@@ -1,0 +1,23 @@
+{{- if and .Values.metallb.enabled }}
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"
+  name: default-metallb-pool
+  namespace: {{ .Release.Namespace }}
+spec:
+  addresses:
+  # Available IP pool for metallb to use
+  {{ .Values.metallb.ipAddresses | toYaml }}
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"
+  name: l2-advertisement
+  namespace: {{ .Release.Namespace }}
+{{- end }}

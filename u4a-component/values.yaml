@@ -1,0 +1,160 @@
+# Default values for u4a-system.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# You must check and update the value of each variable below
+deploymentConfig:
+  # bffServer info
+  bffHost: &bffHost
+    portal.<replaced-ingress-nginx-ip>.nip.io
+  clientName: &clientName
+    bff-client
+  clientId: &clientId
+    bff-client
+  clientSecret: &clientSecret
+    61324af0-773f-4f61-b110-ef57013267d6
+  # BFF server info
+  # The host Kubernetes cluster with OIDC enabled or use kube-oidc-proxy in front of k8s-apiserver
+  # kube-oidc-proxy will be installed by default
+  hostK8sApiWithOidc: &hostK8sApiWithOidc
+    https://<replaced-k8s-ip-with-oidc-enabled>
+  # Enable https for bff server
+  bffHttpsEnabled: true
+
+registryServer: hub.tenxcloud.com
+
+issuerConfig:
+  # oidc certificate info
+  # if using kube-odic-proxy, should add both oidc and proxy IP address here
+  certificate:
+    # MUST update this value
+    oidcIPs: &oidcIPs
+    - <replaced-ingress-nginx-ip>
+    - <replaced-k8s-ip-with-oidc-enabled>
+    # MUST update this value
+    dnsNames: &dnsNames
+    - *bffHost
+    - oidc-server
+    - oidc-server.u4a-system
+    - oidc-server.u4a-system.svc
+    - kube-oidc-proxy
+    - kube-oidc-proxy.addon-system
+    - kube-oidc-proxy.addon-system.svc
+  spec:
+  # Use selfSigned or specified CA(such as CA from kubernetes)
+    selfSigned: {}
+    #ca:
+      #secretName: k8s-ca-key-pair
+
+# The ingress class id of the nginx ingress to expose the services for external access
+ingress:
+  name: u4a-component-ingress
+
+###############################################################################################
+### Below is the configuration for each service, in most cases, you don't need to update them
+### But update as you need if it's required, such as image, connector etc...
+###############################################################################################
+# Optional but the default: Use Kubernetes CRD for user provider - iam provider
+iamProvider:
+  enabled: true
+  image: u4a-component/iam-provider:v0.1.0-20221221
+
+# Required: Use dex as the odic service
+oidcServer:
+  enabled: true
+  host: *bffHost
+  cert:
+    ipAddresses: *oidcIPs
+    dnsNames: *dnsNames
+  image: u4a-component/oidc-server:v0.1.0-20220923
+  issuer: https://{{ .Values.deploymentConfig.bffHost }}/oidc
+  storageType: kubernetes
+  webHttp: 0.0.0.0:5556
+  clientId: *clientId
+  connectors:
+  - type: k8scrd
+    name: k8scrd
+    id: k8scrd
+    config:
+      host: https://127.0.0.1:443
+      insecureSkipVerify: true
+  staticClients:
+  - id: *clientId
+    redirectURIs:
+    - https://{{ .Values.deploymentConfig.bffHost }}/
+    name: *clientName
+    secret: *clientSecret
+  # Enable and update the ip if nip.io is NOT accessible in deployed environment
+  hostConfig:
+    enabled: true
+    hostAliases:
+    - hostnames:
+      - *bffHost
+      ip: <replaced-ingress-nginx-ip>
+  # only enable for debug purpose
+  debug: false
+
+# Optional but the default: BFF server for all API endpoints
+bffServer:
+  enabled: true
+  image: u4a-component/bff-server:v0.1.0-20221221
+  host: *bffHost
+  connectorId: k8scrd
+  clientId: *clientId
+  clientSecret: *clientSecret
+  # Enable and update the ip if nip.io is NOT accessible in deployed environment
+  hostConfig:
+    enabled: true
+    hostAliases:
+    - hostnames:
+      - *bffHost
+      ip: <replaced-ingress-nginx-ip>
+
+# Required: the host Kubernetes cluster with OIDC enabled
+# or use kube-oidc-proxy in front of k8s-apiserver
+k8s:
+  hostK8sApiWithOidc: *hostK8sApiWithOidc
+
+# Generate tenant/namespace/user view for query
+# Install if it's host cluster
+resourceView:
+  image: u4a-component/resource-viewer:v0.1.0-20221024
+
+addon-component:
+  enabled: true
+  tenantManagement:
+    image: hub.tenxcloud.com/u4a-component/capsule:v0.1.2-20221122
+  kubeOidcProxy:
+    image: hub.tenxcloud.com/u4a-component/kube-oidc-proxy:v0.3.0-20221008
+    nodeName: <replaced-oidc-proxy-node-name>
+    issuerUrl: https://portal.<replaced-ingress-nginx-ip>.nip.io/oidc
+    clientId: &clientId
+    certificate:
+      ipAddresses:
+      # MUST update this value to the host ip of kube-oidc-proxy
+      - <replaced-k8s-ip-with-oidc-enabled>
+      dnsNames:
+      - kube-oidc-proxy
+      - kube-oidc-proxy.addon-system
+      - kube-oidc-proxy.addon-system.svc
+    hostConfig:
+      enabled: true
+      hostAliases:
+      - hostnames:
+        # MUST update this value
+        - portal.<replaced-ingress-nginx-ip>.nip.io
+        # MUST update this value
+        ip: <replaced-ingress-nginx-ip>
+
+cluster-component:
+  enabled: false
+
+# Optional: Enable it if use LDAP as user provider
+ldapProvider:
+  enabled: false
+  storageClass: openebs-hostpath
+#  ldapImage: 172.22.96.19/u4a_system/openldap:1.5.0
+#  ldapOrg: tenxcloud
+#  ldapDomain: tenxcloud.com
+#  ldapAdminPwd: Dream001$
+#  ldapAdminImage: 172.22.96.19/u4a_system/phpldapadmin:stable

@@ -1,0 +1,23 @@
+{{- if .Values.iamProvider.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: iam-provider-issuer
+  namespace: {{ .Release.Namespace }}
+spec:
+  ca:
+    secretName: oidc-server-root-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: iam-provider-certificate
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: iam-provider-secret
+  dnsNames:
+    - oidc-server
+    - oidc-server.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: iam-provider-issuer
+{{- end }}

@@ -1,0 +1,227 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/capsule-selfsigned-ca
+  creationTimestamp: null
+  name: capsule-mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /namespace-owner-reference
+  failurePolicy: Fail
+  name: owner.namespace.capsule.clastix.io
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/capsule-selfsigned-ca
+  creationTimestamp: null
+  name: capsule-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /ingresses
+  failurePolicy: Fail
+  name: ingress.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - networking.k8s.io
+    - extensions
+    apiVersions:
+    - v1beta1
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - ingresses
+    scope: Namespaced
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /namespaces
+  failurePolicy: Fail
+  name: namespaces.capsule.clastix.io
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /networkpolicies
+  failurePolicy: Fail
+  name: networkpolicies.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - networking.k8s.io
+    apiVersions:
+    - v1
+    operations:
+    - UPDATE
+    - DELETE
+    resources:
+    - networkpolicies
+    scope: Namespaced
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /nodes
+  failurePolicy: Fail
+  name: nodes.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - UPDATE
+    resources:
+    - nodes
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /pods
+  failurePolicy: Fail
+  name: pods.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+    scope: Namespaced
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /persistentvolumeclaims
+  failurePolicy: Fail
+  name: pvc.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - persistentvolumeclaims
+    scope: Namespaced
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /services
+  failurePolicy: Fail
+  name: services.capsule.clastix.io
+  namespaceSelector:
+    matchExpressions:
+    - key: capsule.clastix.io/tenant
+      operator: Exists
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - services
+    scope: Namespaced
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: capsule-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /tenants
+  failurePolicy: Fail
+  name: tenants.capsule.clastix.io
+  rules:
+  - apiGroups:
+    - capsule.clastix.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - tenants
+  sideEffects: None

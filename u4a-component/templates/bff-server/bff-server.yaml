@@ -1,0 +1,130 @@
+{{- if .Values.bffServer.enabled -}}
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: bff-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: bff-server
+    name: bff
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bff-server
+      name: bff
+  template:
+    metadata:
+      labels:
+        app: bff-server
+        name: bff
+        version: v1
+    spec:
+      {{- if .Values.bffServer.hostConfig.enabled }}
+      hostAliases: {{ toYaml .Values.bffServer.hostConfig.hostAliases | nindent 6 }}
+      {{- end }}
+      volumes:
+        - name: time-localtime
+          hostPath:
+            path: /etc/localtime
+            type: ''
+        - name: oidc-server-ca
+          secret:
+            secretName: oidc-server-root-secret
+            items:
+            - key: ca.crt
+              path: ca.crt
+        - name: cluster-configs-secret
+          secret:
+            secretName: cluster-configs
+      containers:
+        - name: bff-server
+          image: {{ .Values.registryServer }}/{{ .Values.bffServer.image }}
+          livenessProbe:
+            failureThreshold: 4
+            httpGet:
+              path: /health
+              port: 8022
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 4
+            httpGet:
+              path: /health
+              port: 8022
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          ports:
+            - containerPort: 8022
+              protocol: TCP
+            - containerPort: 8023
+              protocol: TCP
+          env: # 主要是环境变量这里
+            - name: DEX_SERVER_URL # dex 服务地址
+              value: http://oidc-server:5556/oidc
+            - name: DEX_CONNECTOR_ID # 我们自定义的 dex connector id
+              value: {{ .Values.bffServer.connectorId }}
+            - name: DEX_CLIENT_ID # dex client id，用于 dock-app 接入 oidc
+              value: {{ .Values.bffServer.clientId }}
+            - name: DEX_CLIENT_SECRET # dex client secret
+              value: {{ .Values.bffServer.clientSecret }}
+            - name: K8S_OIDC_PROXY_URL # k8s 管理集群上 oidc-proxy 的地址
+              value: {{ .Values.k8s.hostK8sApiWithOidc }}
+            - name: K8S_API_TIMEOUT
+              value: "10"
+            - name: LICENSE_NS
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            limits:
+              cpu: 1
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: time-localtime
+              readOnly: true
+              mountPath: /etc/localtime
+            - name: oidc-server-ca
+              mountPath: /etc/oidc-server
+              readOnly: true
+            - mountPath: /usr/src/app/configs/cluster-configs
+              name: cluster-configs-secret
+              readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bff-server
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: bff-server
+  ports:
+    - protocol: TCP
+      port: 8022
+      name: http
+      targetPort: 8022
+    - protocol: TCP
+      port: 8023
+      name: websocket
+      targetPort: 8023
+---
+apiVersion: v1
+data:
+kind: Secret
+metadata:
+  name: cluster-configs
+  namespace: {{ .Release.Namespace }}
+{{- end }}

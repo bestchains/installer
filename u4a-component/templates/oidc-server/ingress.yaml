@@ -1,0 +1,39 @@
+{{- if .Values.oidcServer.debug -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    description: oidc-ingress
+    displayName: oidc-ingress
+    httpSend: /
+    ingress-lb: {{ .Values.ingress.name }}
+    kubernetes.io/ingress.class: {{ .Values.ingress.name }}
+    nginx.ingress.kubernetes.io/enable-access-log: "false"
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "false"
+    nginx.ingress.kubernetes.io/load-balance: round_robin
+    nginx.ingress.kubernetes.io/proxy-body-size: ""
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/server-alias: ""
+    nginx.ingress.kubernetes.io/upstream-vhost: $host
+  labels:
+    ingress-lb: {{ .Values.ingress.name }}
+  name: oidc-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+#  ingressClassName: {{ .Values.ingress.name }}
+  tls:
+    - hosts:
+        - {{ .Values.oidcServer.host }}
+      secretName: oidc-server-root-secret
+  rules:
+  - host: {{ .Values.oidcServer.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: oidc-server
+            port:
+              number: 5556
+        path: /oidc
+        pathType: ImplementationSpecific
+{{- end }}

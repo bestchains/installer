@@ -1,0 +1,53 @@
+{{- if .Values.oidcServer.enabled -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: oidc-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    system/component: u4a
+    system/u4a: oidc-server
+data:
+  config.yaml: |
+    issuer: {{ tpl .Values.oidcServer.issuer . }}
+    storage:
+      type: {{ .Values.oidcServer.storageType }}
+      config:
+        inCluster: true
+    web:
+      http: {{ .Values.oidcServer.webHttp }}
+    additionalConfig:
+      defaultUserGroups:
+      - iam.tenxcloud.com
+      - obsevability
+      - resource-reader
+    connectors:
+    {{- range .Values.oidcServer.connectors }}
+    - type: {{ .type }}
+      name: {{ .name }}
+      id: {{ .id }}
+      config:
+        host: {{ .config.host }}
+        insecureSkipVerify: {{ .config.insecureSkipVerify }}
+    {{- end }}
+    oauth2:
+      skipApprovalScreen: true
+    staticClients:
+    {{- range .Values.oidcServer.staticClients }}
+    - id: {{ .id }}
+      name: {{ .name }}
+      secret: {{ .secret }}
+      redirectURIs:
+      {{- range .redirectURIs }}
+      - {{ tpl . $ }}
+      {{- end }}
+    {{- end }}
+    enablePasswordDB: true
+#    staticPasswords:
+#    {{- range .Values.oidcServer.staticPasswords }}
+#    - email: {{ .email }}
+#      hash: {{ .hash }}
+#      username: {{ .username }}
+#      userID: {{ .userID }}
+#    {{- end }}
+{{- end }}

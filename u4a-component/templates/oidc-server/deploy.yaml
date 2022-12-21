@@ -1,0 +1,104 @@
+{{- if .Values.oidcServer.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oidc-server
+    system/component: u4a
+    system/u4a: oidc-server
+  name: oidc-server
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oidc-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: oidc-server
+        system/component: u4a
+        system/u4a: oidc-server
+    spec:
+      {{- if .Values.oidcServer.hostConfig.enabled }}
+      hostAliases: {{ toYaml .Values.oidcServer.hostConfig.hostAliases | nindent 6 }}
+      {{- end }}
+      serviceAccountName: oidc-server
+      containers:
+      - name: oidc-server
+        image: {{ .Values.registryServer }}/{{ .Values.oidcServer.image }}
+        command: ["/usr/local/bin/dex", "serve", "/etc/oidc-server/cfg/config.yaml"]
+        ports:
+        - name: http
+          containerPort: 5556
+          hostPort: 5556
+        volumeMounts:
+        - name: config
+          mountPath: /etc/oidc-server/cfg
+        - name: tls
+          mountPath: /etc/oidc-server/tls
+        readinessProbe:
+          httpGet:
+            {{- if .Values.oidcServer.debug }}
+            path: /healthz
+            {{- else }}
+            path: /oidc/healthz
+            {{- end }}
+            port: 5556
+            scheme: HTTP
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+      - name: iam-provider
+        image: {{ .Values.registryServer }}/{{ .Values.iamProvider.image }}
+        ports:
+        - containerPort: 443
+          protocol: TCP
+        env: # 主要是环境变量这里
+        - name: DEX_SERVER_URL # dex 服务地址
+          value: {{ tpl .Values.oidcServer.issuer . }}
+        - name: DEX_CONNECTOR_ID # 我们自定义的 dex connector id
+          value: {{ .Values.bffServer.connectorId }}
+        - name: DEX_CLIENT_ID
+          value: {{ .Values.bffServer.clientId }}
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /etc/iam/certs
+          name: iam-secret
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 443
+            scheme: HTTPS
+      volumes:
+      - name: config
+        configMap:
+          name: oidc-server
+          items:
+          - key: config.yaml
+            path: config.yaml
+      - name: tls
+        secret:
+          secretName: oidc-server-root-secret
+      - name: iam-secret
+        secret:
+          secretName: iam-provider-secret
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+{{- end }}

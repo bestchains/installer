@@ -1,0 +1,22 @@
+{{- if .Values.iamProvider.enabled -}}
+apiVersion: iam.tenxcloud.com/v1alpha1
+kind: User
+metadata:
+  name: admin
+  labels:
+    "t7d.io.username": "admin"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "6"
+spec:
+  name: admin
+  description: admin 用户
+  email: admin@tenxcloud.com
+  groups:
+  - system:masters
+  - iam.tenxcloud.com
+  - observability
+  - resource-reader
+  password: Passw0rd$
+  phone: "18890901212"
+{{- end }}

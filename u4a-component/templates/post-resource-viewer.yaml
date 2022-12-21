@@ -1,0 +1,121 @@
+---
+apiVersion: t7d.io/v1
+kind: ResourceAggregationView
+metadata:
+  name: tenantview
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+spec:
+  resourceTypes:
+    - group: capsule.clastix.io
+      version: v1beta1
+      kind: Tenant
+  columns:
+    - name: cluster
+      isPrimary: true
+      exportLabels: true
+      type: string
+    - name: tenant
+      isPrimary: true
+      exportLabels: true
+      resourceRef:
+        field: "{.metadata.name}"
+      type: string
+    - name: namespaces
+      exportLabels: true
+      resourceRef:
+        field: "{.status.namespaces}"
+      type: array
+    - name: owners
+      exportLabels: true
+      resourceRef:
+        field: "{.spec.owners[?(@.kind}=='User')].name}"
+      type: array
+---
+apiVersion: t7d.io/v1
+kind: ResourceAggregationView
+metadata:
+  name: namespaceview
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+spec:
+  resourceTypes:
+    - group: ""
+      version: v1
+      kind: Namespace
+  filters:
+    - field: "{.metadata.labels.capsule\\.clastix\\.io/tenant}"
+      operator: Exists
+  columns:
+    - name: cluster
+      isPrimary: true
+      exportLabels: true
+      type: string
+    - name: tenant
+      exportLabels: true
+      resourceRef:
+        field: "{.metadata.labels.capsule\\.clastix\\.io/tenant}"
+      type: string
+    - name: namespace
+      isPrimary: true
+      exportLabels: true
+      resourceRef:
+        field: "{.metadata.name}"
+      type: string
+---
+apiVersion: t7d.io/v1
+kind: ResourceAggregationView
+metadata:
+  labels:
+    "t7d.io/viewname-suffix": "true"
+  name: userview
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+spec:
+  resourceTypes:
+    - group: rbac.authorization.k8s.io
+      version: v1
+      kind: RoleBinding
+  filters:
+    - field: "{.subjects[?(@.kind}=='User')].name}"
+      operator: Exists
+    - field: "{.metadata.labels.t7d\\.io\\.rolebinding}"
+      operator: Exists
+    # - group: rbac.authorization.k8s.io
+    #   version: v1
+    #   kind: ClusterRoleBinding
+  columns:
+    - name: cluster
+      isPrimary: true
+      exportLabels: true
+      type: string
+    - name: user
+      isPrimary: true
+      exportLabels: true
+      resourceRef:
+        field: "{.subjects[?(@.kind}=='User')].name}"
+      type: string
+    - name: namespace
+      isPrimary: true
+      exportLabels: true
+      resourceRef:
+        field: "{.metadata.namespace}"
+      type: string
+    - name: kind
+      exportLabels: true
+      resourceRef:
+        field: "{.kind}"
+      type: string
+    - name: rolebinding
+      exportLabels: true
+      resourceRef:
+        field: "{.metadata.name}"
+      type: array
+    - name: roles
+      exportLabels: true
+      resourceRef:
+        field: "{.roleRef.name}"
+      type: array

@@ -1,0 +1,32 @@
+{{- if .Values.iamProvider.enabled -}}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: u4a-system/iam-provider-certificate
+    "helm.sh/hook-weight": "-5"
+  name: pwd-encrypt-webhook
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: oidc-server
+        namespace: {{ .Release.Namespace }}
+        path: /mutate
+        port: 443
+    name: pwdencrypt.iam.tenxcloud.com
+    rules:
+      - apiGroups:
+          - iam.tenxcloud.com
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - 'users'
+        scope: 'Cluster'
+    sideEffects: None
+    timeoutSeconds: 10
+{{- end }}

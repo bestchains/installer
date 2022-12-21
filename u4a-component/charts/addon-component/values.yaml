@@ -1,0 +1,53 @@
+# Default values for system-tenant-component.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Rbac resource name of host or managed cluster's reader role
+# such as host-cluster-reader, managed-cluster-reader
+rbacResourceName: host-cluster-reader
+
+# Optional but the default: Use it if the managed Kubernetes didn't have OIDC configured on apiserver
+kubeOidcProxy:
+  enabled: true
+  auditEnabled: true
+  hostNetwork:
+    enabled: true
+  ingress:
+    enabled: false
+  # oidc-proxy certificate info
+  # ipAddresses: the node IP address where kube-oidc-proxy is scheduled.
+  certificate:
+    ipAddresses:
+    # MUST update this value to the host ip of kube-oidc-proxy
+    - k8s-ip-with-oidc-enabled
+    dnsNames:
+    - kube-oidc-proxy
+    - kube-oidc-proxy.addon-system
+    - kube-oidc-proxy.addon-system.svc
+  image: hub.tenxcloud.com/u4a-component/kube-oidc-proxy:v0.3.0-v5.6.0-20221008
+  # MUST update this value
+  nodeName: 21v-tc-sunyy-team-2
+  # MUST update this value
+  issuerUrl: https://portal.ingress-nginx-ip.nip.io/oidc
+  usernameClaim: preferred_username
+  groupClaim: groups
+  clientId: bff-client
+  extraArgs:
+    audit-log-path: /var/log/apiserver/audit/audit.log
+    audit-policy-file: /etc/kubernetes/audit-policy.yaml
+    audit-log-maxage: 7
+    audit-log-maxbackup: 10
+    audit-log-maxsize: 10
+  # Enable and update the ip if nip.io is NOT accessible in deployed environment
+  hostConfig:
+    enabled: true
+    hostAliases:
+    - hostnames:
+      # MUST update this value
+      - portal.ingress-nginx-ip.nip.io
+      # MUST update this value
+      ip: ingress-nginx-ip
+
+# Use capsule for tenant management
+tenantManagement:
+  image: hub.tenxcloud.com/u4a-component/capsule:v0.1.2-20221122

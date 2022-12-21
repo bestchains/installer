@@ -1,0 +1,82 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.5.0
+  creationTimestamp: null
+  name: connector3rds.iam.tenxcloud.com
+spec:
+  group: iam.tenxcloud.com
+  names:
+    kind: Connector3rd
+    listKind: Connector3rdList
+    plural: connector3rds
+    singular: connector3rd
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Connector3rd is the Schema for the connector3rds API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Connector3rdSpec defines the state of Connector3rd
+            properties:
+              connectors:
+                description: connecors is connector list. gitlab and github connector
+                  will be containerd in default.
+                items:
+                  properties:
+                    description:
+                      description: Description desecribe connector information
+                      type: string
+                    enabled:
+                      description: Enabled the connecor
+                      type: boolean
+                    icon:
+                      description: Icon is the Connector's icon.
+                      type: string
+                    id:
+                      description: connector ID
+                      type: string
+                    name:
+                      description: Name is connector Name
+                      type: string
+                  required:
+                  - description
+                  - enabled
+                  - id
+                  - name
+                  type: object
+                type: array
+            required:
+            - connectors
+            type: object
+          status:
+            description: Connector3rdStatus defines the observed state of Connector3rd
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

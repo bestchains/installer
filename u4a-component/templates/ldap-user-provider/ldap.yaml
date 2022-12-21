@@ -1,0 +1,85 @@
+{{- if .Values.ldapProvider.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openldap
+  namespace: {{ .Release.Namespace }}
+  labels:
+    system/component: u4a
+    system/u4a: openldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      system/component: u4a
+      system/u4a: openldap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        system/component: u4a
+        system/u4a: openldap
+    spec:
+      containers:
+      - name: openldap
+        image: {{ .Values.registryServer }}/{{ .Values.ldapProvider.ldapImage }}
+        env:
+        - name: LDAP_ORGANISATION
+          value: {{ .Values.ldapProvider.ldapOrg }}
+        - name: LDAP_DOMAIN
+          value: {{ .Values.ldapProvider.ldapDomain }}
+        - name: LDAP_ADMIN_PASSWORD
+          value: {{ .Values.ldapProvider.ldapAdminPwd }}
+        - name: LDAP_OPENLDAP_GID
+          value: "65534"
+        - name: LDAP_OPENLDAP_UID
+          value: "65534"
+        - name: LDAP_TLS_VERIFY_CLIENT
+          value: try
+        ports:
+        - name: ldap
+          containerPort: 389
+        - name: ldaps
+          containerPort: 636
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/ldap
+          subPath: data
+        - name: data
+          mountPath: /etc/ldap/slapd.d
+          subPath: config
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: ldap-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ldap
+  name: openldap
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: port1
+    port: 389
+    protocol: TCP
+    targetPort: 389
+  - name: port2
+    port: 636
+    protocol: TCP
+    targetPort: 636
+  selector:
+    system/u4a: openldap
+  sessionAffinity: None
+  type: ClusterIP
+{{- end }}

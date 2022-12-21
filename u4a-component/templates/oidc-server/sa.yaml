@@ -1,0 +1,11 @@
+{{- if .Values.oidcServer.enabled -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: oidc-server
+    system/component: u4a
+    system/sso: oidc-server
+  name: oidc-server
+  namespace: {{ .Release.Namespace }}
+{{- end }}

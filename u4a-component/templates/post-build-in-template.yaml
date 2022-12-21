@@ -1,0 +1,57 @@
+apiVersion: iam.tenxcloud.com/v1alpha1
+kind: RoleTemplate
+metadata:
+  annotations:
+    description: 角色模板描述
+    displayName: 平台内置角色
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+  name: build-in-template
+spec:
+  kindType: ClusterRole
+  resources:
+  - category: 访问控制
+    displayName: 成员管理
+    rules:
+    - apiGroups:
+      - iam.tenxcloud.com
+      resources:
+      - users
+      verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - category: 访问控制
+    displayName: 项目角色管理
+    rules:
+    - apiGroups:
+      - rbac.authorization.k8s.io
+      resources:
+      - clusterroles
+      verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - category: 访问控制
+    displayName: 租户管理
+    rules:
+    - apiGroups:
+      - capsule.clastix.io/v1beta1
+      resources:
+      - tenants
+      verbs:
+      - get
+      - list
+      - update
+      - patch
+      - delete
+      - create
+      - watch

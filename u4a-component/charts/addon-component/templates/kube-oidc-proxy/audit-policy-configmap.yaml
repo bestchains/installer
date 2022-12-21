@@ -1,0 +1,46 @@
+apiVersion: v1
+data:
+  audit-policy.yaml: |
+    apiVersion: audit.k8s.io/v1beta1
+    kind: Policy
+    # Don't generate audit events for all requests in RequestReceived stage.
+    omitStages:
+      - "RequestReceived"
+    rules:
+      # Don't audit kube-system
+      - level: None
+        resources:
+        - group: "" # core API group
+          resources: ["secrets", "configmaps"]
+        namespaces: ["kube-system", "cluster-system"]
+      # 1. Default resources, only enable 'write' verbs audit log for container
+      - level: RequestResponse
+        verbs: ["create","delete","deletecollection","patch","update"]
+        resources:
+        - group: "" # core API group
+          resources: ["secrets", "configmaps","deployments","services","statefulsets","limitranges","namespaces","nodes","persistentvolumeclaims","persistentvolumes","pods","resourcequotas","mutatingwebhookconfigurations","validatingwebhookconfigurations","customresourcedefinitions","apiservices","daemonsets","replicasets","horizontalpodautoscalers","verticalpodautoscalers","cronjobs","jobs","certificates","clusters","applications","ingresses","networkpolicies","volumes","storageclasses"]
+        - group: "" # core API group
+          resources: ["serviceaccounts","clusterrolebindings","clusterroles","rolebindings","roles"]
+      # 2. CRDs, only enable 'write' verbs audit log for user/tenants/sa/role management, etc ...
+        - group: "t7d.io" # API group
+          resources: ["tenants","roletemplates","users"]
+        - group: "cluster.karmada.io"
+          resources: ["clusters"]
+        - group: "capsule.clastix.io"
+          resources: ["tenants", "capsuleconfigurations"]
+        - group: "common.tenxcloud.com" # core API group
+          resources: ["licenses"]
+        - group: "component.t7d.io"
+          resources: ["components", "menus"]
+        - group: "iam.tenxcloud.com"
+          resources: ["users", "roletemplates"]
+      # 3. Add audit for your resources
+      #- level: RequestResponse
+      #  verbs: ["create","delete","deletecollection","patch","update"]
+      #  resources:
+      #  - group: "" # core API group
+      #    resources: [""]
+kind: ConfigMap
+metadata:
+  name: audit-policy-conf
+  namespace: {{ .Release.Namespace }}

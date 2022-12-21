@@ -1,0 +1,116 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (devel)
+  creationTimestamp: null
+  name: resourceaggregationviews.t7d.io
+spec:
+  group: t7d.io
+  names:
+    categories:
+    - raall
+    kind: ResourceAggregationView
+    listKind: ResourceAggregationViewList
+    plural: resourceaggregationviews
+    shortNames:
+    - rav
+    singular: resourceaggregationview
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.status
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: ResourceAggregationView is a specification for a ResourceAggregationView
+          resource
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ResourceAggregationViewSpec defines the desired state of
+              ResourceAggregationView
+            properties:
+              columns:
+                items:
+                  properties:
+                    exportLabels:
+                      type: boolean
+                    isPrimary:
+                      type: boolean
+                    name:
+                      type: string
+                    resourceRef:
+                      properties:
+                        field:
+                          type: string
+                      required:
+                      - field
+                      type: object
+                    type:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
+              filters:
+                items:
+                  properties:
+                    field:
+                      type: string
+                    operator:
+                      type: string
+                  required:
+                  - field
+                  - operator
+                  type: object
+                type: array
+              resourceTypes:
+                items:
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - version
+                  type: object
+                type: array
+            type: object
+          status:
+            description: ResourceAggregationViewStatus defines the observed state
+              of ResourceAggregationView
+            properties:
+              observedGeneration:
+                format: int64
+                type: integer
+              status:
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,48 @@
+apiVersion: capsule.clastix.io/v1beta1
+kind: Tenant
+metadata:
+  annotations:
+    clusterrolenames.capsule.clastix.io/user.admin: cluster-admin
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-6"
+  name: system-tenant
+spec:
+  additionalResources:
+    items:
+    - |-
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      metadata:
+        name: podsecuritypolicy
+      rules:
+      - apiGroups:
+        - policy
+        resourceNames:
+        - default
+        resources:
+        - podsecuritypolicies
+        verbs:
+        - use
+      - apiGroups:
+        - extensions
+        resourceNames:
+        - default
+        resources:
+        - podsecuritypolicies
+        verbs:
+        - use
+    - |-
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: podsecuritypolicy
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: Role
+        name: podsecuritypolicy
+      subjects:
+      - kind: ServiceAccount
+        name: default
+  owners:
+  - kind: User
+    name: admin

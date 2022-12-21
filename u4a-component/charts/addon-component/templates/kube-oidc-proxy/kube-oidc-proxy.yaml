@@ -1,0 +1,203 @@
+{{- if .Values.kubeOidcProxy.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-oidc-proxy
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kube-oidc-proxy
+  name: kube-oidc-proxy
+  namespace: {{ .Release.Namespace }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-oidc-proxy
+  template:
+    metadata:
+      labels:
+        app: kube-oidc-proxy
+    spec:
+      {{- if .Values.kubeOidcProxy.hostConfig.enabled }}
+      hostAliases: {{ toYaml .Values.kubeOidcProxy.hostConfig.hostAliases | nindent 6 }}
+      {{- end }}
+      # Use hostnetwork to expose apiserver proxy using 443 port for now
+      hostNetwork: {{ .Values.kubeOidcProxy.hostNetwork.enabled }}
+      serviceAccountName: kube-oidc-proxy
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: {{ .Values.kubeOidcProxy.nodeName }}
+      tolerations:
+        - operator: Exists
+      containers:
+      - image: {{ .Values.kubeOidcProxy.image }}
+        ports:
+        - containerPort: 443
+        - containerPort: 8088
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8088
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        name: kube-oidc-proxy
+        command: ["kube-oidc-proxy"]
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        args:
+          - "--secure-port=443"
+          - "--readiness-probe-port=8088"
+          - "--token-passthrough"
+          - "--tls-cert-file=/etc/oidc/tls/crt.pem"
+          - "--tls-private-key-file=/etc/oidc/tls/key.pem"
+          - "--oidc-client-id=$(OIDC_CLIENT_ID)"
+          - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
+          - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
+          - "--oidc-groups-claim=$(OIDC_GROUPS_CLAIM)"
+          - "--oidc-ca-file=/etc/oidc/oidc-server/ca.pem"
+        {{- if .Values.kubeOidcProxy.auditEnabled }}
+          {{- range $key, $value := .Values.kubeOidcProxy.extraArgs }}
+          - "--{{ $key }}={{ $value -}}"
+          {{- end }}
+        {{- end }}
+        env:
+        - name: OIDC_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: kube-oidc-proxy-config
+              key: oidc.client-id
+        - name: OIDC_ISSUER_URL
+          valueFrom:
+            secretKeyRef:
+              name: kube-oidc-proxy-config
+              key: oidc.issuer-url
+        - name: OIDC_USERNAME_CLAIM
+          valueFrom:
+            secretKeyRef:
+              name: kube-oidc-proxy-config
+              key: oidc.username-claim
+        - name: OIDC_GROUPS_CLAIM
+          valueFrom:
+            secretKeyRef:
+              name: kube-oidc-proxy-config
+              key: oidc.group-claim
+        volumeMounts:
+          - name: kube-oidc-proxy-tls
+            mountPath: /etc/oidc/tls
+            readOnly: true
+          - name: oidc-server-ca
+            mountPath: /etc/oidc/oidc-server
+            readOnly: true
+          {{- if .Values.kubeOidcProxy.auditEnabled }}
+          - mountPath: /etc/kubernetes
+            name: audit-config
+            readOnly: true
+          - mountPath: /var/log/apiserver/audit
+            name: apiserver-audit
+          {{- end }}
+      volumes:
+        - name: kube-oidc-proxy-tls
+          secret:
+            secretName: oidc-proxy-cert-tls
+            items:
+            - key: tls.crt
+              path: crt.pem
+            - key: tls.key
+              path: key.pem
+        - name: oidc-server-ca
+          secret:
+            secretName: oidc-server-root-secret
+            items:
+            - key: ca.crt
+              path: ca.pem
+        {{- if .Values.kubeOidcProxy.auditEnabled }}
+        - hostPath:
+            path: /var/log/apiserver/audit
+            type: DirectoryOrCreate
+          name: apiserver-audit
+        - name: audit-config
+          configMap:
+            name: audit-policy-conf
+        {{- end }}
+{{- if not .Values.kubeOidcProxy.hostNetwork.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-oidc-proxy
+  name: kube-oidc-proxy
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  type: ClusterIP
+  selector:
+    app: kube-oidc-proxy
+{{- end }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: t7d.io.kube-oidc-proxy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: t7d.io.kube-oidc-proxy
+subjects:
+- kind: ServiceAccount
+  name: kube-oidc-proxy
+  namespace: {{ .Release.Namespace }}
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: t7d.io.kube-oidc-proxy
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - "users"
+  - "groups"
+  - "serviceaccounts"
+  verbs:
+  - "impersonate"
+- apiGroups:
+  - "authentication.k8s.io"
+  resources:
+  - "userextras/scopes"
+  - "userextras/remote-client-ip"
+  - "tokenreviews"
+  verbs:
+  - "create"
+  - "impersonate"
+- apiGroups:
+  - policy
+  resourceNames:
+  - system
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+- apiGroups:
+  - extensions
+  resourceNames:
+  - system
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+{{- end }}

@@ -1,0 +1,19 @@
+apiVersion: component.t7d.io/v1beta1
+kind: Component
+metadata:
+  name: oidc
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+spec:
+  application:
+    helmChart:
+      name: oidc-helm-chart
+      valuesConfig: values.yaml from helm
+      version: v0.1
+    name: oidc
+  menu:
+    name: oidc-root-menu
+  portal:
+    entry: /oidc-public/index.html
+    path: /oidc

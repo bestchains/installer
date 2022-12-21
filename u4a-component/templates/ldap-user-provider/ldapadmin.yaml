@@ -1,0 +1,55 @@
+{{- if .Values.ldapProvider.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ldapadmin
+  name: ldapadmin
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ldapadmin
+  template:
+    metadata:
+      labels:
+        app: ldapadmin
+    spec:
+      containers:
+      - env:
+        - name: PHPLDAPADMIN_LDAP_HOSTS
+          value: openldap
+        image: {{ .Values.registryServer }}/{{ .Values.ldapProvider.ldapAdminImage }}
+        name: phpldapadmin
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 443
+          name: ldap
+          protocol: TCP
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ldapadmin
+  name: ldapadmin
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: ldapadmin
+  sessionAffinity: None
+  type: ClusterIP
+{{- end }}

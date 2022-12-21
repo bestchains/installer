@@ -1,0 +1,1056 @@
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-cluster-configs
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"setting-cluster","data":"<path d=\"M781.517 975.002v-244.02h97.024v-145.97H537.549v145.97h96.973v244.02H390.554v-244.02h96.972v-145.97H147.558v145.97h96.973v244.02H.512v-244.02h97.024V536.064h389.99V439.04H243.558V49.05H779.52v389.99H537.549v97.024h389.99v194.97h96.973v244.019H781.517zM50.534
+    779.98v146.022h146.023V779.981H50.534zm681.984-389.99V97.996H293.53V389.99h438.988zM440.525
+    779.98v146.022h146.022V779.981H440.525zm536.013 0H830.515v146.022h146.023V779.981zM489.523
+    293.018H392.55v-97.024h96.973v97.024zm146.023 0h-97.997v-97.024h96.973v97.024z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-cluster
+    uid: ""
+  pathname: /oidc/management/clusters/:clusterID/configs
+  rankingInColumn: 100
+  text: 集群设置
+  textEn: Cluster Configs
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-cluster-nodes
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"cluster-nodes","data":"<path d=\"M402.176 431.744l-29.76 51.008-72.64-42.368V189.888L511.744
+    64l212.032 125.888v250.368l-71.296 42.368-30.208-50.752 42.496-25.216V223.488L511.68
+    132.672l-152.832 90.752v183.04l43.328 25.28zM693.12 560.576l-29.312-51.264 72.96-41.728
+    216.96 125.248 3.008 246.592L741.824 960 524.992 834.816l-1.024-82.944 59.072-.704.576
+    49.344 158.592 91.52 155.2-87.04-2.176-177.92-158.464-91.52-43.648 25.024zM440.448
+    748.352l59.072.256-.384 84.16-216.96 125.248-215.04-120.64 3.008-246.656 216.832-125.184
+    72.384 40.576-28.928 51.456-43.008-24.192-158.592 91.584-2.176 177.92 155.2 87.04
+    158.464-91.456.128-50.112zm29.184-304.96h84.224l104.512 182.656-42.176 66.24H407.36l-40.128-66.176
+    102.4-182.72z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-cluster
+    uid: ""
+  pathname: /oidc/management/clusters/:clusterID/hosts
+  rankingInColumn: 200
+  text: 集群节点
+  textEn: Cluster Nodes
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-cluster-labels
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"node-labels","data":"<path d=\"M410.752 464.576c-8.832-13.568-27.84-16.832-42.304-7.296-14.528
+    9.536-19.008 28.224-10.112 41.792l151.68 230.656c8.96 13.568 27.84 16.832 42.368
+    7.296a32.32 32.32 0 0013.824-19.392 28.608 28.608 0 00-3.712-22.4L410.752 464.576zm123.456
+    24.384l106.304 161.728a31.36 31.36 0 0043.584 8.704 31.808 31.808 0 0013.632-19.904
+    31.04 31.04 0 00-4.416-23.552L587.008 454.208a31.424 31.424 0 00-43.584-8.704
+    31.424 31.424 0 00-9.216 43.456zM314.304 291.776a38.4 38.4 0 1076.8 0 38.4 38.4
+    0 10-76.8 0zm633.92 327.872l-300.416-461.12a32.832 32.832 0 00-18.752-13.44L213.376
+    34.24a31.808 31.808 0 00-39.872 25.984L106.88 485.248a32.512 32.512 0 004.672
+    22.592l300.416 461.184a44.8 44.8 0 0062.016 13.12l461.184-300.416a44.8 44.8 0
+    0013.056-62.08zm-493.12 298.368L171.968 483.392l59.264-378.048 369.792 98.624L884.16
+    638.592 455.104 918.016z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-cluster
+    uid: ""
+  pathname: /oidc/management/clusters/:clusterID/labels
+  rankingInColumn: 300
+  text: 集群标签
+  textEn: Cluster Labels
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: tenant-project-manage-management-projects-roles
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-user","data":"<defs><style></style></defs><path d=\"M663.168
+    538.112c67.2-48.512 112-126.912 112-212.8C775.168 179.712 659.392 64 513.792 64S252.48
+    179.712 252.48 325.312c0 89.6 44.8 168 112 212.8a411.776 411.776 0 00-261.312
+    384.512V960h74.688v-37.312c0-186.688 149.312-336 336-336s336 149.312 336 336c0
+    11.2 0 26.112-3.712 37.312h74.688v-37.312c3.648-175.488-104.64-324.8-257.664-384.576zM513.792
+    512c-104.512 0-186.624-82.112-186.624-186.688s82.112-186.688 186.688-186.688 186.688
+    82.112 186.688 186.688S618.368 512 513.792 512z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-tenant-project-manage
+    uid: ""
+  pathname: /oidc/management/projects/:id/role
+  rankingInColumn: 100
+  requiredRoles:
+  - TenantAdmin
+  text: 项目角色
+  textEn: Project Roles
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: tenant-project-manage-management-projects-members
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-team","data":"<defs><style></style></defs><path d=\"M548.544
+    537.6C614.4 490.048 658.24 413.248 658.24 329.152c0-142.656-113.344-256-256-256s-256
+    113.344-256 256A249.856 249.856 0 00256 537.6C106.048 596.096 0 742.4 0 914.304v36.544h73.152v-36.544c0-182.848
+    146.304-329.152 329.152-329.152s329.152 146.304 329.152 329.152c0 10.944 0 25.6-3.648
+    36.544h73.152v-36.544C804.544 742.4 698.496 596.096 548.544 537.6zM402.304 512c-102.4
+    0-182.848-80.448-182.848-182.848s80.448-182.848 182.848-182.848 182.848 80.448
+    182.848 182.848S504.704 512 402.304 512z\"></path><path d=\"M819.2 501.056c36.544-32.896
+    58.496-80.448 58.496-135.296 0-91.456-65.856-168.256-153.6-179.2l-10.944 73.152c51.2
+    7.296 91.456 54.848 91.456 109.696 0 62.144-47.552 109.696-109.696 109.696v73.152c142.656
+    0 256 113.344 256 256 0 10.944 0 25.6-3.648 36.544h73.152c0-10.944 3.648-25.6
+    3.648-36.544-.064-142.656-84.16-259.712-204.864-307.2z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-tenant-project-manage
+    uid: ""
+  pathname: /oidc/management/projects/:id/member
+  rankingInColumn: 200
+  requiredRoles:
+  - TenantAdmin
+  text: 项目成员
+  textEn: Project Members
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: tenant-project-manage-management-projects-clusters
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-cluster-authorization","data":"<defs><style></style></defs><path
+    d=\"M94.4 889.216V134.848c0-18.88 21.568-40.512 40.512-40.512H752c18.944 0 40.512
+    21.568 40.512 40.512v106.048h65.536V134.848C857.984 78.336 808.448 28.8 752 28.8H134.848C78.336
+    28.8 28.8 78.336 28.8 134.848v754.304c0 56.512 49.536 106.048 106.048 106.048h243.2v-65.6h-243.2c-18.88-.064-40.448-21.568-40.448-40.384z\"></path><path
+    d=\"M923.456 783.104h-12.032l-134.208-202.88a137.6 137.6 0 0080.704-124.8 140.48
+    140.48 0 00-140.288-140.352c-77.44 0-140.352 62.912-140.352 140.352a137.6 137.6
+    0 0080.768 124.8l-134.144 202.88H512c-42.944 0-71.808 28.8-71.808 71.744v68.608c0
+    42.88 28.864 71.68 71.808 71.68h411.456c42.944 0 71.744-28.8 71.744-71.744v-68.608c0-42.816-28.8-71.68-71.744-71.68zM718.784
+    381.248v3.136a71.04 71.04 0 0170.848 71.04c0 39.68-32.256 71.936-71.936 71.936a71.552
+    71.552 0 01.896-142.976l.192-3.136zm.768 236.096l108.544 167.552H607.424l112.128-167.552zm206.4
+    305.6L924.8 929.6H509.568v-77.184h416.32l.064 70.528zM207.04 216a33.28 33.28 0
+    000 66.432h433.152a33.28 33.28 0 000-66.432H207.04zM393.6 437.824H207.04a33.28
+    33.28 0 000 66.432H393.6a33.28 33.28 0 000-66.432zm0 221.888H207.04a33.28 33.28
+    0 000 66.432H393.6a33.28 33.28 0 000-66.432z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-tenant-project-manage
+    uid: ""
+  pathname: /oidc/management/projects/:id/cluster
+  rankingInColumn: 300
+  requiredRoles:
+  - TenantAdmin
+  text: 项目授权集群
+  textEn: Project Clusters
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-tenant-project-manage
+spec:
+  getTitleForReplaceSider:
+    method: useGetProject
+    params: |-
+      {
+                  "name": "id"
+                }
+    responseDataPath:
+    - data
+    - project
+  icon: '{"name":"project-manage","data":"<defs><style></style></defs><path d=\"M877.696
+    256c0-60.48-49.216-109.696-109.696-109.696H109.696C49.216 146.304 0 195.52 0 256v658.304C0
+    974.784 49.216 1024 109.696 1024H768c60.48 0 109.696-49.216 109.696-109.696V256zm-768-36.544H768c20.16
+    0 36.544 16.448 36.544 36.544v182.848H73.152V256c0-20.16 16.448-36.544 36.544-36.544zM768
+    950.848H109.696a36.608 36.608 0 01-36.544-36.544V512h731.392v402.304A36.608 36.608
+    0 01768 950.848zm-36.032-658.304h-73.152v73.152h73.152v-73.152zm-549.12 73.152H512a36.544
+    36.544 0 000-73.088H182.848a36.544 36.544 0 000 73.088zM914.304 0H256c-60.48 0-109.696
+    49.216-109.696 109.696h73.088A36.736 36.736 0 01256 73.152h658.304c20.16 0 36.544
+    16.448 36.544 36.544V768a36.608 36.608 0 01-36.544 36.608v73.152A109.952 109.952
+    0 001024 768V109.696C1024 49.216 974.784 0 914.304 0z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-tenant
+    uid: ""
+  pathname: /oidc/management/tenants/:id/projects
+  rankingInColumn: 100
+  replaceSiderBackNextPathnamePattern: management-projects
+  text: 项目管理
+  textEn: Cluster Nodes
+  useChildrenReplaceSider: true
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-tenant-tenant-cluster
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"authorized-cluster","data":"<defs><style></style></defs><path d=\"M960
+    736h-48v-96c0-35.3-28.7-64-64-64H544V448h224c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H256c-35.3
+    0-64 28.7-64 64v320c0 35.3 28.7 64 64 64h224v128H176c-35.3 0-64 28.7-64 64v96H64c-35.3
+    0-64 28.7-64 64v160c0 35.3 28.7 64 64 64h160c35.3 0 64-28.7 64-64V800c0-35.3-28.7-64-64-64h-48v-96h304v96h-48c-35.3
+    0-64 28.7-64 64v160c0 35.3 28.7 64 64 64h160c35.3 0 64-28.7 64-64V800c0-35.3-28.7-64-64-64h-48v-96h304v96h-48c-35.3
+    0-64 28.7-64 64v160c0 35.3 28.7 64 64 64h160c35.3 0 64-28.7 64-64V800c0-35.3-28.7-64-64-64zm-736
+    64v160H64V800h160zm368 0v160H432V800h160zM256 384V64h512v320H256zm704 576H800V800h160v160z\"></path><path
+    d=\"M352 192h128v64H352zm192 0h128v64H544z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-tenant
+    uid: ""
+  pathname: /oidc/management/tenants/:id/authorizeCluster
+  rankingInColumn: 200
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  text: 租户授权集群
+  textEn: Cluster Labels
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-projects-roles
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-user","data":"<defs><style></style></defs><path d=\"M663.168
+    538.112c67.2-48.512 112-126.912 112-212.8C775.168 179.712 659.392 64 513.792 64S252.48
+    179.712 252.48 325.312c0 89.6 44.8 168 112 212.8a411.776 411.776 0 00-261.312
+    384.512V960h74.688v-37.312c0-186.688 149.312-336 336-336s336 149.312 336 336c0
+    11.2 0 26.112-3.712 37.312h74.688v-37.312c3.648-175.488-104.64-324.8-257.664-384.576zM513.792
+    512c-104.512 0-186.624-82.112-186.624-186.688s82.112-186.688 186.688-186.688 186.688
+    82.112 186.688 186.688S618.368 512 513.792 512z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-projects
+    uid: ""
+  pathname: /oidc/management/projects/:id/role
+  rankingInColumn: 100
+  text: 项目角色
+  textEn: Project Roles
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-projects-members
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-team","data":"<defs><style></style></defs><path d=\"M548.544
+    537.6C614.4 490.048 658.24 413.248 658.24 329.152c0-142.656-113.344-256-256-256s-256
+    113.344-256 256A249.856 249.856 0 00256 537.6C106.048 596.096 0 742.4 0 914.304v36.544h73.152v-36.544c0-182.848
+    146.304-329.152 329.152-329.152s329.152 146.304 329.152 329.152c0 10.944 0 25.6-3.648
+    36.544h73.152v-36.544C804.544 742.4 698.496 596.096 548.544 537.6zM402.304 512c-102.4
+    0-182.848-80.448-182.848-182.848s80.448-182.848 182.848-182.848 182.848 80.448
+    182.848 182.848S504.704 512 402.304 512z\"></path><path d=\"M819.2 501.056c36.544-32.896
+    58.496-80.448 58.496-135.296 0-91.456-65.856-168.256-153.6-179.2l-10.944 73.152c51.2
+    7.296 91.456 54.848 91.456 109.696 0 62.144-47.552 109.696-109.696 109.696v73.152c142.656
+    0 256 113.344 256 256 0 10.944 0 25.6-3.648 36.544h73.152c0-10.944 3.648-25.6
+    3.648-36.544-.064-142.656-84.16-259.712-204.864-307.2z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-projects
+    uid: ""
+  pathname: /oidc/management/projects/:id/member
+  rankingInColumn: 200
+  text: 项目成员
+  textEn: Project Members
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-projects-clusters
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-cluster-authorization","data":"<defs><style></style></defs><path
+    d=\"M94.4 889.216V134.848c0-18.88 21.568-40.512 40.512-40.512H752c18.944 0 40.512
+    21.568 40.512 40.512v106.048h65.536V134.848C857.984 78.336 808.448 28.8 752 28.8H134.848C78.336
+    28.8 28.8 78.336 28.8 134.848v754.304c0 56.512 49.536 106.048 106.048 106.048h243.2v-65.6h-243.2c-18.88-.064-40.448-21.568-40.448-40.384z\"></path><path
+    d=\"M923.456 783.104h-12.032l-134.208-202.88a137.6 137.6 0 0080.704-124.8 140.48
+    140.48 0 00-140.288-140.352c-77.44 0-140.352 62.912-140.352 140.352a137.6 137.6
+    0 0080.768 124.8l-134.144 202.88H512c-42.944 0-71.808 28.8-71.808 71.744v68.608c0
+    42.88 28.864 71.68 71.808 71.68h411.456c42.944 0 71.744-28.8 71.744-71.744v-68.608c0-42.816-28.8-71.68-71.744-71.68zM718.784
+    381.248v3.136a71.04 71.04 0 0170.848 71.04c0 39.68-32.256 71.936-71.936 71.936a71.552
+    71.552 0 01.896-142.976l.192-3.136zm.768 236.096l108.544 167.552H607.424l112.128-167.552zm206.4
+    305.6L924.8 929.6H509.568v-77.184h416.32l.064 70.528zM207.04 216a33.28 33.28 0
+    000 66.432h433.152a33.28 33.28 0 000-66.432H207.04zM393.6 437.824H207.04a33.28
+    33.28 0 000 66.432H393.6a33.28 33.28 0 000-66.432zm0 221.888H207.04a33.28 33.28
+    0 000 66.432H393.6a33.28 33.28 0 000-66.432z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: management-projects
+    uid: ""
+  pathname: /oidc/management/projects/:id/cluster
+  rankingInColumn: 300
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  - TenantAdmin
+  text: 项目授权集群
+  textEn: Project Clusters
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-cluster
+spec:
+  getTitleForReplaceSider:
+    method: useGetCluster
+    params: |-
+      {
+                      "name": "clusterID"
+                    }
+    responseDataPath:
+    - data
+    - cluster
+  icon: '{"name":"nav-cluster","data":"<defs><style></style></defs><path d=\"M772.8
+    992a63.104 63.104 0 01-64.64-64.64V779.648a63.104 63.104 0 0164.64-64.64h41.536v-78.4h-272.32v78.464h36.928a63.104
+    63.104 0 0164.64 64.64v147.712a63.104 63.104 0 01-64.64 64.64H431.232a63.104 63.104
+    0 01-64.64-64.64V779.712a63.104 63.104 0 0164.64-64.64h41.536v-78.464h-272.32v78.464h41.536a63.104
+    63.104 0 0164.64 64.64v147.712a63.104 63.104 0 01-64.64 64.64H94.336a63.104 63.104
+    0 01-64.64-64.64V779.712a63.104 63.104 0 0164.64-64.64h41.536V632a63.104 63.104
+    0 0164.64-64.64H477.44V456.64H274.304a63.104 63.104 0 01-64.64-64.64V96.64A63.104
+    63.104 0 01274.304 32h475.392a63.104 63.104 0 0164.64 64.64V392a63.104 63.104
+    0 01-64.64 64.64H546.624v110.784h276.928a63.104 63.104 0 0164.64 64.64v83.072h41.536a63.104
+    63.104 0 0164.64 64.64v147.712a63.104 63.104 0 01-64.64 64.64L772.8 992zm143.04-69.248V784.32H777.408v138.432H915.84zm-341.504
+    0V784.32H435.84v138.432h138.496zm-341.568 0V784.32H94.336v138.432h138.432zm503.104-535.36V101.248H269.696v286.144h466.176z\"></path><path
+    d=\"M528.128 281.216v-69.248h129.216v69.248H528.128zm-175.36 0v-69.248h129.216v69.248H352.768z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-management-tenant-cluster
+    uid: ""
+  pathname: /oidc/management/clusters
+  rankingInColumn: 100
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  text: 集群管理
+  textEn: Clusters Management
+  useChildrenReplaceSider: true
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-tenant
+spec:
+  getTitleForReplaceSider:
+    method: useGetTenant
+    params: |-
+      {
+                  "tenant": {
+                    "name": "id"
+                  }
+                }
+    responseDataPath:
+    - data
+    - tenant
+  icon: '{"name":"tenant-manage","data":"<defs><style></style></defs><path d=\"M991.68
+    951.104h-31.808V596.48c0-18.816-9.408-44.672-32.32-54.08L639.936 354.176V59.456l-2.944-6.464c-12.928-32.32-41.728-48.256-77.056-41.728l-450.56
+    134.08a68.992 68.992 0 00-44.672 64.128v741.696H32.32A32.192 32.192 0 000 983.488c0
+    19.392 12.928 32.32 32.32 32.32h959.296c19.392 0 32.32-12.928 32.32-32.32.064-20.032-12.864-32.384-32.256-32.384zM895.808
+    592.32v358.208H640.512V427.072L895.808 592.32zM128.192 208.832l447.616-134.08v876.352H128.192V208.832z\"></path><path
+    d=\"M448.192 308.224H256.448c-19.392 0-32.32 12.352-32.32 32.32 0 19.392 12.928
+    32.32 32.32 32.32h191.744c19.392 0 32.32-12.352 32.32-32.32-.576-19.968-13.504-32.32-32.32-32.32zm0
+    191.168H256.448c-19.392 0-32.32 12.928-32.32 32.32s12.928 32.32 32.32 32.32h191.744c19.392
+    0 32.32-12.928 32.32-32.32-.576-19.392-13.504-32.32-32.32-32.32zm255.872 224.704c0
+    19.392 12.928 32.32 32.32 32.32h64.128c19.392 0 32.32-12.352 32.32-32.32 0-19.392-12.928-32.32-32.32-32.32h-64.704c-19.392-.064-31.744
+    12.288-31.744 32.32 0-.576 0 0 0 0zm-255.872-32.384H256.448c-19.392 0-32.32 12.352-32.32
+    32.32 0 19.392 12.928 32.32 32.32 32.32h191.744c19.392 0 32.32-12.352 32.32-32.32-.576-19.968-13.504-32.32-32.32-32.32z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-management-tenant-cluster
+    uid: ""
+  pathname: /oidc/management/tenants
+  rankingInColumn: 200
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  - TenantAdmin
+  text: 租户管理
+  textEn: Tenants Management
+  useChildrenReplaceSider: true
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-projects
+spec:
+  getTitleForReplaceSider:
+    method: useGetProject
+    params: |-
+      {
+                  "name": "id"
+                }
+    responseDataPath:
+    - data
+    - project
+  icon: '{"name":"project-manage","data":"<defs><style></style></defs><path d=\"M877.696
+    256c0-60.48-49.216-109.696-109.696-109.696H109.696C49.216 146.304 0 195.52 0 256v658.304C0
+    974.784 49.216 1024 109.696 1024H768c60.48 0 109.696-49.216 109.696-109.696V256zm-768-36.544H768c20.16
+    0 36.544 16.448 36.544 36.544v182.848H73.152V256c0-20.16 16.448-36.544 36.544-36.544zM768
+    950.848H109.696a36.608 36.608 0 01-36.544-36.544V512h731.392v402.304A36.608 36.608
+    0 01768 950.848zm-36.032-658.304h-73.152v73.152h73.152v-73.152zm-549.12 73.152H512a36.544
+    36.544 0 000-73.088H182.848a36.544 36.544 0 000 73.088zM914.304 0H256c-60.48 0-109.696
+    49.216-109.696 109.696h73.088A36.736 36.736 0 01256 73.152h658.304c20.16 0 36.544
+    16.448 36.544 36.544V768a36.608 36.608 0 01-36.544 36.608v73.152A109.952 109.952
+    0 001024 768V109.696C1024 49.216 974.784 0 914.304 0z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-management-tenant-cluster
+    uid: ""
+  pathname: /oidc/management/projects
+  rankingInColumn: 300
+  requiredRoles:
+  - User
+  - SystemAdmin
+  - PlatformAdmin
+  text: 项目管理
+  textEn: Tenants Management
+  useChildrenReplaceSider: true
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-users
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-user","data":"<defs><style></style></defs><path d=\"M663.168
+    538.112c67.2-48.512 112-126.912 112-212.8C775.168 179.712 659.392 64 513.792 64S252.48
+    179.712 252.48 325.312c0 89.6 44.8 168 112 212.8a411.776 411.776 0 00-261.312
+    384.512V960h74.688v-37.312c0-186.688 149.312-336 336-336s336 149.312 336 336c0
+    11.2 0 26.112-3.712 37.312h74.688v-37.312c3.648-175.488-104.64-324.8-257.664-384.576zM513.792
+    512c-104.512 0-186.624-82.112-186.624-186.688s82.112-186.688 186.688-186.688 186.688
+    82.112 186.688 186.688S618.368 512 513.792 512z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-management-user-management
+    uid: ""
+  pathname: /oidc/management/users
+  rankingInColumn: 100
+  text: 成员管理
+  textEn: Users Management
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-tenant-cluster
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-overview","data":"<defs><style></style></defs><path d=\"M135.616
+    569.024h109.568v64.64H135.616v-64.64zm642.112 0h109.568v64.64H777.728v-64.64zM479.36
+    216.768H544v109.504h-64.64V216.768zm221.888 168.064l77.44-77.376 45.696 45.76-77.44
+    77.376-45.696-45.76zm-412.032 48.96l-77.376-77.44 45.76-45.76 77.376 77.44-45.76
+    45.76zm393.536 14.72l-220.8 138.752a61.632 61.632 0 00-26.56 51.456 61.952 61.952
+    0 00106.496 42.368l.512-.64a57.152 57.152 0 007.552-9.92l135.232-222.08-2.432.064z\"></path><path
+    d=\"M1024 592v-.256l-.064-1.024a515.072 515.072 0 00-5.184-67.84 521.088 521.088
+    0 00-18.176-83.84c-1.536-4.864-3.584-9.536-5.248-14.336a511.104 511.104 0 00-20.672-50.432c-3.008-6.4-5.888-12.8-9.216-19.072a512.64
+    512.64 0 00-33.28-54.848c-1.408-1.984-2.304-4.16-3.712-6.144l-.576.384a514.496
+    514.496 0 00-101.824-106.048l.384-.512c-2.688-2.112-5.696-3.456-8.384-5.504a504.448
+    504.448 0 00-59.072-38.72c-3.264-1.792-6.528-3.392-9.856-5.12a510.208 510.208
+    0 00-60.16-26.496c-5.824-2.176-11.584-4.48-17.472-6.4a482.112 482.112 0 00-67.456-17.216c-5.632-1.024-11.328-1.792-17.024-2.624a516.224
+    516.224 0 00-74.944-6.08h-.128a508.16 508.16 0 00-74.944 6.144c-5.696.768-11.392
+    1.536-17.024 2.56a500.288 500.288 0 00-67.456 17.088c-5.888 1.92-11.648 4.288-17.472
+    6.4a515.84 515.84 0 00-60.224 26.496c-3.264 1.728-6.528 3.328-9.728 5.12-20.736
+    11.456-40.32 24.64-59.136 38.784-2.688 2.048-5.696 3.392-8.384 5.504l.384.512A514.496
+    514.496 0 0096.128 294.528l-.576-.384c-1.408 1.92-2.368 4.16-3.712 6.08-12.224
+    17.536-23.296 35.84-33.28 54.912-3.328 6.272-6.208 12.672-9.216 19.072a495.616
+    495.616 0 00-20.608 50.432c-1.664 4.8-3.776 9.472-5.248 14.336a500.672 500.672
+    0 00-18.24 83.84c-3.008 22.272-5.12 44.8-5.184 67.84L0 591.68v.576a513.344 513.344
+    0 00118.464 328.128 62.592 62.592 0 0048 23.744h691.008a62.784 62.784 0 0048-23.744
+    508.608 508.608 0 0087.936-153.792 512.192 512.192 0 0030.592-174.4V592zM244.288
+    233.472a447.296 447.296 0 0160.8-38.656c16.832-8.768 34.176-16.256 51.904-22.784
+    5.184-1.92 10.24-3.968 15.488-5.696 19.2-6.336 38.848-11.264 58.816-14.912 5.248-.96
+    10.56-1.664 15.872-2.432a445.696 445.696 0 0164.768-5.248h.128c21.824-.064 43.392
+    2.176 64.768 5.248 5.312.768 10.624 1.472 15.872 2.432 19.968 3.648 39.616 8.576
+    58.816 14.912 5.248 1.728 10.304 3.776 15.488 5.696 17.728 6.528 35.072 14.016
+    51.904 22.848 3.648 1.92 7.36 3.84 10.944 5.824 17.344 9.728 33.92 20.8 49.92
+    32.832a445.76 445.76 0 01129.088 151.232c2.944 5.632 5.568 11.392 8.256 17.152
+    6.592 14.016 12.48 28.224 17.536 42.816 1.6 4.608 3.52 9.024 4.992 13.632a451.968
+    451.968 0 0115.808 73.088c2.56 19.136 4.352 38.464 4.48 58.048l.128 2.624c-.064
+    18.944-2.56 37.504-4.864 56.128-.896 7.104-.64 14.4-1.856 21.44-.96 5.696-3.2
+    11.072-4.416 16.704a448.384 448.384 0 01-92.544 193.024L512 879.808l-344.32-.384A448.384
+    448.384 0 0175.136 686.4c-1.216-5.632-3.392-11.008-4.416-16.704-1.216-7.04-.96-14.336-1.856-21.44-2.368-18.624-4.864-37.184-4.928-56.128l.128-2.624a459.904
+    459.904 0 017.232-75.84c3.264-18.752 7.424-37.248 13.12-55.36 1.472-4.672 3.392-9.088
+    4.992-13.632 5.056-14.528 10.944-28.8 17.536-42.816 2.688-5.76 5.312-11.52 8.256-17.152
+    8.64-16.384 18.24-32.384 28.928-47.808a451.84 451.84 0 01100.16-103.424z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-manage
+    uid: ""
+  rankingInColumn: 100
+  text: 租户和集群
+  textEn: Tenant & Cluster
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-user-management
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"nav-overview","data":"<defs><style></style></defs><path d=\"M135.616
+    569.024h109.568v64.64H135.616v-64.64zm642.112 0h109.568v64.64H777.728v-64.64zM479.36
+    216.768H544v109.504h-64.64V216.768zm221.888 168.064l77.44-77.376 45.696 45.76-77.44
+    77.376-45.696-45.76zm-412.032 48.96l-77.376-77.44 45.76-45.76 77.376 77.44-45.76
+    45.76zm393.536 14.72l-220.8 138.752a61.632 61.632 0 00-26.56 51.456 61.952 61.952
+    0 00106.496 42.368l.512-.64a57.152 57.152 0 007.552-9.92l135.232-222.08-2.432.064z\"></path><path
+    d=\"M1024 592v-.256l-.064-1.024a515.072 515.072 0 00-5.184-67.84 521.088 521.088
+    0 00-18.176-83.84c-1.536-4.864-3.584-9.536-5.248-14.336a511.104 511.104 0 00-20.672-50.432c-3.008-6.4-5.888-12.8-9.216-19.072a512.64
+    512.64 0 00-33.28-54.848c-1.408-1.984-2.304-4.16-3.712-6.144l-.576.384a514.496
+    514.496 0 00-101.824-106.048l.384-.512c-2.688-2.112-5.696-3.456-8.384-5.504a504.448
+    504.448 0 00-59.072-38.72c-3.264-1.792-6.528-3.392-9.856-5.12a510.208 510.208
+    0 00-60.16-26.496c-5.824-2.176-11.584-4.48-17.472-6.4a482.112 482.112 0 00-67.456-17.216c-5.632-1.024-11.328-1.792-17.024-2.624a516.224
+    516.224 0 00-74.944-6.08h-.128a508.16 508.16 0 00-74.944 6.144c-5.696.768-11.392
+    1.536-17.024 2.56a500.288 500.288 0 00-67.456 17.088c-5.888 1.92-11.648 4.288-17.472
+    6.4a515.84 515.84 0 00-60.224 26.496c-3.264 1.728-6.528 3.328-9.728 5.12-20.736
+    11.456-40.32 24.64-59.136 38.784-2.688 2.048-5.696 3.392-8.384 5.504l.384.512A514.496
+    514.496 0 0096.128 294.528l-.576-.384c-1.408 1.92-2.368 4.16-3.712 6.08-12.224
+    17.536-23.296 35.84-33.28 54.912-3.328 6.272-6.208 12.672-9.216 19.072a495.616
+    495.616 0 00-20.608 50.432c-1.664 4.8-3.776 9.472-5.248 14.336a500.672 500.672
+    0 00-18.24 83.84c-3.008 22.272-5.12 44.8-5.184 67.84L0 591.68v.576a513.344 513.344
+    0 00118.464 328.128 62.592 62.592 0 0048 23.744h691.008a62.784 62.784 0 0048-23.744
+    508.608 508.608 0 0087.936-153.792 512.192 512.192 0 0030.592-174.4V592zM244.288
+    233.472a447.296 447.296 0 0160.8-38.656c16.832-8.768 34.176-16.256 51.904-22.784
+    5.184-1.92 10.24-3.968 15.488-5.696 19.2-6.336 38.848-11.264 58.816-14.912 5.248-.96
+    10.56-1.664 15.872-2.432a445.696 445.696 0 0164.768-5.248h.128c21.824-.064 43.392
+    2.176 64.768 5.248 5.312.768 10.624 1.472 15.872 2.432 19.968 3.648 39.616 8.576
+    58.816 14.912 5.248 1.728 10.304 3.776 15.488 5.696 17.728 6.528 35.072 14.016
+    51.904 22.848 3.648 1.92 7.36 3.84 10.944 5.824 17.344 9.728 33.92 20.8 49.92
+    32.832a445.76 445.76 0 01129.088 151.232c2.944 5.632 5.568 11.392 8.256 17.152
+    6.592 14.016 12.48 28.224 17.536 42.816 1.6 4.608 3.52 9.024 4.992 13.632a451.968
+    451.968 0 0115.808 73.088c2.56 19.136 4.352 38.464 4.48 58.048l.128 2.624c-.064
+    18.944-2.56 37.504-4.864 56.128-.896 7.104-.64 14.4-1.856 21.44-.96 5.696-3.2
+    11.072-4.416 16.704a448.384 448.384 0 01-92.544 193.024L512 879.808l-344.32-.384A448.384
+    448.384 0 0175.136 686.4c-1.216-5.632-3.392-11.008-4.416-16.704-1.216-7.04-.96-14.336-1.856-21.44-2.368-18.624-4.864-37.184-4.928-56.128l.128-2.624a459.904
+    459.904 0 017.232-75.84c3.264-18.752 7.424-37.248 13.12-55.36 1.472-4.672 3.392-9.088
+    4.992-13.632 5.056-14.528 10.944-28.8 17.536-42.816 2.688-5.76 5.312-11.52 8.256-17.152
+    8.64-16.384 18.24-32.384 28.928-47.808a451.84 451.84 0 01100.16-103.424z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-manage
+    uid: ""
+  rankingInColumn: 200
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  text: 用户管理
+  textEn: User Management
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-management-approval
+spec:
+  getTitleForReplaceSider: {}
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: platform-manage
+    uid: ""
+  rankingInColumn: 300
+  text: 配置管理
+  textEn: ""
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: platform-manage
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"home-two-tone","data":"<defs><style></style></defs><path d=\"M1020.48
+    409.536l-502.784-386.4a8.992 8.992 0 00-5.728-1.76v88.992l.384-.32 463.232 356a9.216
+    9.216 0 0012.8-1.536l33.664-42.4a8.864 8.864 0 00-1.568-12.576z\"></path><path
+    d=\"M511.968 21.28a9.12 9.12 0 00-7.072 3.296l-.16.224L3.52 410.016a8.864 8.864
+    0 00-1.568 12.576l33.664 42.4a9.184 9.184 0 0012.8 1.536l463.552-356.256V21.28zm0
+    161.504L78.816 517.28v484.672h285.76V636.256h147.392z\" opacity=\"0.6\"></path><path
+    d=\"M512.448 183.2l-.48.352v453.44h145.184v365.728h288.032V517.376z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: ""
+    kind: ""
+    name: ""
+    uid: ""
+  rankingInColumn: 100
+  requiredRoles:
+  - PlatformAdmin
+  - SystemAdmin
+  - TenantAdmin
+  text: 管理工作台
+  textEn: Management Console
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: user-panel-accounts-my-account
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"pandect","data":"<defs><style></style></defs><path d=\"M562.752
+    82.56a71.936 71.936 0 00-96.576 0L75.648 453.376a36.032 36.032 0 0048.192 53.504l6.208-5.888V888a72.064
+    72.064 0 0071.936 72.128h209.728V743.232a50.752 50.752 0 0150.688-50.816h98.752c28.032
+    0 50.752 22.72 50.752 50.688v216.96H826.56c39.808 0 72.064-32.256 72.064-72v-382.4c16
+    14.464 38.72 13.376 52.032-1.472a36.032 36.032 0 00-2.624-50.88L562.752 82.56z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: user-panel-accounts
+    uid: ""
+  pathname: /oidc/management/account
+  rankingInColumn: 100
+  text: 我的账户
+  textEn: My Account
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-license
+spec:
+  getTitleForReplaceSider: {}
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: user-panel-platform-setting
+    uid: ""
+  pathname: /oidc/management/license
+  rankingInColumn: 100
+  requiredRoles:
+  - SystemAdmin
+  - PlatformAdmin
+  text: 正版授权
+  textEn: Genuine Authorization
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: user-panel-accounts
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"system-setting","data":"<defs><style></style></defs><path d=\"M903.4
+    98.2H120.2c-30.9 0-55.9 25-55.9 55.9v606.5c0 30.9 25 55.9 55.9 55.9H344v55.9c0
+    30.9 25 55.9 55.9 55.9h223.8c30.9 0 55.9-25 55.9-55.9v-55.9h223.8c30.9 0 55.9-25
+    55.9-55.9V154.1c0-30.9-25-55.9-55.9-55.9zm-6.8 648.7H127.4V168.4h769.3v578.5zM594.9
+    547.6c-12 9.9-25.8 17.6-40.5 22.7v28.9c0 11.9-9.7 21.6-21.6 21.6h-44.6c-11.9 0-21.6-9.7-21.6-21.6v-28.9c-14.7-5.1-28.4-12.8-40.5-22.7l-24.5
+    14.2c-10.3 6-23.5 2.4-29.5-7.9l-22.3-38.7c-6-10.3-2.4-23.5 7.9-29.5l23.4-13.5c-3-15.9-3-32.2
+    0-48.1l-23.4-13.5c-10.3-6-13.9-19.2-7.9-29.5l22.3-38.7c6-10.3 19.2-13.9 29.5-7.9l24.5
+    14.2c12.1-9.9 25.8-17.6 40.5-22.7v-28.9c0-11.9 9.7-21.6 21.6-21.6h44.6c11.9 0
+    21.6 9.7 21.6 21.6V326c14.9 5.2 28.6 13 40.5 22.7l24.5-14.2c10.3-6 23.5-2.4 29.5
+    7.9l22.3 38.7c6 10.3 2.4 23.5-7.9 29.5l-23.4 13.5c3 15.9 3 32.2 0 48.1l23.4 13.5c10.3
+    6 13.9 19.2 7.9 29.5l-22.3 38.7c-6 10.3-19.2 13.9-29.5 7.9l-24.5-14.2zM510.5 513c36.4
+    0 65.9-29 65.9-64.8s-29.5-64.8-65.9-64.8-65.9 29-65.9 64.8 29.5 64.8 65.9 64.8z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: user-panel
+    uid: ""
+  rankingInColumn: 100
+  text: 账户中心
+  textEn: Account Center
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: user-panel-platform-setting
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"system-setting","data":"<defs><style></style></defs><path d=\"M903.4
+    98.2H120.2c-30.9 0-55.9 25-55.9 55.9v606.5c0 30.9 25 55.9 55.9 55.9H344v55.9c0
+    30.9 25 55.9 55.9 55.9h223.8c30.9 0 55.9-25 55.9-55.9v-55.9h223.8c30.9 0 55.9-25
+    55.9-55.9V154.1c0-30.9-25-55.9-55.9-55.9zm-6.8 648.7H127.4V168.4h769.3v578.5zM594.9
+    547.6c-12 9.9-25.8 17.6-40.5 22.7v28.9c0 11.9-9.7 21.6-21.6 21.6h-44.6c-11.9 0-21.6-9.7-21.6-21.6v-28.9c-14.7-5.1-28.4-12.8-40.5-22.7l-24.5
+    14.2c-10.3 6-23.5 2.4-29.5-7.9l-22.3-38.7c-6-10.3-2.4-23.5 7.9-29.5l23.4-13.5c-3-15.9-3-32.2
+    0-48.1l-23.4-13.5c-10.3-6-13.9-19.2-7.9-29.5l22.3-38.7c6-10.3 19.2-13.9 29.5-7.9l24.5
+    14.2c12.1-9.9 25.8-17.6 40.5-22.7v-28.9c0-11.9 9.7-21.6 21.6-21.6h44.6c11.9 0
+    21.6 9.7 21.6 21.6V326c14.9 5.2 28.6 13 40.5 22.7l24.5-14.2c10.3-6 23.5-2.4 29.5
+    7.9l22.3 38.7c6 10.3 2.4 23.5-7.9 29.5l-23.4 13.5c3 15.9 3 32.2 0 48.1l23.4 13.5c10.3
+    6 13.9 19.2 7.9 29.5l-22.3 38.7c-6 10.3-19.2 13.9-29.5 7.9l-24.5-14.2zM510.5 513c36.4
+    0 65.9-29 65.9-64.8s-29.5-64.8-65.9-64.8-65.9 29-65.9 64.8 29.5 64.8 65.9 64.8z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: user-panel
+    uid: ""
+  rankingInColumn: 200
+  text: 平台信息
+  textEn: Platform setting
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: user-panel-toolbox
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"setting-two-tone","data":"<defs><style></style></defs><path d=\"M294.852
+    508.673c1.983-116.923 95.234-210.654 210.654-215.165V1.056c-23.353.448-46.29 2.59-68.842
+    5.982-22.97 3.455-45.426 8.125-67.243 14.523l-22.905 85.382v.128l-.064.255-.064.128v.064l-12.156
+    45.362a410.26 410.26 0 00-42.771 24.505l-45.042-12.093-.064-.064h-.192l-.256-.064h-.064l-85.317-22.968a513.671
+    513.671 0 00-46.258 50.992 513.631 513.631 0 00-43.954 63.308 513.656 513.656
+    0 00-32.886 69.738 504.706 504.706 0 00-21.017 65.58l62.508 62.508v.064l.256.192.128.128v.064l33.334
+    33.333c-.448 8.062-1.216 16.123-1.216 24.377s.704 16.25 1.216 24.376l-33.27 33.27-.064.064-.128.128-.192.256h-.096L16.38
+    633.082c5.374 22.073 12.604 43.954 21.05 65.516 9.276 23.672 19.833 47.089 32.885
+    69.738s28.023 43.57 43.89 63.34c14.46 18.106 29.751 35.253 46.258 50.992l85.317-22.905h.064l.256-.064.192-.064h.064l44.978-12.092a413.603
+    413.603 0 0042.867 24.44l12.156 45.362v.256l.128.256v.064l22.905 85.381c21.817
+    6.398 44.338 11.133 67.243 14.524 22.808 3.615 45.81 5.502 68.906 6.046V731.515c-118.81-4.798-212.734-103.391-210.686-222.842z\"
+    opacity=\"0.6\"></path><path d=\"M947.928 570.542l-.256-.192-.128-.128h-.064l-33.334-33.398c.448-8.125
+    1.216-16.187 1.216-24.376 0-8.254-.704-16.315-1.216-24.44l33.334-33.334.128-.128.192-.192
+    62.508-62.508a503.107 503.107 0 00-21.05-65.58 515.487 515.487 0 00-32.885-69.738
+    512.416 512.416 0 00-43.89-63.34 505.89 505.89 0 00-46.258-50.992L780.844 165.1l-.064.064-.256.064-.192.064h-.064l-45.042
+    12.093a401.338 401.338 0 00-42.802-24.44l-12.157-45.363.128-.192-.064-.192-.064-.191v-.064L657.363
+    21.56A513.697 513.697 0 00590.12 7.038 514.751 514.751 0 00513.28.704c-2.688 0-5.31.32-7.998.352v292.42c3.679-.128
+    7.326-.448 11.069-.384a219.355 219.355 0 11-7.486 438.647c-1.216-.032-2.367-.192-3.583-.256v292.293c2.623.064
+    5.246.352 7.87.352 26.231 0 51.76-2.56 76.904-6.398a513.697 513.697 0 0067.243-14.524l22.904-85.38.064-.32.064-.193
+    12.157-45.361c14.779-7.422 29.11-15.42 42.802-24.505l45.106 12.092v.064l.192.064.256.064h.064l85.413
+    22.905a517.274 517.274 0 0046.258-50.992c16.25-19.962 30.902-41.139 43.954-63.34
+    13.116-22.649 23.609-46.066 32.886-69.738 8.51-21.562 15.675-43.379 21.05-65.516l-62.541-62.508z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: user-panel
+    uid: ""
+  pathname: /oidc/management/toolbox
+  rankingInColumn: 300
+  text: API 凭证
+  textEn: API Credentials
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: user-panel
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"setting-two-tone","data":"<defs><style></style></defs><path d=\"M294.852
+    508.673c1.983-116.923 95.234-210.654 210.654-215.165V1.056c-23.353.448-46.29 2.59-68.842
+    5.982-22.97 3.455-45.426 8.125-67.243 14.523l-22.905 85.382v.128l-.064.255-.064.128v.064l-12.156
+    45.362a410.26 410.26 0 00-42.771 24.505l-45.042-12.093-.064-.064h-.192l-.256-.064h-.064l-85.317-22.968a513.671
+    513.671 0 00-46.258 50.992 513.631 513.631 0 00-43.954 63.308 513.656 513.656
+    0 00-32.886 69.738 504.706 504.706 0 00-21.017 65.58l62.508 62.508v.064l.256.192.128.128v.064l33.334
+    33.333c-.448 8.062-1.216 16.123-1.216 24.377s.704 16.25 1.216 24.376l-33.27 33.27-.064.064-.128.128-.192.256h-.096L16.38
+    633.082c5.374 22.073 12.604 43.954 21.05 65.516 9.276 23.672 19.833 47.089 32.885
+    69.738s28.023 43.57 43.89 63.34c14.46 18.106 29.751 35.253 46.258 50.992l85.317-22.905h.064l.256-.064.192-.064h.064l44.978-12.092a413.603
+    413.603 0 0042.867 24.44l12.156 45.362v.256l.128.256v.064l22.905 85.381c21.817
+    6.398 44.338 11.133 67.243 14.524 22.808 3.615 45.81 5.502 68.906 6.046V731.515c-118.81-4.798-212.734-103.391-210.686-222.842z\"
+    opacity=\"0.6\"></path><path d=\"M947.928 570.542l-.256-.192-.128-.128h-.064l-33.334-33.398c.448-8.125
+    1.216-16.187 1.216-24.376 0-8.254-.704-16.315-1.216-24.44l33.334-33.334.128-.128.192-.192
+    62.508-62.508a503.107 503.107 0 00-21.05-65.58 515.487 515.487 0 00-32.885-69.738
+    512.416 512.416 0 00-43.89-63.34 505.89 505.89 0 00-46.258-50.992L780.844 165.1l-.064.064-.256.064-.192.064h-.064l-45.042
+    12.093a401.338 401.338 0 00-42.802-24.44l-12.157-45.363.128-.192-.064-.192-.064-.191v-.064L657.363
+    21.56A513.697 513.697 0 00590.12 7.038 514.751 514.751 0 00513.28.704c-2.688 0-5.31.32-7.998.352v292.42c3.679-.128
+    7.326-.448 11.069-.384a219.355 219.355 0 11-7.486 438.647c-1.216-.032-2.367-.192-3.583-.256v292.293c2.623.064
+    5.246.352 7.87.352 26.231 0 51.76-2.56 76.904-6.398a513.697 513.697 0 0067.243-14.524l22.904-85.38.064-.32.064-.193
+    12.157-45.361c14.779-7.422 29.11-15.42 42.802-24.505l45.106 12.092v.064l.192.064.256.064h.064l85.413
+    22.905a517.274 517.274 0 0046.258-50.992c16.25-19.962 30.902-41.139 43.954-63.34
+    13.116-22.649 23.609-46.066 32.886-69.738 8.51-21.562 15.675-43.379 21.05-65.516l-62.541-62.508z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: ""
+    kind: ""
+    name: ""
+    uid: ""
+  rankingInColumn: 200
+  text: 设置管理
+  textEn: System Setting
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: management-operation-audit
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"audit","data":"<defs><style></style></defs><path d=\"M944.695 122.067l-107.71-107.71a46.271
+    46.271 0 00-67.006 0l-289.53 291.962a57.535 57.535 0 00-14.4 26.367L446.913 457.1a48.319
+    48.319 0 0055.04 55.039l126.845-19.136a56.639 56.639 0 0026.303-14.336l289.594-289.594c19.136-16.767
+    19.136-47.87 0-67.006zm-345.08 315.641l-89.023 7.936 8-84.158 298.17-293.05 76.798
+    76.222-293.946 293.05zM721.851 729.35h-463.67a9.728 9.728 0 00-9.665 9.664v57.983c0
+    5.312 4.352 9.663 9.664 9.663h463.67a9.728 9.728 0 009.664-9.663v-57.983a9.728
+    9.728 0 00-9.663-9.664zM480.32 632.776a9.728 9.728 0 009.663-9.664V565.13a9.728
+    9.728 0 00-9.663-9.663H258.18a9.728 9.728 0 00-9.664 9.663v57.983c0 5.312 4.352
+    9.664 9.664 9.664h222.14z\"></path><path d=\"M432.066 86.931H151.879v850.095h676.21V521.674c0-5.312
+    4.352-9.663 9.664-9.663H905.4c5.312 0 9.664 4.351 9.664 9.663v463.67c0 21.376-17.28
+    38.656-38.656 38.656H103.56a38.591 38.591 0 01-38.655-38.655V38.676A38.72 38.72
+    0 01103.56.021h328.442c5.312 0 9.663 4.352 9.663 9.664v67.647a9.6 9.6 0 01-9.6
+    9.6z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: oidc-platform-ops
+    uid: ""
+  pathname: /oidc/management/operation-audit
+  rankingInColumn: 100
+  text: 操作审计
+  textEn: Operation audit
+status: {}
+
+---
+apiVersion: component.t7d.io/v1beta1
+kind: Menu
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-6"
+  creationTimestamp: null
+  name: oidc-platform-ops
+spec:
+  getTitleForReplaceSider: {}
+  icon: '{"name":"manage-monitor","data":"<path d=\"M1024 128c0-15.36-7.68-28.16-15.36-38.4-12.8-17.92-30.72-23.04-53.76-23.04H56.32c-7.68
+    0-17.92 2.56-23.04 5.12C15.36 84.48 0 99.84 0 125.44v645.12c0 7.68 2.56 15.36
+    5.12 20.48 10.24 25.6 28.16 35.84 56.32 35.84h307.2c12.8 0 15.36 2.56 15.36 15.36v33.28c0
+    12.8-2.56 15.36-15.36 15.36h-102.4c-10.24 0-12.8 5.12-12.8 12.8v33.28c0 12.8 0
+    12.8 12.8 12.8h496.64v-46.08c0-15.36-2.56-15.36-15.36-15.36h-99.84c-7.68 0-12.8-2.56-12.8-10.24v-40.96c0-12.8
+    0-12.8 12.8-12.8h317.44c7.68 0 17.92-5.12 25.6-10.24s12.8-15.36 17.92-20.48c7.68-10.24
+    7.68-17.92 7.68-28.16C1024 555.52 1024 343.04 1024 128zm-64 496.64c0 12.8-2.56
+    15.36-15.36 15.36H81.92C64 640 64 640 64 622.08V125.44h880.64c12.8 0 15.36 0 15.36
+    15.36v483.84z\"></path><path d=\"M437.76 371.2c-12.8 0-25.6-2.56-35.84-10.24-2.56
+    0-7.68 0-7.68 2.56-23.04 20.48-48.64 38.4-71.68 58.88-15.36 12.8-30.72 23.04-46.08
+    35.84-5.12 5.12-12.8 10.24-5.12 17.92v5.12c-5.12 20.48-10.24 38.4-33.28 48.64-25.6
+    12.8-51.2 5.12-69.12-17.92-10.24-12.8-12.8-28.16-10.24-43.52 2.56-17.92 12.8-33.28
+    30.72-38.4 10.24-2.56 20.48-5.12 30.72-5.12h5.12c15.36 10.24 25.6 5.12 38.4-7.68s30.72-23.04
+    43.52-35.84c23.04-17.92 43.52-33.28 66.56-51.2 2.56-2.56 5.12-7.68 5.12-12.8 0-20.48
+    10.24-35.84 25.6-46.08 15.36-10.24 33.28-12.8 51.2-5.12 10.24 5.12 17.92 10.24
+    23.04 17.92 10.24 17.92 15.36 33.28 5.12 53.76-2.56 2.56 2.56 10.24 5.12 15.36
+    12.8 17.92 28.16 33.28 40.96 48.64 5.12 10.24 12.8 7.68 20.48 7.68 10.24 0 20.48-2.56
+    30.72 5.12 0 0 7.68 0 7.68-2.56 15.36-15.36 30.72-30.72 48.64-43.52 28.16-25.6
+    53.76-51.2 81.92-74.24 10.24-7.68 17.92-15.36 28.16-25.6 2.56-2.56 5.12-7.68 5.12-12.8v-23.04c2.56-17.92
+    7.68-33.28 25.6-40.96 7.68-5.12 17.92-10.24 28.16-10.24 15.36 0 30.72 5.12 43.52
+    17.92 15.36 17.92 15.36 38.4 10.24 58.88-2.56 15.36-15.36 25.6-30.72 30.72-7.68
+    2.56-17.92 2.56-25.6 5.12h-5.12c-15.36-10.24-23.04 2.56-33.28 10.24-15.36 15.36-30.72
+    28.16-48.64 43.52-23.04 20.48-46.08 43.52-69.12 64-10.24 10.24-23.04 20.48-33.28
+    33.28-2.56 2.56-5.12 7.68-5.12 12.8 2.56 23.04-7.68 43.52-25.6 53.76-12.8 7.68-28.16
+    12.8-46.08 5.12-10.24-5.12-23.04-10.24-28.16-20.48-10.24-15.36-15.36-33.28-5.12-51.2
+    2.56-5.12 2.56-12.8-2.56-17.92-15.36-15.36-28.16-33.28-40.96-51.2-2.56-2.56-5.12-2.56-7.68-5.12-5.12-2.56-10.24
+    0-15.36 0z\"></path><path d=\"M230.4 478.72c0-10.24-5.12-15.36-17.92-15.36-10.24
+    0-17.92 7.68-17.92 17.92s7.68 17.92 17.92 17.92c7.68-2.56 17.92-12.8 17.92-20.48zm578.56-258.56c-12.8
+    0-17.92 5.12-17.92 17.92 0 10.24 7.68 17.92 15.36 17.92s17.92-10.24 17.92-17.92c2.56-10.24-5.12-17.92-15.36-17.92zm-268.8
+    243.2c0 12.8 5.12 17.92 15.36 17.92 10.24 0 20.48-7.68 20.48-17.92 0-5.12-10.24-17.92-17.92-17.92-12.8
+    0-17.92 5.12-17.92 17.92zm-87.04-145.92c-5.12-12.8-10.24-20.48-25.6-15.36-7.68
+    2.56-7.68 10.24-10.24 15.36-2.56 5.12 7.68 15.36 15.36 17.92 12.8 0 15.36-10.24
+    20.48-17.92z\"></path>"}'
+  parentOwnerReferences:
+    apiVersion: component.t7d.io/v1beta1
+    blockOwnerDeletion: false
+    controller: false
+    kind: Menu
+    name: monitoring-and-ops
+    uid: ""
+  rankingInColumn: 300
+  text: 平台运维
+  textEn: Manage/Monitor
+status: {}
+
+---

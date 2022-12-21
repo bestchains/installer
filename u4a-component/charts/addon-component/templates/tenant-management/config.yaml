@@ -1,0 +1,40 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: t7d.io.capsule-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  # should update this clusterrole to limit the granted access
+  # TODO: Fix the RBAC here
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: capsule-selfsigned-ca
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: capsule-tls
+  dnsNames:
+  - capsule-webhook-service.{{ .Release.Namespace }}.svc
+  # cluster.local might be incorrect if the cluster has customized suffix
+  - capsule-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    name: capsule-issuer
+    kind: Issuer
+  subject:
+    organizations:
+      - clastix.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: capsule-issuer
+  namespace: {{ .Release.Namespace }}
+spec:
+  selfSigned: {}

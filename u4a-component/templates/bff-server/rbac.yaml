@@ -1,0 +1,81 @@
+{{- if .Values.bffServer.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: t7d.io.platform-resource-reader
+rules:
+- apiGroups:
+  - common.tenxcloud.com
+  resources:
+  - licenseusings
+  - licenses
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - iam.tenxcloud.com
+  resources:
+  - users
+  - roletemplates
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - t7d.io
+  resources:
+  - userviews
+  - tenantviews
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - t7d.io
+  resources:
+  - namespaceviews
+#TODO: 普通用户也在resource-reader组中，普通用户也就有create,update,delete nsview的权限，存在一定的安全隐患，后期在优化
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - cluster.karmada.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - component.t7d.io
+  resources:
+  - menus
+  - components
+  verbs:
+  - list
+- apiGroups:
+  - extensions
+  - policy
+  resourceNames:
+  - default
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: t7d.io.platform-resource-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: t7d.io.platform-resource-reader
+subjects:
+- kind: Group
+  name: resource-reader
+- kind: ServiceAccount
+  name: default
+  namespace: {{ .Release.Namespace }}
+{{- end }}

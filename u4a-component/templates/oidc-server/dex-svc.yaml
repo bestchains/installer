@@ -1,0 +1,24 @@
+{{- if .Values.oidcServer.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    system/component: u4a
+    system/u4a: oidc-server
+  name: oidc-server
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: port-1
+    port: 5556
+    protocol: TCP
+    targetPort: 5556
+  - name: port-2
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    system/component: u4a
+    system/u4a: oidc-server
+  type: ClusterIP
+{{- end }}
