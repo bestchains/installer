@@ -57,7 +57,7 @@ ingress:
 # Optional but the default: Use Kubernetes CRD for user provider - iam provider
 iamProvider:
   enabled: true
-  image: u4a-component/iam-provider:v0.1.0-20221221
+  image: u4a-component/iam-provider:v0.1.0-20221223
 
 # Required: Use dex as the odic service
 oidcServer:
@@ -69,7 +69,7 @@ oidcServer:
   image: u4a-component/oidc-server:v0.1.0-20220923
   issuer: https://{{ .Values.deploymentConfig.bffHost }}/oidc
   storageType: kubernetes
-  webHttp: 0.0.0.0:5556
+  webHttps: 0.0.0.0:5556
   clientId: *clientId
   connectors:
   - type: k8scrd
@@ -97,7 +97,7 @@ oidcServer:
 # Optional but the default: BFF server for all API endpoints
 bffServer:
   enabled: true
-  image: u4a-component/bff-server:v0.1.0-20221221
+  image: u4a-component/bff-server:v0.1.0-20221223
   host: *bffHost
   connectorId: k8scrd
   clientId: *clientId
@@ -146,9 +146,6 @@ addon-component:
         # MUST update this value
         ip: <replaced-ingress-nginx-ip>
 
-cluster-component:
-  enabled: false
-
 # Optional: Enable it if use LDAP as user provider
 ldapProvider:
   enabled: false
@@ -158,3 +155,6 @@ ldapProvider:
 #  ldapDomain: tenxcloud.com
 #  ldapAdminPwd: Dream001$
 #  ldapAdminImage: 172.22.96.19/u4a_system/phpldapadmin:stable
+
+cluster-component:
+  enabled: false

@@ -68,7 +68,7 @@ spec:
               protocol: TCP
           env: # 主要是环境变量这里
             - name: DEX_SERVER_URL # dex 服务地址
-              value: http://oidc-server:5556/oidc
+              value: https://oidc-server:5556/oidc
             - name: DEX_CONNECTOR_ID # 我们自定义的 dex connector id
               value: {{ .Values.bffServer.connectorId }}
             - name: DEX_CLIENT_ID # dex client id，用于 dock-app 接入 oidc
@@ -79,10 +79,6 @@ spec:
               value: {{ .Values.k8s.hostK8sApiWithOidc }}
             - name: K8S_API_TIMEOUT
               value: "10"
-            - name: LICENSE_NS
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
           resources:
             limits:
               cpu: 1

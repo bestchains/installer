@@ -782,33 +782,6 @@ metadata:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "-6"
   creationTimestamp: null
-  name: management-license
-spec:
-  getTitleForReplaceSider: {}
-  parentOwnerReferences:
-    apiVersion: component.t7d.io/v1beta1
-    blockOwnerDeletion: false
-    controller: false
-    kind: Menu
-    name: user-panel-platform-setting
-    uid: ""
-  pathname: /oidc/management/license
-  rankingInColumn: 100
-  requiredRoles:
-  - SystemAdmin
-  - PlatformAdmin
-  text: 正版授权
-  textEn: Genuine Authorization
-status: {}
-
----
-apiVersion: component.t7d.io/v1beta1
-kind: Menu
-metadata:
-  annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-weight: "-6"
-  creationTimestamp: null
   name: user-panel-accounts
 spec:
   getTitleForReplaceSider: {}

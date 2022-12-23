@@ -1,11 +1,11 @@
 Here is the steps about how to install bestchains BaaS platform
 
-### 1. Install u4a-component
+## 1. Install u4a-component
 For the 1st step, we'll install u4a-component and it'll provide the account, authentication, authorization and audit funcationality built on Kubernetes. And it has the capability to add more features following the guide later.
 
 And then we'll deploy BaaS on top of it, and use OIDC token for SSO between u4a and baas component.
 
-#### Install cluster tools
+### Install cluster tools
 Before deploy u4a, we should add some tools for later usage. Enter into u4a-component folder and following the step below:
 
 * This step will install a ingress nginx controller with ingressclass named 'u4a-component-ingress' and cert-manager for certificate management.
@@ -15,14 +15,14 @@ Before deploy u4a, we should add some tools for later usage. Enter into u4a-comp
 $ kubectl create ns u4a-system
 
 # 2. edit charts/cluster-component/values.yaml to replace '<replaced-ingress-node-name>'
-# with the K8S node name that will install the ingress controller, so update the value of deployedHost
+# with the K8S node name that will install the ingress controller, so update the value of deployedHost, and remember the IP address of this host, will use it at the next step.
 
 ingress-nginx:
   # MUST update this value
   deployedHost: &deployedHost
     k8s-ingress-nginx-node-name
 
-# you should also update the image address if you're using a private registry
+# you should also update the image address if you're using a private registry, then you should replace 'hub.tenxcloud.com'(or the image name) with your private registry.
 
 # 3. install cluster-component using 
 $ helm install cluster-component -n u4a-system charts/cluster-component
@@ -35,7 +35,7 @@ cert-manager-cainjector-64685f8d48-qg69v                      1/1     Running   
 cert-manager-webhook-5c46d68c6b-f4dkh                         1/1     Running   0          76m
 cluster-component-ingress-nginx-controller-5bd67897dd-5m9n7   1/1     Running   0          76m
 ```
-#### Install u4a services
+### Install u4a services
 Enter into u4a-component folder and following the step below:
 
 This step will install the following services:
@@ -68,15 +68,35 @@ kube-oidc-proxy-5f4598c77c-fzl5q                              1/1     Running   
 oidc-server-85db495594-k6pkt                                  2/2     Running   0          65m
 resource-view-controller-76d8c79cf-smkj5                      1/1     Running   0          66m
 ```
+3. At the end of the helm install, it'll prompt you with some notes like below:
+```
+NOTES:
+1. Get the  ServiceAccount token by running these commands:
 
-3. Open the host configured using ingress below:
+  export TOKENNAME=$(kubectl get serviceaccount/host-cluster-reader -n u4a-system -o jsonpath='{.secrets[0].name}')
+  kubectl get secret $TOKENNAME -n u4a-system -o jsonpath='{.data.token}' | base64 -d
+```
+Save the token and will use it to add the cluster later.
+
+4. Open the host configured using ingress below:
 
 `https://portal.<replaced-ingress-nginx-ip>.nip.io`
 
-If your host isn't able to access nip.io, you should add the ip<->host mapping to your hosts file.
+If your host isn't able to access nip.io, you should add the ip<->host mapping to your hosts file. Login with user admin/baas-admin (default one).
+
+5. Prepare the environment
+1) Create a namespace for cluster management, it should be 'cluster-system'.
+```
+kubectl create -n cluster-system
+```
+
+2) Add current cluster to the portal. Navigate to '集群管理' and '添加集群'
+* for API Host, use the one from `hostK8sApiWithOidc`
+* for API Token, use the one you saved from step 3.
+
+Now, you should have a cluster and a 'system-tenant' and tenant management.
+
+## 2. Install baas-component
 
 
-### 2. Install baas-component
-
-
-### 3. Add more components
+## 3. Add more components

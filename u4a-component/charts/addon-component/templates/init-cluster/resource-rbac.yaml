@@ -1,9 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-weight": "-3"
   name: t7d.io.{{ .Values.clusterResPrefix }}-cluster-resource-reader
 rules:
 - apiGroups:

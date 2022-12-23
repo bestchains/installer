@@ -15,7 +15,9 @@ data:
       config:
         inCluster: true
     web:
-      http: {{ .Values.oidcServer.webHttp }}
+      https: {{ .Values.oidcServer.webHttps }}
+      tlsCert: /etc/oidc-server/tls/tls.crt
+      tlsKey: /etc/oidc-server/tls/tls.key
     additionalConfig:
       defaultUserGroups:
       - iam.tenxcloud.com

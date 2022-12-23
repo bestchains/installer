@@ -1,0 +1,4 @@
+1. Get the {{ .Values.rbacResourceName }} ServiceAccount token by running these commands:
+
+  export TOKENNAME=$(kubectl get serviceaccount/{{ index .Values "addon-component" "rbacResourceName" }} -n {{ .Release.Namespace }} -o jsonpath='{.secrets[0].name}')
+  kubectl get secret $TOKENNAME -n {{ .Release.Namespace }} -o jsonpath='{.data.token}' | base64 -d
