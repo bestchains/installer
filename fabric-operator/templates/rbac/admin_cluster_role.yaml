@@ -1,0 +1,50 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: blockchain:admin-cluster-role
+rules:
+# CRD Organization
+- apiGroups:
+    - ibp.com
+  resources:
+    - organizations
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+- apiGroups:
+    - ibp.com
+  resources:
+    - organizations/status
+  verbs:
+    - get
+# CRD Federations & Networks
+- apiGroups:
+    - ibp.com
+  resources:
+    - federations
+    - networks
+  verbs:
+    - create
+    - delete
+- apiGroups:
+    - ibp.com
+  resources:
+    - federations/status
+    - networks/status
+  verbs:
+    - get
+# CRD Proposals
+- apiGroups:
+    - ibp.com
+  resources:
+    - proposals
+  verbs:
+    - create
+- apiGroups:
+    - ibp.com
+  resources:
+    - proposals/status
+  verbs:
+    - get

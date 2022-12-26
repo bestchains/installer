@@ -39,15 +39,6 @@ spec:
           mountPath: /etc/oidc-server/cfg
         - name: tls
           mountPath: /etc/oidc-server/tls
-        readinessProbe:
-          httpGet:
-            {{- if .Values.oidcServer.debug }}
-            path: /healthz
-            {{- else }}
-            path: /oidc/healthz
-            {{- end }}
-            port: 5556
-            scheme: HTTP
         resources:
           limits:
             cpu: 1

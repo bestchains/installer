@@ -1,0 +1,23 @@
+name: "installer e2e"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  suite: 
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Kind
+      run: |
+        make kind
+    - name: Install
+      run: |
+        make e2e

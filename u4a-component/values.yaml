@@ -7,6 +7,8 @@ deploymentConfig:
   # bffServer info
   bffHost: &bffHost
     portal.<replaced-ingress-nginx-ip>.nip.io
+  bcHost: &bcHost
+    bc.<replaced-ingress-nginx-ip>.nip.io
   clientName: &clientName
     bff-client
   clientId: &clientId
@@ -48,7 +50,7 @@ issuerConfig:
 
 # The ingress class id of the nginx ingress to expose the services for external access
 ingress:
-  name: u4a-component-ingress
+  name: portal-ingress
 
 ###############################################################################################
 ### Below is the configuration for each service, in most cases, you don't need to update them
@@ -82,6 +84,9 @@ oidcServer:
   - id: *clientId
     redirectURIs:
     - https://{{ .Values.deploymentConfig.bffHost }}/
+    - https://{{ .Values.deploymentConfig.bcHost }}/
+    - https://{{ .Values.deploymentConfig.bcHost }}
+    - https://{{ .Values.deploymentConfig.bcHost }}/bc
     name: *clientName
     secret: *clientSecret
   # Enable and update the ip if nip.io is NOT accessible in deployed environment
@@ -128,7 +133,7 @@ addon-component:
     image: hub.tenxcloud.com/u4a-component/kube-oidc-proxy:v0.3.0-20221008
     nodeName: <replaced-oidc-proxy-node-name>
     issuerUrl: https://portal.<replaced-ingress-nginx-ip>.nip.io/oidc
-    clientId: &clientId
+    clientId: *clientId
     certificate:
       ipAddresses:
       # MUST update this value to the host ip of kube-oidc-proxy

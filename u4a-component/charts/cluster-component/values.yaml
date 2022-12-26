@@ -9,8 +9,8 @@ ingress-nginx:
     <replaced-ingress-node-name>
   controller:
     ingressClassResource:
-      name: u4a-component-ingress
-    ingressClass: u4a-component-ingress
+      name: portal-ingress
+    ingressClass: portal-ingress
     image:
       repository: hub.tenxcloud.com/u4a-component/ingress-nginx-controller
       tag: v1.3.0
@@ -29,7 +29,7 @@ ingress-nginx:
       report-node-internal-ip-address:
       http-port: 8080
       https-port: 8443
-      enable-ssl-passthrough:
+      enable-ssl-passthrough: true
       ssl-passthrough-proxy-port: 16443
     service:
       enabled: false

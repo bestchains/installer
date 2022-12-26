@@ -1,0 +1,23 @@
+apiVersion: v2
+name: fabric-operator
+description: fabric-operator is an open-source, cloud-native Operator for managing Hyperledger Fabric networks on Kubernetes
+type: application
+version: 0.1.0
+icon: https://avatars.githubusercontent.com/u/116370569?s=200&v=4
+appVersion: v0.1.0
+keywords:
+  - chain
+  - operator
+  - fabric-operator
+  - bestchains
+sources:
+  - https://github.com/bestchains/fabric-operator
+maintainers:
+  - name: nkwangleiGIT
+    url: https://github.com/nkwangleiGIT
+  - name: bjwswang
+    url: https://github.com/bjwswang
+  - name: Abirdcfly
+    url: https://github.com/Abirdcfly
+  - name: 0xff-dev
+    url: https://github.com/0xff-dev
