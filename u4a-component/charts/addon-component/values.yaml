@@ -22,8 +22,8 @@ kubeOidcProxy:
     - k8s-ip-with-oidc-enabled
     dnsNames:
     - kube-oidc-proxy
-    - kube-oidc-proxy.addon-system
-    - kube-oidc-proxy.addon-system.svc
+    - kube-oidc-proxy.u4a-system
+    - kube-oidc-proxy.u4a-system.svc
   image: hub.tenxcloud.com/u4a-component/kube-oidc-proxy:v0.3.0-v5.6.0-20221008
   # MUST update this value
   nodeName: 21v-tc-sunyy-team-2

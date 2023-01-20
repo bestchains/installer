@@ -1,0 +1,27 @@
+# Default values for u4a-system.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+dashboard:
+  dashboardImage: hub.tenxcloud.com/addon_system/kube-dashboard:v2.7.0
+  proxyImage: hub.tenxcloud.com/addon_system/keycloak-gatekeeper:latest
+  metricsImage: hub.tenxcloud.com/addon_system/kube-dashboard-metrics-scraper:v1.0.8
+
+ingress:
+  class: u4a-component-ingress
+  host: kubedashboard.<replaced-ingress-nginx-ip>.nip.io
+
+# You must check and update the value of each variable below
+kubeOidcProxy:
+  issuerUrl: <replaced-issuer-url> # https://portal.172.22.96.209.nip.io/oidc
+  clientId: <replaced-client-id>
+  clientSecret: <replaced-client-secret>
+  usernameClaim: preferred_username
+  groupClaim: groups
+  hostConfig:
+    enabled: true
+    hostAliases:
+    - hostnames:
+      # MUST update this value
+      - portal.<replaced-ingress-nginx-ip>.nip.io
+      ip: <replaced-ingress-nginx-ip>

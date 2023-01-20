@@ -38,8 +38,8 @@ issuerConfig:
     - oidc-server.u4a-system
     - oidc-server.u4a-system.svc
     - kube-oidc-proxy
-    - kube-oidc-proxy.addon-system
-    - kube-oidc-proxy.addon-system.svc
+    - kube-oidc-proxy.u4a-system
+    - kube-oidc-proxy.u4a-system.svc
   spec:
   # Use selfSigned or specified CA(such as CA from kubernetes)
     selfSigned: {}
@@ -135,8 +135,8 @@ addon-component:
       - <replaced-k8s-ip-with-oidc-enabled>
       dnsNames:
       - kube-oidc-proxy
-      - kube-oidc-proxy.addon-system
-      - kube-oidc-proxy.addon-system.svc
+      - kube-oidc-proxy.u4a-system
+      - kube-oidc-proxy.u4a-system.svc
     hostConfig:
       enabled: true
       hostAliases:
