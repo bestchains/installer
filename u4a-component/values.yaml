@@ -12,7 +12,7 @@ deploymentConfig:
   clientId: &clientId
     bff-client
   clientSecret: &clientSecret
-    61324af0-773f-4f61-b110-ef57013267d6
+    61324af0-1234-4f61-b110-ef57013267d6
   # BFF server info
   # The host Kubernetes cluster with OIDC enabled or use kube-oidc-proxy in front of k8s-apiserver
   # kube-oidc-proxy will be installed by default

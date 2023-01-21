@@ -100,10 +100,10 @@ Now, you should have a cluster and a 'system-tenant' and tenant management.
 
 
 ## 3. Add more components
-1. Install [kube-dashboard](./kube-dashboard/README.md) to integrate with u4a.
+1. Install [kube-dashboard](./kube-dashboard/) to integrate with u4a.
 
 Refer to [kubernetes dashboard ](https://github.com/kubernetes/dashboard) for details.
 
-2. Install [kubelogin](./kubelogin/README.md) to integrate with u4a
+2. Install [kubelogin](./kubelogin/) to integrate with u4a
 
 Refer to [kubelogin](https://github.com/int128/kubelogin) for details.
