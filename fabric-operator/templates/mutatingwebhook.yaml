@@ -1,0 +1,127 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Values.namespace }}/operator-serving-cert
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-channel
+  failurePolicy: Fail
+  name: channel.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - channels
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-federation
+  failurePolicy: Fail
+  name: federation.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - federations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-network
+  failurePolicy: Fail
+  name: network.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - networks
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-organization
+  failurePolicy: Fail
+  name: organization.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - organizations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-proposal
+  failurePolicy: Fail
+  name: proposal.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - proposals
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /mutate-ibp-com-v1beta1-vote
+  failurePolicy: Fail
+  name: vote.mutate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - votes
+  sideEffects: None

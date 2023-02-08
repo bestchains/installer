@@ -1,0 +1,7 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.authProxy.metricReaderClusterRoleName }}
+rules:
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["get"]

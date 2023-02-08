@@ -1,0 +1,59 @@
+namespace: baas-system
+serviceAccountName: operator-controller-manager
+ingressDomain: <replaced-ingress-nginx-ip>.nip.io
+ingressClassName: portal-ingress
+operator:
+  watchNamespace: ""
+  clusterType: K8S
+  iamServer: <replaced-iam-server> # example: https://oidc-server.system.svc
+  image: hyperledgerk8s/fabric-operator:v0.1.0-20230208
+  imagePullPolicy: IfNotPresent
+  clusterRoleName: manager-role
+  clusterRoleBindingName: operator
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+      ephemeral-storage: 1Gi
+    requests:
+      cpu: 1
+      memory: 512Mi
+      ephemeral-storage: 100Mi
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    tcpSocket:
+      port: 8383
+    timeoutSeconds: 5
+  tolerations:
+  - operator: "Exists"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/arch
+              operator: Exists
+leaderElection:
+  roleName: leader-election-role
+  roleBindingName: leader-election-rolebinding
+authProxy:
+  authProxyServiceName: controller-manager-metrics-service
+  proxyClusterRoleName: proxy-role
+  proxyClusterRoleBindingName: proxy-rolebinding
+  metricReaderClusterRoleName: metrics-reader
+bcapi:
+  name: bff-apis
+  env:
+    k8sOIDCProxyURL: <replace-with-k8s-oidc-proxy-url>
+    OIDCServerURL: <replace-with-oidc-server-url>
+    OIDCServerClientID: <replace-with-oidc-client-id>
+    OIDCServerClientSecret: <replace-with-oidc-client-secret>
+  image: hyperledgerk8s/bc-apis:v0.1.0-20230118
+  imagePullPolicy: IfNotPresent
+  hostAliases:
+  - hostnames:
+    - oidc.<replaced-ingress-nginx-ip>.nip.io
+    ip: <replaced-ingress-nginx-ip>
+  ingressName: bc-apis-ingress
+  

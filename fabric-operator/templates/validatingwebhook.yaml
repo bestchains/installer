@@ -1,0 +1,133 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Values.namespace }}/operator-serving-cert
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-channel
+  failurePolicy: Fail
+  name: channel.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - channels
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-federation
+  failurePolicy: Fail
+  name: federation.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - federations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-network
+  failurePolicy: Fail
+  name: network.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - networks
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-organization
+  failurePolicy: Fail
+  name: organization.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - organizations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-proposal
+  failurePolicy: Fail
+  name: proposal.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - proposals
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-vote
+  failurePolicy: Fail
+  name: vote.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - votes
+  sideEffects: None

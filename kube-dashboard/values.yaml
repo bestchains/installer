@@ -8,7 +8,7 @@ dashboard:
   metricsImage: hub.tenxcloud.com/addon_system/kube-dashboard-metrics-scraper:v1.0.8
 
 ingress:
-  class: u4a-component-ingress
+  class: portal-ingress
   host: kubedashboard.<replaced-ingress-nginx-ip>.nip.io
 
 # You must check and update the value of each variable below
