@@ -42,6 +42,8 @@ spec:
               fieldPath: metadata.name
         - name: CLUSTERTYPE
           value: {{ .Values.operator.clusterType }}
+        - name: OPERATOR_INGRESS_CLASS
+          value: {{ .Values.ingressClassName}}
         - name: OPERATOR_INGRESS_DOMAIN
           value: {{ .Values.ingressDomain }}
         - name: OPERATOR_IAM_SERVER
