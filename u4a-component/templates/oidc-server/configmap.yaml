@@ -23,6 +23,7 @@ data:
       - iam.tenxcloud.com
       - obsevability
       - resource-reader
+      - bestchains
     connectors:
     {{- range .Values.oidcServer.connectors }}
     - type: {{ .type }}

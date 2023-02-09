@@ -24,6 +24,10 @@ spec:
     spec:
       containers:
       - env:
+        - name: DEFAULT_INGRESS_CLASS
+          value: {{ .Values.ingressClassName }}
+        - name: DEFAULT_STORAGE_CLASS
+          value: {{ .Values.storageClassName }}
         - name: K8S_OIDC_PROXY_URL
           value: {{ .Values.bcapi.env.k8sOIDCProxyURL }}
         - name: OIDC_SERVER_URL

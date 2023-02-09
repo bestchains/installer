@@ -68,7 +68,7 @@ oidcServer:
   cert:
     ipAddresses: *oidcIPs
     dnsNames: *dnsNames
-  image: u4a-component/oidc-server:v0.1.0-20220923
+  image: u4a-component/oidc-server:v0.1.0-20230209
   issuer: https://{{ .Values.deploymentConfig.bffHost }}/oidc
   storageType: kubernetes
   webHttps: 0.0.0.0:5556

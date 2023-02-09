@@ -1,6 +1,19 @@
-Here is the steps about how to install bestchains BaaS platform
-
 # Installer
+
+Here are the steps about how to install bestchains BaaS platform which include ways to install:
+
+- a [kind](https://kind.sigs.k8s.io/) cluster
+- `u4a-component` which provides identity and access management
+    - [nginx ingress service](https://docs.nginx.com/nginx-ingress-controller/)
+    - [cert-manager service](https://cert-manager.io/)
+    - [oidc service](https://github.com/dexidp/dex)
+- `baas-component` which provides blockchain management in `CloudNative` way
+    - [fabric-operator](https://github.com/bestchains/fabric-operator)
+    - [bc-apis](https://github.com/bestchains/bc-apis)
+- more addons
+    - [kuber-dashboard](https://github.com/kubernetes/dashboard)
+    - [kubelogin](https://github.com/int128/kubelogin)
+
 ## Prerequisites
 
 - [Install Docker](https://docs.docker.com/engine/install/)

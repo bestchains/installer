@@ -51,6 +51,8 @@ The following table lists the configurable parameters of fabric-operator chart a
 | ------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------- |
 | `namespace`                               | which namespace the operator will be deployed.   | default `baas-system`. |
 | `ingressDomain`          | ingress domain.    | default `empty`, **you must set it**.       |
+| `ingressClassName`          | default ingress class name in fabric-operator and bc-apis  | default `portal-ingress` which installed by `installer`,  **you must set it**    |
+| `storageClassName`          | default storage class name in fabric-operator and bc-apis   | default `empty`      |
 | `serviceAccountName`                      | service account name   | default ` operator-controller-manager`   |
 | `operator.watchNamespace`                 | The namespace under which the CR is created can trigger the operator's logic.   | default `empty`, means all namespace. |
 | `operator.clusterType`                    | K8S, or OPENSHIFT. | default `K8S`.                |

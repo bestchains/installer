@@ -2,11 +2,12 @@ namespace: baas-system
 serviceAccountName: operator-controller-manager
 ingressDomain: <replaced-ingress-nginx-ip>.nip.io
 ingressClassName: portal-ingress
+storageClassName: standard # optional
 operator:
   watchNamespace: ""
   clusterType: K8S
   iamServer: <replaced-iam-server> # example: https://oidc-server.system.svc
-  image: hyperledgerk8s/fabric-operator:v0.1.0-20230208
+  image: hyperledgerk8s/fabric-operator:v0.1.0-20230209
   imagePullPolicy: IfNotPresent
   clusterRoleName: manager-role
   clusterRoleBindingName: operator
@@ -49,7 +50,7 @@ bcapi:
     OIDCServerURL: <replace-with-oidc-server-url>
     OIDCServerClientID: <replace-with-oidc-client-id>
     OIDCServerClientSecret: <replace-with-oidc-client-secret>
-  image: hyperledgerk8s/bc-apis:v0.1.0-20230118
+  image: hyperledgerk8s/bc-apis:v0.1.0-20230209
   imagePullPolicy: IfNotPresent
   hostAliases:
   - hostnames:
