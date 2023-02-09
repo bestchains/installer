@@ -41,16 +41,15 @@ function kind_up_cluster {
 
 function pre_load_image() {
 	pre_load_images=(hyperledgerk8s/ubi-minimal:latest hyperledgerk8s/fabric-ca:iam-20230131
-			hyperledgerk8s/fabric-peer:2.4.7 hyperledgerk8s/fabric-peer:2.4.7
-			hyperledgerk8s/couchdb:3.2.2 hyperledgerk8s/fabric-orderer:2.4.7
-			hyperledgerk8s/fabric-console:latest hyperledgerk8s/grpc-web:latest)
-	for image in ${pre_load_images[*]}
-	do
+		hyperledgerk8s/fabric-peer:2.4.7 hyperledgerk8s/fabric-peer:2.4.7
+		hyperledgerk8s/couchdb:3.2.2 hyperledgerk8s/fabric-orderer:2.4.7
+		hyperledgerk8s/fabric-console:latest hyperledgerk8s/grpc-web:latest)
+	for image in ${pre_load_images[*]}; do
 		docker pull $image
 		kind load docker-image $image
 	done
 }
 
-
-export K8S_VERSION=v1.24; kind_up_cluster
+export K8S_VERSION=v1.24
+kind_up_cluster
 pre_load_image
