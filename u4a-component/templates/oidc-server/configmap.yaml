@@ -14,6 +14,9 @@ data:
       type: {{ .Values.oidcServer.storageType }}
       config:
         inCluster: true
+    logger:
+      # Support error,info,debug log level
+      level: info
     web:
       https: {{ .Values.oidcServer.webHttps }}
       tlsCert: /etc/oidc-server/tls/tls.crt
@@ -34,6 +37,8 @@ data:
         insecureSkipVerify: {{ .config.insecureSkipVerify }}
     {{- end }}
     oauth2:
+      # Enable for password grant type if needed, such as kubelogin
+      # passwordConnector: k8scrd
       skipApprovalScreen: true
     staticClients:
     {{- range .Values.oidcServer.staticClients }}
