@@ -27,8 +27,8 @@ spec:
       description: minio's object path
       default: ""
     - name: SOURCE_MINIO_HOST
-      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local)
-      default: "minio.tekton-pipelines-addons.svc.cluster.local"
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+      default: "fabric-minio.baas-system.svc.cluster.local"
     - name: SOURCE_MINIO_ACCESS_KEY
       type: string
       description: the accessKey used to fetch minio object

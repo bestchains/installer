@@ -25,7 +25,7 @@ spec:
     - name: object
       value: go-contract
     - name: host
-      value: minio.tekton-pipelines-addons.svc.cluster.local
+      value: fabric-minio.baas-system.svc.cluster.local
     - name: accessKey
       value: "q18aRFqWOAX7pEin"
     - name: secretKey

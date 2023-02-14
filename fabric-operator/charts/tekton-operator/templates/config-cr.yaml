@@ -1,0 +1,20 @@
+{{- if (eq .Values.operator.autoInstallComponents false) -}}
+---
+apiVersion: operator.tekton.dev/v1alpha1
+kind: TektonConfig
+metadata:
+  name: config
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  profile: lite
+  targetNamespace: tekton-pipelines
+  # TODO Do not use .Release.Namespace because there is a bug here,
+  # the whole ns will be prune when deleting TektonConfig.
+  pruner:
+    resources:
+      - pipelinerun
+      - taskrun
+    keep: 100
+    schedule: "0 8 * * *"
+{{- end -}}

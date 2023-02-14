@@ -19,8 +19,8 @@ spec:
   params:
     - name: host
       type: string
-      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local)
-      default: minio.tekton-pipelines-addons.svc.cluster.local
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+      default: fabric-minio.baas-system.svc.cluster.local
     - name: bucket
       type: string
       description: minio's bucket name
