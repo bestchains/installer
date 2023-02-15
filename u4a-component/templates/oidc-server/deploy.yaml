@@ -65,7 +65,7 @@ spec:
           requests:
             cpu: 10m
             memory: 128Mi
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/iam/certs
           name: iam-secret

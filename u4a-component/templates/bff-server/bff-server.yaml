@@ -86,7 +86,7 @@ spec:
             requests:
               cpu: 200m
               memory: 512Mi
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: time-localtime
               readOnly: true
