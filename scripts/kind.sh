@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/..
 echo $ROOT
+
+IGNORE_FIXED_IMAGE_LOAD=${IGNORE_FIXED_IMAGE_LOAD:-"NO"}
+
 function kind_up_cluster {
 	# when update kind version, please change this file and github action file.
 	# https://github.com/kubernetes-sigs/kind/releases
@@ -52,4 +55,8 @@ function pre_load_image() {
 
 export K8S_VERSION=v1.24
 kind_up_cluster
-pre_load_image
+if [[ ${IGNORE_FIXED_IMAGE_LOAD} != "YES" ]]; then
+	pre_load_image
+else
+	echo "According to the configuration, pre_load_image will not running."
+fi

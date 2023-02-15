@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+IGNORE_FABRIC_OPERATOR=${IGNORE_FABRIC_OPERATOR:-"NO"}
+
 function debug() {
 	kubectl describe po -A
 	kubectl get po -A
@@ -33,6 +35,7 @@ kubeProxyNodeIP=$(kubectl get node ${kubeProxyNode} -owide | grep -v "NAME" | aw
 kubectl get node -owide
 echo "ingressNodeIp ${ingressNodeIP}"
 echo "kubeProxyNodeIP ${kubeProxyNodeIP}"
+export ingressNodeIP=${ingressNodeIP}
 
 # step 3. repalce nginx and proxy node name
 cat u4a-component/charts/cluster-component/values.yaml | sed "s/<replaced-ingress-node-name>/${ingressNode}/g" \
@@ -69,7 +72,11 @@ cat fabric-operator/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNo
 		>fabric-operator/values1.yaml
 
 # step 8. install fabric operator
-kubectl create namespace baas-system
-helm -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
-echo "deploy fabric-operator successfully"
-kubectl get po -nbaas-system
+if [[ ${IGNORE_FABRIC_OPERATOR} != "YES" ]]; then
+	kubectl create namespace baas-system
+	helm -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
+	echo "deploy fabric-operator successfully"
+	kubectl get po -nbaas-system
+else
+	echo "According to the configuration, fabric-operator will not be installed."
+fi
