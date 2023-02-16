@@ -28,6 +28,8 @@ spec:
           value: {{ .Values.ingressClassName }}
         - name: DEFAULT_STORAGE_CLASS
           value: {{ .Values.storageClassName }}
+        - name: IAM_PROVIDER_URL
+          value: {{ .Values.iamServer }}
         - name: K8S_OIDC_PROXY_URL
           value: {{ .Values.bcapi.env.k8sOIDCProxyURL }}
         - name: OIDC_SERVER_URL
