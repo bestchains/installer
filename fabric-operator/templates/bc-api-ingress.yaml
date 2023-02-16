@@ -13,6 +13,7 @@ metadata:
       proxy_cache_use_stale error timeout updating http_404 http_500 http_502 http_503 http_504;
       proxy_cache_bypass $http_x_purge;
       add_header X-Cache-Status $upstream_cache_status; # check X-Cache-Status to see if it's HIT
+      rewrite ^/bc-apis(/|$)(.*)$ /$2 break;
     nginx.ingress.kubernetes.io/enable-access-log: "false"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "false"
     nginx.ingress.kubernetes.io/load-balance: round_robin
@@ -28,7 +29,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   rules:
-  - host: bc.{{ .Values.ingressDomain }}
+  - host: portal.{{ .Values.ingressDomain }}
     http:
       paths:
       - backend:
@@ -36,5 +37,12 @@ spec:
             name: {{ .Values.bcapi.name }}
             port:
               number: 8024
-        path: /
+        path: /bc-public
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: {{ .Values.bcapi.name }}
+            port:
+              number: 8024
+        path: /bc-apis
         pathType: ImplementationSpecific
