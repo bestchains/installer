@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 IGNORE_FABRIC_OPERATOR=${IGNORE_FABRIC_OPERATOR:-"NO"}
+TIMEOUT=${TIMEOUT:-"1200s"}
 
 function debug() {
 	kubectl describe po -A
@@ -42,7 +43,7 @@ cat u4a-component/charts/cluster-component/values.yaml | sed "s/<replaced-ingres
 	>u4a-component/charts/cluster-component/values1.yaml
 
 # step 4. install cluster-compoent
-helm -nu4a-system install cluster-component --wait -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
+helm --wait --timeout=$TIMEOUT -nu4a-system install cluster-component --wait -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
 
 echo "deploy cluster component succeffsully"
 kubectl get po -nu4a-system -owide
@@ -53,7 +54,7 @@ cat u4a-component/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNode
 	sed "s/<replaced-k8s-ip-with-oidc-enabled>/${kubeProxyNodeIP}/g" \
 		>u4a-component/values1.yaml
 
-helm -nu4a-system install u4a-component --wait -f u4a-component/values1.yaml u4a-component
+helm --wait --timeout=$TIMEOUT -nu4a-system install u4a-component --wait -f u4a-component/values1.yaml u4a-component
 
 # step 6. install u4a component
 
@@ -74,7 +75,7 @@ cat fabric-operator/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNo
 # step 8. install fabric operator
 if [[ ${IGNORE_FABRIC_OPERATOR} != "YES" ]]; then
 	kubectl create namespace baas-system
-	helm -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
+	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
 	echo "deploy fabric-operator successfully"
 	kubectl get po -nbaas-system
 else
