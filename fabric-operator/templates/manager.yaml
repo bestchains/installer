@@ -47,7 +47,7 @@ spec:
         - name: OPERATOR_INGRESS_DOMAIN
           value: {{ .Values.ingressDomain }}
         - name: OPERATOR_IAM_SERVER
-          value: {{ .Values.operator.iamServer }}
+          value: {{ .Values.iamServer }}
         image: {{ .Values.operator.image }}
         imagePullPolicy: IfNotPresent
         livenessProbe:

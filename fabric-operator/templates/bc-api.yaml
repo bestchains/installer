@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: bff-apis
+    app: bc-apis
   name: {{ .Values.bcapi.name }}
   namespace: {{ .Values.namespace }}
 spec:
@@ -11,7 +11,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: bff-apis
+      app: bc-apis
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app: bff-apis
+        app: bc-apis
     spec:
       containers:
       - env:
@@ -38,6 +38,12 @@ spec:
           value: {{ .Values.bcapi.env.OIDCServerClientSecret }}
         - name: K8S_API_TIMEOUT
           value: "10"
+        - name: IMAGE_NAMESPACE
+          value: {{ .Values.bcapi.env.imageNamespace }}
+        - name: IMAGE_FABRIC_CA_TAG
+          value: {{ .Values.bcapi.env.imageFabricCATag }}
+        - name: IAM_PROVIDER_URL
+          value: {{ .Values.iamServer }}
         image: {{ .Values.bcapi.image }}
         imagePullPolicy: {{ .Values.bcapi.imagePullPolicy }}
         livenessProbe:

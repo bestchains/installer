@@ -10,6 +10,6 @@ spec:
     protocol: TCP
     targetPort: 8024
   selector:
-    app: bff-apis
+    app: bc-apis
   sessionAffinity: None
   type: ClusterIP
