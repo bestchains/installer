@@ -46,6 +46,15 @@ spec:
                 required:
                 - members
                 type: object
+              archiveChannel:
+                properties:
+                  channel:
+                    type: string
+                  description:
+                    type: string
+                required:
+                - channel
+                type: object
               createFederation:
                 type: object
               deleteMember:
@@ -81,6 +90,15 @@ spec:
               startAt:
                 format: date-time
                 type: string
+              unarchiveChannel:
+                properties:
+                  channel:
+                    type: string
+                  description:
+                    type: string
+                required:
+                - channel
+                type: object
             required:
             - federation
             - initiatorOrganization

@@ -91,6 +91,45 @@ spec:
           status:
             description: ChannelStatus defines the observed state of Channel
             properties:
+              archivedStatus:
+                description: CRStatus is the object that defines the status of a CR
+                properties:
+                  errorcode:
+                    description: ErrorCode is the code of classification of errors
+                    type: integer
+                  lastHeartbeatTime:
+                    description: LastHeartbeatTime is when the controller reconciled
+                      this component
+                    format: date-time
+                    type: string
+                  message:
+                    description: Message provides a message for the status to be shown
+                      to customer
+                    type: string
+                  reason:
+                    description: Reason provides a reason for an error
+                    type: string
+                  status:
+                    description: Status is defined based on the current status of
+                      the component
+                    type: string
+                  type:
+                    description: Type is true or false based on if status is valid
+                    type: string
+                  version:
+                    description: Version is the product (IBP) version of the component
+                    type: string
+                  versions:
+                    description: Versions is the operand version of the component
+                    properties:
+                      reconciled:
+                        description: Reconciled provides the reconciled version of
+                          the operand
+                        type: string
+                    required:
+                    - reconciled
+                    type: object
+                type: object
               errorcode:
                 description: ErrorCode is the code of classification of errors
                 type: integer
