@@ -7,7 +7,7 @@ iamServer: <replaced-iam-server> # example: https://oidc-server.system.svc
 operator:
   watchNamespace: ""
   clusterType: K8S
-  image: hyperledgerk8s/fabric-operator:v0.1.0
+  image: hyperledgerk8s/fabric-operator:v0.1.0-20230220
   imagePullPolicy: IfNotPresent
   clusterRoleName: manager-role
   clusterRoleBindingName: operator
@@ -52,7 +52,7 @@ bcapi:
     OIDCServerClientSecret: <replace-with-oidc-client-secret>
     imageNamespace: hyperledgerk8s
     imageFabricCATag: iam-20230131
-  image: hyperledgerk8s/bc-apis:v0.1.0-20230209
+  image: hyperledgerk8s/bc-apis:v0.1.0-20230220
   imagePullPolicy: IfNotPresent
   hostAliases:
   - hostnames:

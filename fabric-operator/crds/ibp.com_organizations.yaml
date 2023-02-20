@@ -378,12 +378,7 @@ spec:
               federations:
                 description: Federations which this organization has been added
                 items:
-                  properties:
-                    name:
-                      type: string
-                    namespace:
-                      type: string
-                  type: object
+                  type: string
                 type: array
               lastHeartbeatTime:
                 description: LastHeartbeatTime is when the controller reconciled this
