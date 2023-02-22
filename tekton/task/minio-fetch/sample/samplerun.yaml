@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cache-image-ws-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: sample-minio-taskrun
+  labels:
+    description: "A_TaskRun_For_Minio"
+spec:
+  taskRef:
+    name: minio-fetch
+  params:
+    - name: bucket
+      value: bestchains
+    - name: object
+      value: go-contract
+    - name: host
+      value: minio.tekton-pipelines-addons.svc.cluster.local
+    - name: accessKey
+      value: "q18aRFqWOAX7pEin"
+    - name: secretKey
+      value: "nCbZIP6q4s8KtQpL7n8CD2N88H6XABGf"
+  workspaces:
+    - name: output
+      subPath: minio
+      persistentVolumeClaim:
+        claimName: cache-image-ws-pvc

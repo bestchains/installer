@@ -1,0 +1,120 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: chaincodebuild-kaniko
+  annotations:
+    tekton.dev/tags: chaincode-build-kaniko
+    tekton.dev/displayName: "ChaincodeBuilds"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    The pipeline uses git-clone/minio-fetch and docker-build to build a chaincode image from git/minio.
+
+  workspaces:
+    - name: source-ws
+      description: Location where source is stored.
+
+  params:
+    - name: SOURCE
+      description: >-
+        The source type where chaincode code stores.Now supports minio,git
+      default: "minio"
+    - name: SOURCE_MINIO_BUCKET
+      description: minio's bucket name
+      default: "bestchains"
+    - name: SOURCE_MINIO_OBJECT
+      description: minio's object path
+      default: "bestchains"
+    - name: SOURCE_MINIO_HOST
+      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local) (required if SOURCE is git)
+      default: "minio.tekton-pipelines-addons.svc.cluster.local"
+    - name: SOURCE_MINIO_ACCESS_KEY
+      type: string
+      description: the accessKey used to fetch minio object (required if SOURCE is git)
+      default: ""
+    - name: SOURCE_MINIO_SECRET_KEY
+      type: string
+      description: the secretKey used to fetch minio object (required if SOURCE is git)
+      default: ""
+    - name: SOURCE_GIT_URL
+      description: A git repo url where the source code resides. (required if SOURCE is git)
+      default: "github.com/bestchains/fabric-builder-k8s"
+    - name: SOURCE_GIT_REFERENCE
+      description: The branch, tag or SHA to checkout.
+      default: ""
+    - name: SOURCE_GIT_INIT_IMAGE
+      description: The init image of git-clone
+      default: ""
+    - name: APP_IMAGE
+      description: The chaincode name of the image to build (required)
+      default: "hyperledgerk8s/fabric-chaincode"
+    - name: BUILDER_IMAGE
+      description: The name of the image containing the Docker tool
+      default: "gcr.m.daocloud.io/kaniko-project/executor:v1.9.1"
+    - name: DOCKERFILE
+      description: The path of the dockerfile to execute (optional)
+      default: "./Dockerfile"
+    - name: CONTEXT
+      description: The path of the directory to use as context (optional)
+      default: "."
+  tasks:
+    - name: fetch-from-minio
+      taskRef:
+        name: minio-fetch
+      when:
+        - input: "$(params.SOURCE)"
+          operator: in
+          values: ["minio","MINIO","Minio"]
+      params:
+        - name: bucket
+          value: $(params.SOURCE_MINIO_BUCKET)
+        - name: object
+          value: $(params.SOURCE_MINIO_OBJECT)
+        - name: host
+          value: $(params.SOURCE_MINIO_HOST)
+        - name: accessKey
+          value: $(params.SOURCE_MINIO_ACCESS_KEY)
+        - name: secretKey
+          value: $(params.SOURCE_MINIO_SECRET_KEY)
+      workspaces:
+        - name: output
+          workspace: source-ws
+    - name: fetch-from-git
+      taskRef:
+        name: git-clone
+      when:
+        - input: "$(params.SOURCE)"
+          operator: in
+          values: ["git","GIT","Git"]
+      params:
+        - name: url
+          value: $(params.SOURCE_GIT_URL)
+        - name: revision
+          value: $(params.SOURCE_GIT_REFERENCE)
+        - name: gitInitImage
+          value: $(params.SOURCE_GIT_INIT_IMAGE)
+      workspaces:
+        - name: output
+          workspace: source-ws
+    - name: build-with-kaniko
+      runAfter:
+        - fetch-from-minio
+        - fetch-from-git
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: source-ws
+      params:
+        - name: IMAGE
+          value: $(params.APP_IMAGE)
+        - name: DOCKERFILE
+          value: $(params.DOCKERFILE)
+        - name: CONTEXT
+          value: $(params.CONTEXT)
+        - name: BUILDER_IMAGE
+          value: $(params.BUILDER_IMAGE)
+        - name: EXTRA_ARGS
+          value:
+            - --skip-tls-verify
