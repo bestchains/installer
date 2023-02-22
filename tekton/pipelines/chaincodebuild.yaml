@@ -1,0 +1,136 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: chaincodebuild
+  annotations:
+    tekton.dev/tags: chaincode-build
+    tekton.dev/displayName: "ChaincodeBuilds"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    The pipeline uses git-clone/minio-fetch and docker-build to build a chaincode image from git/minio.
+
+  workspaces:
+    - name: source-ws
+      description: Location where source is stored.
+
+  params:
+    - name: SOURCE
+      description: >-
+        The source type where chaincode code stores.Now supports minio,git
+      default: "minio"
+    - name: SOURCE_MINIO_BUCKET
+      description: minio's bucket name
+      default: "bestchains"
+    - name: SOURCE_MINIO_OBJECT
+      description: minio's object path
+      default: ""
+    - name: SOURCE_MINIO_HOST
+      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local)
+      default: "minio.tekton-pipelines-addons.svc.cluster.local"
+    - name: SOURCE_MINIO_ACCESS_KEY
+      type: string
+      description: the accessKey used to fetch minio object
+      default: ""
+    - name: SOURCE_MINIO_SECRET_KEY
+      type: string
+      description: the secretKey used to fetch minio object
+      default: ""
+    - name: SOURCE_GIT_URL
+      description: The git repo url where the source code resides
+      default: "github.com/bestchains/fabric-builder-k8s"
+    - name: SOURCE_GIT_REFERENCE
+      description: The branch, tag or SHA to checkout.
+      default: ""
+    - name: SOURCE_GIT_INIT_IMAGE
+      description: The init image of git-clone
+      default: "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.21.0"
+    - name: APP_IMAGE
+      description: The chaincode name of the image to build
+      default: "hyperledgerk8s/fabric-chaincode"
+    - name: BUILDER_IMAGE
+      description: The name of the image containing the Docker tool
+      default: "docker.io/docker:latest"
+    - name: DIND_IMAGE
+      description: The name of the image used by `docker-in-docker` sidecar container
+      default: "docker:dind"
+    - name: DOCKERFILE
+      description: The path of the dockerfile to execute
+      default: "./Dockerfile"
+    - name: CONTEXT
+      description: The path of the directory to use as context
+      default: "."
+    - name: INSECURE_REGISTRY
+      description: Allows the user to push to an insecure registry that has been specified
+      default: "registry.tekton-pipelines-addons.svc.cluster.local:5000"
+    - name: BUILD_ARGS
+      description: Extra parameters passed for the build command when building images.
+      default: ""
+    - name: PUSH_ARGS
+      description: Extra parameters passed for the push command when pushing images.
+      default: ""
+  tasks:
+    - name: fetch-from-minio
+      taskRef:
+        name: minio-fetch
+      when:
+        - input: "$(params.SOURCE)"
+          operator: in
+          values: ["minio","MINIO","Minio"]
+      params:
+        - name: bucket
+          value: $(params.SOURCE_MINIO_BUCKET)
+        - name: object
+          value: $(params.SOURCE_MINIO_OBJECT)
+        - name: host
+          value: $(params.SOURCE_MINIO_HOST)
+        - name: accessKey
+          value: $(params.SOURCE_MINIO_ACCESS_KEY)
+        - name: secretKey
+          value: $(params.SOURCE_MINIO_SECRET_KEY)
+      workspaces:
+        - name: output
+          workspace: source-ws
+    - name: fetch-from-git
+      taskRef:
+        name: git-clone
+      when:
+        - input: "$(params.SOURCE)"
+          operator: in
+          values: ["git","GIT","Git"]
+      params:
+        - name: url
+          value: $(params.SOURCE_GIT_URL)
+        - name: revision
+          value: $(params.SOURCE_GIT_REFERENCE)
+        - name: gitInitImage
+          value: $(params.SOURCE_GIT_INIT_IMAGE)
+      workspaces:
+        - name: output
+          workspace: source-ws
+    - name: build-from-dockerfile
+      runAfter:
+        - fetch-from-git
+      taskRef:
+        name: docker-build
+      workspaces:
+        - name: source
+          workspace: source-ws
+      params:
+        - name: image
+          value: $(params.APP_IMAGE)
+        - name: builder_image
+          value: $(params.BUILDER_IMAGE)
+        - name: dind_image
+          value: $(params.DIND_IMAGE)
+        - name: dockerfile
+          value: $(params.DOCKERFILE)
+        - name: context
+          value: $(params.CONTEXT)
+        - name: insecure_registry
+          value: $(params.INSECURE_REGISTRY)
+        - name: build_extra_args
+          value: $(params.BUILD_ARGS)
+        - name: push_extra_args
+          value: $(params.PUSH_ARGS)

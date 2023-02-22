@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: minio-fetch
+  annotations:
+    tekton.dev/categories: Minio
+    tekton.dev/tags: minio
+    tekton.dev/displayName: "minio fetch"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    The minio-fetch Task will fetch a object from the provided minio host and credentials into the
+    output Workspace.
+
+  workspaces:
+    - name: output
+      description: The minio fetch will be stored onto the volume backing this workspace
+
+  params:
+    - name: host
+      type: string
+      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local)
+      default: minio.tekton-pipelines-addons.svc.cluster.local
+    - name: bucket
+      type: string
+      description: minio's bucket name
+    - name: object
+      type: string
+      description: minio's object path
+    - name: accessKey
+      type: string
+      description: the accessKey used to fetch minio object
+    - name: secretKey
+      type: string
+      description: the secretKey used to fetch minio object
+    - name: subdirectory
+      description: subdirectory inside the "output" workspace to store the minio object into
+      type: string
+      default: ""
+    - name: minioClientImage
+      type: string
+      default: "docker.io/bitnami/minio-client:2023"
+      description: the image used where the minio-fetch
+    
+  results:
+    - name: filepath
+      description: The precise FilePath this minio object stored
+  steps:
+    - name: fetch
+      image: $(params.minioClientImage)
+      env:
+      - name: MINIO_SERVER_HOST
+        value: $(params.host)
+      - name: MINIO_SERVER_ACCESS_KEY
+        value: $(params.accessKey)
+      - name: MINIO_SERVER_SECRET_KEY
+        value: $(params.secretKey)
+      - name: WORKSPACE_OUTPUT_PATH
+        value: $(workspaces.output.path)
+      args:
+        [
+          "cp",
+          --recursive,
+          minio/$(params.bucket)/$(params.object),
+          $(workspaces.output.path)/$(params.subdirectory)/$(params.bucket),
+        ]
