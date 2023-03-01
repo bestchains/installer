@@ -47,17 +47,18 @@ kubectl apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/kaniko/0.6/r
 
 ### Install pipelines
 
+- build with `kaniko` task (**Recommended**)
+```
+kubectl apply -f ./pipelines/chaincodebuild-kaniko.yaml
+```
+
 - build with `docker build` task
 ```
 kubectl apply -f ./pipelines/chaincodebuild.yaml
 ```
 
-- build with `kaniko` task (**Not supported yet**)
-```
-kubectl apply -f ./pipelines/chaincodebuild-kaniko.yaml
-```
 
-### ChaincodeBuilds
+### ChaincodeBuilds (Kaniko)
 
 This pipeline builds chaincode source code into a container image with `srouce-fetch` and `docker build`.
 
@@ -85,8 +86,36 @@ This pipeline builds chaincode source code into a container image with `srouce-f
 | `DOCKERFILE`                               | The path of the dockerfile to execute  | default `./Dockerfile` |   `required` |
 | `CONTEXT`                               | The path of the directory to use as context  | default `.`.  |   `required` |
 | `INSECURE_REGISTRY`                               | Allows the user to push to an insecure registry that has been specified  | default |   `optional` |
-| `BUILD_ARGS`                               | Extra parameters passed for the build command when building images.  | default |   `optional` |
-| `PUSH_ARGS`                               | Extra parameters passed for the push command when pushing images. | default |   `optional` |
+
+
+#### Docker registry (Kaniko)
+
+When user needs to push image to a registry which needs authorization,you should create a push secret and reference it in workspace.
+
+1. create a docker config secret
+
+> - update the docker config file
+> - change the secret namespace to `PipelineRun Namespace`
+```
+ kubectl create secret generic dockerhub-secret --from-file=/root/.docker/config.json -n {Pipeline_Run_Namespace}
+```
+
+2. reference it in `PipelineRun`
+
+
+reference here [Sample with source `git`](./pipelines/sample/sample_git.yaml)
+```
+  workspaces:
+    - name: source-ws
+      subPath: source
+      persistentVolumeClaim:
+        claimName: sample-minio-kaniko-ws-pvc
+    - name: dockerconfig-ws
+      secret:
+        secretName: dockerhub-secret
+```
+
+
 
 #### Samples
 

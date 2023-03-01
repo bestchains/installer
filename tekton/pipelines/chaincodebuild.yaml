@@ -72,6 +72,7 @@ spec:
       default: ""
   tasks:
     - name: fetch-from-minio
+      retries: 3
       taskRef:
         name: minio-fetch
       when:
@@ -93,6 +94,7 @@ spec:
         - name: output
           workspace: source-ws
     - name: fetch-from-git
+      retries: 3
       taskRef:
         name: git-clone
       when:
@@ -110,6 +112,7 @@ spec:
         - name: output
           workspace: source-ws
     - name: build-from-dockerfile
+      retries: 3
       runAfter:
         - fetch-from-git
       taskRef:
