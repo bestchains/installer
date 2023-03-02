@@ -1,0 +1,176 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: chaincodes.ibp.com
+spec:
+  group: ibp.com
+  names:
+    kind: Chaincode
+    listKind: ChaincodeList
+    plural: chaincodes
+    shortNames:
+    - cc
+    singular: chaincode
+  scope: Cluster
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              channel:
+                description: Which channel does chaincode belong to.
+                type: string
+              endorsePolicyRef:
+                properties:
+                  name:
+                    type: string
+                type: object
+              externalBuilder:
+                default: k8s
+                description: ExternalBuilder used, default is k8s
+                type: string
+              id:
+                description: chaincode id
+                pattern: ^[a-z][a-z0-9]{7,63}$
+                type: string
+              images:
+                description: the image used by the current version of chaincode
+                properties:
+                  digest:
+                    type: string
+                  name:
+                    type: string
+                  pullSecret:
+                    default: Always
+                    type: string
+                required:
+                - digest
+                - name
+                type: object
+              initRequired:
+                type: boolean
+              label:
+                type: string
+              license:
+                description: License should be accepted to install custom resources
+                properties:
+                  accept:
+                    description: Accept should be set to true to accept the license.
+                    enum:
+                    - true
+                    type: boolean
+                type: object
+              version:
+                description: current version
+                type: string
+            required:
+            - channel
+            - endorsePolicyRef
+            - id
+            - images
+            - initRequired
+            - label
+            - license
+            - version
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    nextStage:
+                      description: if an error occurs, which step to start from
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  type: object
+                type: array
+              history:
+                description: Chaincode upgrade history
+                items:
+                  properties:
+                    finalState:
+                      type: string
+                    image:
+                      properties:
+                        digest:
+                          type: string
+                        name:
+                          type: string
+                        pullSecret:
+                          default: Always
+                          type: string
+                      required:
+                      - digest
+                      - name
+                      type: object
+                    upgradeTime:
+                      format: date-time
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - finalState
+                  - image
+                  - upgradeTime
+                  - version
+                  type: object
+                type: array
+              lastHeartbeatTime:
+                description: LastHeartbeatTime is when the controller reconciled this
+                  component
+                format: date-time
+                type: string
+              message:
+                type: string
+              phase:
+                type: string
+              reason:
+                type: string
+              sequence:
+                format: int64
+                minimum: 1
+                type: integer
+            required:
+            - sequence
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

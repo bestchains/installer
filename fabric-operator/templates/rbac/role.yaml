@@ -190,6 +190,10 @@ rules:
       - proposals/status
       - votes/status
       - channels/status
+      - chaincodes
+      - chaincodes/status
+      - endorsepolicies
+      - endorsepolicies/status
     verbs:
       - get
       - list
