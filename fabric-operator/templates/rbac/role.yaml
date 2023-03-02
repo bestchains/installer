@@ -160,6 +160,7 @@ rules:
       - proposals.ibp.com
       - votes.ibp.com
       - channels.ibp.com
+      - chaincodebuilds.ibp.com
       - ibpcas
       - ibppeers
       - ibporderers
@@ -170,6 +171,7 @@ rules:
       - proposals
       - votes
       - channels
+      - chaincodebuilds
       - ibpcas/finalizers
       - ibppeers/finalizers
       - ibporderers/finalizers
@@ -180,6 +182,7 @@ rules:
       - proposals/finalizers
       - votes/finalizers
       - channels/finalizers
+      - chaincodebuilds/finalizers
       - ibpcas/status
       - ibppeers/status
       - ibporderers/status
@@ -190,6 +193,7 @@ rules:
       - proposals/status
       - votes/status
       - channels/status
+      - chaincodebuilds/status
       - chaincodes
       - chaincodes/status
       - endorsepolicies
@@ -246,3 +250,18 @@ rules:
       - watch
       - delete
       - deletecollection
+  - apiGroups:
+      - tekton.dev
+    resources:
+      - pipelineruns
+      - taskruns
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch
+

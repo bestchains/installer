@@ -50,10 +50,14 @@ The following table lists the configurable parameters of fabric-operator chart a
 | Parameter                                   | Description                                 | Default                                                          |
 | ------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------- |
 | `namespace`                               | which namespace the operator will be deployed.   | default `baas-system`. |
-| `ingressDomain`          | ingress domain.    | default `empty`, **you must set it**.       |
-| `ingressClassName`          | default ingress class name in fabric-operator and bc-apis  | default `portal-ingress` which installed by `installer`,  **you must set it**    |
-| `storageClassName`          | default storage class name in fabric-operator and bc-apis   | default `empty`      |
-| `serviceAccountName`                      | service account name   | default ` operator-controller-manager`   |
+| `ingressDomain`                           | ingress domain.    | default `empty`, **you must set it**.       |
+| `ingressClassName`                        | default ingress class name in fabric-operator and bc-apis  | default `portal-ingress` which installed by `installer`,  **you must set it**    |
+| `storageClassName`                        | default storage class name in fabric-operator and bc-apis   | default `empty`      |
+| `minio.host`                              | The minio host   | default `minio.bestchains-addons.svc.cluster.local`   |
+| `minio.accessKey`                         | The access key for accessing Minio  | default   |
+| `minio.secretKey`                         | The secret key for accessing Minio   | default   |
+| `tekton.namespace`                        | The namespace where bestchains' taks/pipeline/taskrun/pipelinerun will be deployed   | default `bestchains-pipelinerun`   |
+| `tekton.dockerConfigSecret`               |  The docker config secret which will be used to push/pull built images  | default `dockerhub-secret`   |
 | `operator.watchNamespace`                 | The namespace under which the CR is created can trigger the operator's logic.   | default `empty`, means all namespace. |
 | `operator.clusterType`                    | K8S, or OPENSHIFT. | default `K8S`.                |
 | `operator.iamServer`                      | iam provider address.                            | default `emtpy`, **you must set it**.   |
@@ -71,12 +75,12 @@ The following table lists the configurable parameters of fabric-operator chart a
 | `authProxy.proxyClusterRoleName`          | cluster role name                  | default `proxy-role`           |
 | `authProxy.proxyClusterRoleBindingName`   | cluster rolebinding name           | default `proxy-rolebinding`    |
 | `authProxy.metricReaderClusterRoleName`   | metrics reader cluster role name   | default `metrics-reader`        |
-| `bcapi.name`   | Composited APIs for fabric resource APIs   | default `bff-apis`        |
-| `bcapi.env.k8sOIDCProxyURL`   | oidc proxy url   | it can be emtpty if you don't need oidc-proxy.        |
-| `bcapi.env.OIDCServerURL`   | oidc server  | must be completed       |
-| `bcapi.env.OIDCServerClientID`   | oidc client id   | must be completed       |
-| `bcapi.env.OIDCServerClientSecret`   | oidc client secret   | must be completed       |
-| `bcapi.image`   | image used by the bff service |  hyperledgerk8s/bc-apis:v0.1.0-20230118     |
-| `bcapi.imagePullPolicy`   | the policy of pulling image  | `IfNotPresent` |
-| `bcapi.hostAliases`   | add entry to Pod's /etc/hosts  | can be empty, format reference [adding-additional-entries-with-hostaliases](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/#adding-additional-entries-with-hostaliases)    |
-| `bcapi.ingressName`   | name of the ingress of the bff service| `bc-apis-ingress` |
+| `bcapi.name`                              | Composited APIs for fabric resource APIs   | default `bff-apis`        |
+| `bcapi.env.k8sOIDCProxyURL`               | oidc proxy url   | it can be emtpty if you don't need oidc-proxy.        |
+| `bcapi.env.OIDCServerURL`                 | oidc server  | must be completed       |
+| `bcapi.env.OIDCServerClientID`            | oidc client id   | must be completed       |
+| `bcapi.env.OIDCServerClientSecret`        | oidc client secret   | must be completed       |
+| `bcapi.image`                             | image used by the bff service |  hyperledgerk8s/bc-apis:v0.1.0-20230118     |
+| `bcapi.imagePullPolicy`                   | the policy of pulling image  | `IfNotPresent` |
+| `bcapi.hostAliases`                       | add entry to Pod's /etc/hosts  | can be empty, format reference [adding-additional-entries-with-hostaliases](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/#adding-additional-entries-with-hostaliases)    |
+| `bcapi.ingressName`                       | name of the ingress of the bff service| `bc-apis-ingress` |

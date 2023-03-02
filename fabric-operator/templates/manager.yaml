@@ -48,6 +48,14 @@ spec:
           value: {{ .Values.ingressDomain }}
         - name: OPERATOR_IAM_SERVER
           value: {{ .Values.iamServer }}
+        - name: PIPELINE_RUN_NAMESPACE
+          value: {{ .Values.tekton.namespace }}
+        - name: MINIO_HOST
+          value: {{ .Values.minio.host }}
+        - name: MINIO_ACCESS_KEY
+          value: {{ .Values.minio.accessKey }}
+        - name: MINIO_SECRET_KEY
+          value: {{ .Values.minio.secretKey }}
         image: {{ .Values.operator.image }}
         imagePullPolicy: IfNotPresent
         livenessProbe:
