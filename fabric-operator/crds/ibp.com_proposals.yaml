@@ -64,6 +64,32 @@ spec:
                 required:
                 - member
                 type: object
+              deployChaincode:
+                properties:
+                  chaincode:
+                    type: string
+                  members:
+                    items:
+                      description: Member in a Fedeartion
+                      properties:
+                        initiator:
+                          type: boolean
+                        joinedAt:
+                          description: JoinedAt is the proposal succ time
+                          format: date-time
+                          type: string
+                        joinedBy:
+                          description: JoinedBy is the proposal name which joins this
+                            member into federation
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    type: array
+                required:
+                - chaincode
+                - members
+                type: object
               deprecated:
                 default: false
                 type: boolean
@@ -98,6 +124,49 @@ spec:
                     type: string
                 required:
                 - channel
+                type: object
+              upgradeChaincode:
+                properties:
+                  chaincode:
+                    type: string
+                  members:
+                    items:
+                      description: Member in a Fedeartion
+                      properties:
+                        initiator:
+                          type: boolean
+                        joinedAt:
+                          description: JoinedAt is the proposal succ time
+                          format: date-time
+                          type: string
+                        joinedBy:
+                          description: JoinedBy is the proposal name which joins this
+                            member into federation
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    type: array
+                  newChaincodeImage:
+                    properties:
+                      digest:
+                        type: string
+                      name:
+                        type: string
+                      pullSecret:
+                        default: Always
+                        type: string
+                    required:
+                    - digest
+                    - name
+                    type: object
+                  newVersion:
+                    type: string
+                required:
+                - chaincode
+                - members
+                - newChaincodeImage
+                - newVersion
                 type: object
             required:
             - federation
