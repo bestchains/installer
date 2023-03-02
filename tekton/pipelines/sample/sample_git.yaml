@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: cache-image-ws-pvc
+  name: sample-git-kaniko-ws-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Mi
+      storage: 100Mi
 ---
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
@@ -19,20 +19,23 @@ metadata:
 spec:
   serviceAccountName: chaincodebuild-service-account
   pipelineRef:
-    name: chaincodebuild
+    name: chaincodebuild-kaniko
   params:
     - name: SOURCE
       value: git
     - name: SOURCE_GIT_URL
       value: https://github.com/bestchains/fabric-builder-k8s
     - name: APP_IMAGE
-      value: bjwswang/chaincode-go
+      value: hyperledgerk8s/go-contract:latest
     - name: DOCKERFILE
-      value: ./samples/go-contract/Dockerfile.optimized # relevant path to git repo's root directory
+      value: bestchains/go-contract/Dockerfile.optimized # Must be in format : {bucket}/{object}/{relevant_path_to_object_root_directory}
     - name: CONTEXT
-      value: ./samples/go-contract # relevant path to git repo's root directory
+      value: bestchains/go-contract # Must be in format {bucket}/{object}
   workspaces:
     - name: source-ws
       subPath: source
       persistentVolumeClaim:
-        claimName: cache-image-ws-pvc
+        claimName: sample-git-kaniko-ws-pvc
+    - name: dockerconfig-ws
+      secret:
+        secretName: dockerhub-secret
