@@ -24,12 +24,21 @@ rules:
     - ibp.com
   resources:
     - endorsepolicies
+    - chaincodebuilds
     - chaincodes
   verbs:
     - create
     - get
     - list
     - delete
+- apiGroups:
+    - tekton.dev
+  resources:
+    - pipelineruns
+    - taskruns
+  verbs:
+    - get
+    - list
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
