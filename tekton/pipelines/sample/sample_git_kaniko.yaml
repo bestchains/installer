@@ -1,0 +1,113 @@
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: sample-git-kaniko
+  labels:
+    description: "A_PipelineRun_For_ChaincodeBuild"
+spec:
+  pipelineRef:
+    name: chaincodebuild-kaniko
+  params:
+    - name: SOURCE
+      value: git
+    - name: SOURCE_GIT_URL
+      value: https://github.com/bestchains/fabric-builder-k8s
+    - name: APP_IMAGE
+      value: registry-sample-git-kaniko.default.svc.cluster.local:5000/go-contract:latest
+    - name: DOCKERFILE
+      value: Dockerfile.optimized # Short paths in CONTEXT or complete absolute paths  {relevant_path_to_object_root_directory}
+    - name: CONTEXT
+      value: samples/go-contract/
+  workspaces:
+    - name: source-ws
+      subPath: source
+      persistentVolumeClaim:
+        claimName: sample-git-kaniko-ws-pvc
+    - name: dockerconfig-ws
+      secret:
+        secretName: dockerhub-secret
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sample-git-kaniko-ws-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dockerhub-secret
+data:
+  # echo -n '{"auths":{"registry-sample-git-kaniko.default.svc.cluster.local:5000":{"username":"testuser","password":"testpassword","auth":"dGVzdHVzZXI6dGVzdHBhc3N3b3Jk"}}}' | base64
+  # auth的值是 echo -n "testuser:testpassword" | base64
+  config.json: eyJhdXRocyI6eyJyZWdpc3RyeS1zYW1wbGUtZ2l0LWthbmlrby5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsOjUwMDAiOnsidXNlcm5hbWUiOiJ0ZXN0dXNlciIsInBhc3N3b3JkIjoidGVzdHBhc3N3b3JkIiwiYXV0aCI6ImRHVnpkSFZ6WlhJNmRHVnpkSEJoYzNOM2IzSmsifX19
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-sample-git-kaniko
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: registry-sample-git-kaniko
+  template:
+    metadata:
+      labels:
+        app: registry-sample-git-kaniko
+    spec:
+      volumes:
+        - name: auth
+          projected:
+            sources:
+              - configMap:
+                  name: simple-auth-file
+      containers:
+        - name: registry-sample-git-kaniko
+          image: hyperledgerk8s/registry:2
+          env:
+            - name: REGISTRY_AUTH
+              value: htpasswd
+            - name: REGISTRY_AUTH_HTPASSWD_REALM
+              value: Registry Realm
+            - name: REGISTRY_AUTH_HTPASSWD_PATH
+              value: /tmp/htpasswd
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: auth
+              mountPath: /tmp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-auth-file
+  namespace: default
+data:
+  # docker run --entrypoint htpasswd httpd:2 -Bbn testuser testpassword > auth/htpasswd
+  htpasswd: |-
+    testuser:$2y$05$Gs64xV3b.VuEotFwvR416uZ.aFZihXdLobK5uge94wOrXKRiAtyra
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-sample-git-kaniko
+  namespace: default
+spec:
+  selector:
+    app: registry-sample-git-kaniko
+  ports:
+    - port: 5000
+      targetPort: 5000

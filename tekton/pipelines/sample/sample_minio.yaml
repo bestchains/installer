@@ -1,24 +1,15 @@
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: sample-minio-kaniko-ws-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Mi
+# You should run pre_sample_minio.yaml to store data to minio
+# And run post_sample_minio.yaml to delete data from minio.
 ---
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: sample-minio-kaniko-chaincodebuild-pipelinerun
+  name: sample-minio
   labels:
     description: "A_PipelineRun_For_ChaincodeBuild"
 spec:
   pipelineRef:
-    name: chaincodebuild-kaniko
+    name: chaincodebuild
   params:
     - name: SOURCE
       value: minio
@@ -27,22 +18,71 @@ spec:
     - name: SOURCE_MINIO_OBJECT
       value: go-contract
     - name: SOURCE_MINIO_HOST
-      value: minio.bestchains-addons.svc.cluster.local
+      value: fabric-minio.baas-system.svc.cluster.local:9000
     - name: SOURCE_MINIO_ACCESS_KEY
-      value: "XW37liMe2f5S73Um"
+      value: "q18aRFqWOAX7pEin"
     - name: SOURCE_MINIO_SECRET_KEY
-      value: "6oFLi1uKLdnUPlrVPyd3qwZtia7Sksg4"
+      value: "nCbZIP6q4s8KtQpL7n8CD2N88H6XABGf"
     - name: APP_IMAGE
-      value: hyperledgerk8s/go-contract:latest
+      value: registry-sample-minio.default.svc.cluster.local:5000/go-contract:latest
+    - name: INSECURE_REGISTRY
+      value: registry-sample-minio.default.svc.cluster.local:5000
     - name: DOCKERFILE
-      value: bestchains/go-contract/Dockerfile.optimized # Must be in format : {bucket}/{object}/{relevant_path_to_object_root_directory}
+      value: bestchains/go-contract/samples/go-contract/Dockerfile.optimized # Only complete absolute paths  {bucket}/{object}/{optional-project-internal-path}
     - name: CONTEXT
-      value: bestchains/go-contract # Must be in format {bucket}/{object}
+      value: bestchains/go-contract/samples/go-contract/ # Must be in format {bucket}/{object}/{optional-project-internal-path}
   workspaces:
     - name: source-ws
       subPath: source
       persistentVolumeClaim:
-        claimName: sample-minio-kaniko-ws-pvc
+        claimName: sample-minio-ws-pvc
     - name: dockerconfig-ws
       secret:
         secretName: dockerhub-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-sample-minio
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: registry-sample-minio
+  template:
+    metadata:
+      labels:
+        app: registry-sample-minio
+    spec:
+      containers:
+        - name: registry-sample-minio
+          image: hyperledgerk8s/registry:2
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-sample-minio
+  namespace: default
+spec:
+  selector:
+    app: registry-sample-minio
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sample-minio-ws-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi

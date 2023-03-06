@@ -1,20 +1,15 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: minio-fetch
+  name: minio-remove
   annotations:
     tekton.dev/categories: Minio
     tekton.dev/tags: minio
-    tekton.dev/displayName: "minio fetch"
+    tekton.dev/displayName: "minio remove"
     tekton.dev/platforms: "linux/amd64"
 spec:
   description: >-
-    The minio-fetch Task will fetch a object from the provided minio host and credentials into the
-    output Workspace.
-
-  workspaces:
-    - name: output
-      description: The minio fetch will be stored onto the volume backing this workspace
+    The minio-remove Task will remove a object from the provided minio. 
 
   params:
     - name: scheme
@@ -45,22 +40,36 @@ spec:
       type: string
       default: "hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z"
       description: the image used where the minio-fetch
-    
-  results:
-    - name: filepath
-      description: The precise FilePath this minio object stored
+
   steps:
-    - name: fetch
+    - name: remove
       image: $(params.minioClientImage)
       env:
-      - name: MC_HOST_minio
-        value: $(params.scheme)://$(params.accessKey):$(params.secretKey)@$(params.host)
-      - name: WORKSPACE_OUTPUT_PATH
-        value: $(workspaces.output.path)
+        - name: MC_HOST_minio
+          value: $(params.scheme)://$(params.accessKey):$(params.secretKey)@$(params.host)
       args:
         [
-          "cp",
+          "rm",
           --recursive,
+          --force,
           minio/$(params.bucket)/$(params.object),
-          $(workspaces.output.path)/$(params.subdirectory)/$(params.bucket),
         ]
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: post-sample-minio
+spec:
+  taskRef:
+    name: minio-remove
+  params:
+    - name: bucket
+      value: bestchains
+    - name: object
+      value: go-contract
+    - name: host
+      value: fabric-minio.baas-system.svc.cluster.local:9000
+    - name: accessKey
+      value: "admin"
+    - name: secretKey
+      value: "passw0rd"

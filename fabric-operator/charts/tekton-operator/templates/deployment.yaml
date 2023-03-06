@@ -79,6 +79,24 @@ spec:
               value: {{ .Values.triggers.webhook.image }}
             - name: IMAGE_PIPELINES_ARG__ENTRYPOINT_IMAGE
               value: {{ .Values.pipeline.args.entrypointImage }}
+            - name: IMAGE_PIPELINES_ARG__GIT_IMAGE
+              value: {{ .Values.pipeline.args.gitImage}}
+            - name: IMAGE_PIPELINES_ARG__KUBECONFIG_WRITER_IMAGE
+              value: {{ .Values.pipeline.args.kubeconfigWriterImage}}
+            - name: IMAGE_PIPELINES_ARG__NOP_IMAGE
+              value: {{ .Values.pipeline.args.nopImage}}
+            - name: IMAGE_PIPELINES_ARG__IMAGEDIGEST_EXPORTER_IMAGE
+              value: {{ .Values.pipeline.args.imagedigestexporterImage}}
+            - name: IMAGE_PIPELINES_ARG__PR_IMAGE
+              value: {{ .Values.pipeline.args.pullrequestInitImage}}
+            - name: IMAGE_PIPELINES_ARG__WORKINGDIRINIT_IMAGE
+              value: {{ .Values.pipeline.args.workingdirinitImage}}
+            - name: IMAGE_PIPELINES_ARG__GSUTIL_IMAGE
+              value: {{ .Values.pipeline.args.cloudSdkImage}}
+            - name: IMAGE_PIPELINES_ARG__SHELL_IMAGE
+              value: {{ .Values.pipeline.args.busyboxImage}}
+            - name: IMAGE_PIPELINES_ARG__SHELL_IMAGE_WIN
+              value: {{ .Values.pipeline.args.powershellImage}}
           args:
             - "-controllers"
             - "tektonconfig,tektonpipeline,tektontrigger,tektonhub,tektonchain,tektonresults,tektondashboard"
@@ -143,6 +161,24 @@ spec:
               value: {{ .Values.triggers.webhook.image }}
             - name: IMAGE_PIPELINES_ARG__ENTRYPOINT_IMAGE
               value: {{ .Values.pipeline.args.entrypointImage }}
+            - name: IMAGE_PIPELINES_ARG__GIT_IMAGE
+              value: {{ .Values.pipeline.args.gitImage}}
+            - name: IMAGE_PIPELINES_ARG__KUBECONFIG_WRITER_IMAGE
+              value: {{ .Values.pipeline.args.kubeconfigWriterImage}}
+            - name: IMAGE_PIPELINES_ARG__NOP_IMAGE
+              value: {{ .Values.pipeline.args.nopImage}}
+            - name: IMAGE_PIPELINES_ARG__IMAGEDIGEST_EXPORTER_IMAGE
+              value: {{ .Values.pipeline.args.imagedigestexporterImage}}
+            - name: IMAGE_PIPELINES_ARG__PR_IMAGE
+              value: {{ .Values.pipeline.args.pullrequestInitImage}}
+            - name: IMAGE_PIPELINES_ARG__WORKINGDIRINIT_IMAGE
+              value: {{ .Values.pipeline.args.workingdirinitImage}}
+            - name: IMAGE_PIPELINES_ARG__GSUTIL_IMAGE
+              value: {{ .Values.pipeline.args.cloudSdkImage}}
+            - name: IMAGE_PIPELINES_ARG__SHELL_IMAGE
+              value: {{ .Values.pipeline.args.busyboxImage}}
+            - name: IMAGE_PIPELINES_ARG__SHELL_IMAGE_WIN
+              value: {{ .Values.pipeline.args.powershellImage}}
           args:
             - "-controllers"
             - "tektoninstallerset"

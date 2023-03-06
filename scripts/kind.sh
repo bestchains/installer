@@ -43,16 +43,43 @@ function kind_up_cluster {
 }
 
 function pre_load_image() {
-	pre_load_images=(hyperledgerk8s/ubi-minimal:latest hyperledgerk8s/fabric-ca:iam-20230131
-		hyperledgerk8s/fabric-peer:2.4.7 hyperledgerk8s/fabric-peer:2.4.7
-		hyperledgerk8s/couchdb:3.2.2 hyperledgerk8s/fabric-orderer:2.4.7
-		hyperledgerk8s/fabric-console:latest hyperledgerk8s/grpc-web:latest
-		hyperledgerk8s/tektoncd-operator:v0.64.0 hyperledgerk8s/tekton-operator-webhook:v0.64.0
-		hyperledgerk8s/tekton-pipeline-controller:v0.42.0 hyperledgerk8s/tekton-pipeline-webhook:v0.42.0 hyperledgerk8s/tekton-pipeline-resolvers:v0.42.0
-		hyperledgerk8s/tekton-triggers-controller:v0.22.0 hyperledgerk8s/tekton-triggers-interceptors:v0.22.0 hyperledgerk8s/tekton-triggers-webhook:v0.22.0
+	pre_load_images=(
+		hyperledgerk8s/ubi-minimal:latest
+		hyperledgerk8s/fabric-ca:iam-20230131
+		hyperledgerk8s/fabric-peer:2.4.7
+		hyperledgerk8s/fabric-peer:2.4.7
+		hyperledgerk8s/couchdb:3.2.2
+		hyperledgerk8s/fabric-orderer:2.4.7
+		hyperledgerk8s/fabric-console:latest
+		hyperledgerk8s/grpc-web:latest
+		hyperledgerk8s/tektoncd-operator:v0.64.0
+		hyperledgerk8s/tekton-operator-webhook:v0.64.0
+		hyperledgerk8s/tekton-pipeline-controller:v0.42.0
+		hyperledgerk8s/tekton-pipeline-webhook:v0.42.0
+		hyperledgerk8s/tekton-pipeline-resolvers:v0.42.0
+		hyperledgerk8s/tekton-triggers-controller:v0.22.0
+		hyperledgerk8s/tekton-triggers-interceptors:v0.22.0
+		hyperledgerk8s/tekton-triggers-webhook:v0.22.0
 		hyperledgerk8s/tekton-dashboard:v0.31.0
 		hyperledgerk8s/tekton-pipeline-args-entrypoint:v0.42.0
-		hyperledgerk8s/minio-minio:RELEASE.2023-02-10T18-48-39Z hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z)
+		hyperledgerk8s/tekton-pipeline-args-git-init:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-kubeconfigwriter:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-nop:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-imagedigestexporter:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-pullrequest-init:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-workingdirinit:v0.42.0
+		hyperledgerk8s/tekton-pipeline-args-cloud-sdk:27b2c2
+		hyperledgerk8s/tekton-pipeline-args-busybox:19f022
+		hyperledgerk8s/tekton-pipeline-args-powershell:nanoserver-b6d5ff
+		hyperledgerk8s/minio-minio:RELEASE.2023-02-10T18-48-39Z
+		hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z
+		hyperledgerk8s/registry:2
+		hyperledgerk8s/docker:dind
+		hyperledgerk8s/docker:stable
+		hyperledgerk8s/kaniko-executor:v1.9.1
+		hyperledgerk8s/bash:5.1.4
+		hyperledgerk8s/ubuntu:22.04
+	)
 	for image in ${pre_load_images[*]}; do
 		docker pull ${image}
 		kind load docker-image ${image}

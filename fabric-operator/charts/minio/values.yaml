@@ -87,8 +87,8 @@ runtimeClassName: ""
 ## AccessKey and secretKey is generated when not set
 ## Distributed MinIO ref: https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-multi-node-multi-drive.html
 ##
-rootUser: "admin"
-rootPassword: "passw0rd"
+rootUser: ""
+rootPassword: ""
 
 ## Use existing Secret that store following variables:
 ##
@@ -181,7 +181,7 @@ service:
 
 ingress:
   enabled: false
-  # ingressClassName: ""
+  ingressClassName: "portal-ingress"
   labels: {}
     # node-role.kubernetes.io/ingress: platform
 
@@ -208,8 +208,8 @@ consoleService:
   nodePort: 32001
 
 consoleIngress:
-  enabled: false
-  # ingressClassName: ""
+  enabled: true
+  ingressClassName: "portal-ingress"
   labels: {}
     # node-role.kubernetes.io/ingress: platform
 
@@ -223,7 +223,7 @@ consoleIngress:
     # nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
   path: /
   hosts:
-    - console.minio-example.local
+    - console.minio.local
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -329,15 +329,15 @@ makePolicyJob:
 
 ## List of users to be created after minio install
 ##
-users:
+users: []
   ## Username, password and policy to be assigned to the user
   ## Default policies are [readonly|readwrite|writeonly|consoleAdmin|diagnostics]
   ## Add new policies as explained here https://min.io/docs/minio/kubernetes/upstream/administration/identity-access-management.html#access-management
   ## NOTE: this will fail if LDAP is enabled in your MinIO deployment
   ## make sure to disable this if you are using LDAP.
-  - accessKey: q18aRFqWOAX7pEin
-    secretKey: nCbZIP6q4s8KtQpL7n8CD2N88H6XABGf
-    policy: readwrite
+  #- accessKey: q18aRFqWOAX7pEin
+  #  secretKey: nCbZIP6q4s8KtQpL7n8CD2N88H6XABGf
+  #  policy: readwrite
   # Or you can refer to specific secret
   #- accessKey: externalSecret
   #  existingSecret: my-secret

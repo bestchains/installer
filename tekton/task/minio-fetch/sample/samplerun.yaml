@@ -25,7 +25,7 @@ spec:
     - name: object
       value: go-contract
     - name: host
-      value: fabric-minio.baas-system.svc.cluster.local
+      value: fabric-minio.baas-system.svc.cluster.local:9000
     - name: accessKey
       value: "q18aRFqWOAX7pEin"
     - name: secretKey

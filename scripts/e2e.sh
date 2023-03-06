@@ -23,47 +23,78 @@ INSTALL_U4A=${INSTALL_U4A:-"NO"}
 
 REMOVE_FABRIC_OPERATOR=${REMOVE_FABRIC_OPERATOR:-"NO"}
 UPGRADE_FABRIC_OPERATOR=${UPGRADE_FABRIC_OPERATOR:-"NO"}
-IGNORE_FABRIC_OPERATOR=${IGNORE_FABRIC_OPERATOR:-"YES"}
-
+INSTALL_FABRIC_OPERATOR=${INSTALL_FABRIC_OPERATOR:-"NO"}
 
 TIMEOUT=${TIMEOUT:-"1200s"}
-WAIT_TEKTON_INSTALL=${WAIT_TEKTON_INSTALL:-"YES"}
-RUN_TEKTON_EXAMPLE=${RUN_TEKTON_EXAMPLE:-"YES"}
+
+WAIT_TEKTON_INSTALL=${WAIT_TEKTON_INSTALL:-"NO"}
+INSTALL_TEKTON=${INSTALL_TEKTON:-"NO"}
+INSTALL_MINIO=${INSTALL_MINIO:-"NO"}
+INSTALL_TEKTON_TASK_PIPELINE=${INSTALL_TEKTON_TASK_PIPELINE:-"NO"}
+RUN_IN_TEST=${RUN_IN_TEST:-"NO"}
 
 echo "checking option params..."
 
 # Get install options
 for i in "$@"; do
 	echo $i
-	if [ $i == "--all" ];
-	then
+	if [ $i == "--all" ]; then
 		echo "will install all parts by default"
 		INSTALL_U4A="YES"
-		IGNORE_FABRIC_OPERATOR="NO"
-	elif [ $i == "--u4a" ];
-	then 
+		INSTALL_FABRIC_OPERATOR="YES"
+		WAIT_TEKTON_INSTALL="YES"
+		INSTALL_MINIO="NO"
+		INSTALL_TEKTON="NO"
+		INSTALL_TEKTON_TASK_PIPELINE="YES"
+	elif [ $i == "--u4a" ]; then
 		echo "will install u4a components"
 		INSTALL_U4A="YES"
-	elif [ $i == "--baas" ];
-	then
+		INSTALL_FABRIC_OPERATOR="NO"
+		WAIT_TEKTON_INSTALL="NO"
+		INSTALL_MINIO="NO"
+		INSTALL_TEKTON="NO"
+		INSTALL_TEKTON_TASK_PIPELINE="NO"
+	elif [ $i == "--baas" ]; then
 		echo "will install fabric-operator"
-		IGNORE_FABRIC_OPERATOR="NO"
-	elif [ $i == "--addon" ];
-	then
-		echo "will install addons"
-		# TODO: future components integration
-	elif [ $i == "--up-all" ];
-	then
+		INSTALL_U4A="NO"
+		INSTALL_FABRIC_OPERATOR="YES"
+		WAIT_TEKTON_INSTALL="YES"
+		INSTALL_MINIO="NO"
+		INSTALL_TEKTON="NO"
+		INSTALL_TEKTON_TASK_PIPELINE="YES"
+	elif [ $i == "--minio" ]; then
+		echo "will install minio"
+		INSTALL_U4A="NO"
+		INSTALL_FABRIC_OPERATOR="NO"
+		WAIT_TEKTON_INSTALL="NO"
+		INSTALL_MINIO="YES"
+		INSTALL_TEKTON="NO"
+		INSTALL_TEKTON_TASK_PIPELINE="NO"
+	elif [ $i == "--tekton-operator" ]; then
+		echo "will install tekton-operator"
+		INSTALL_U4A="NO"
+		INSTALL_FABRIC_OPERATOR="NO"
+		WAIT_TEKTON_INSTALL="YES"
+		INSTALL_MINIO="NO"
+		INSTALL_TEKTON="YES"
+		INSTALL_TEKTON_TASK_PIPELINE="NO"
+	elif [ $i == "--tekton-task-pipeline" ]; then
+		echo "will install tekton task and pipeline"
+		INSTALL_U4A="NO"
+		INSTALL_FABRIC_OPERATOR="NO"
+		WAIT_TEKTON_INSTALL="NO"
+		INSTALL_MINIO="NO"
+		INSTALL_TEKTON="NO"
+		INSTALL_TEKTON_TASK_PIPELINE="YES"
+	elif [ $i == "--up-all" ]; then
 		echo "will upgrade all components"
 		UPGRADE_U4A="YES"
 		UPGRADE_FABRIC_OPERATOR="YES"
 		# TODO: upgrade other components
-	elif [ $i == "--up-baas" ];
-	then
+	elif [ $i == "--up-baas" ]; then
 		echo "will upgrade fabric-operator"
 		UPGRADE_FABRIC_OPERATOR="YES"
-	elif [ $i == "--rm-baas" ];
-	then
+	elif [ $i == "--rm-baas" ]; then
 		echo "will remove fabric-operator"
 		REMOVE_FABRIC_OPERATOR="YES"
 	else
@@ -72,8 +103,10 @@ for i in "$@"; do
 done
 
 function debug() {
-	kubectl describe po -A
-	kubectl get po -A
+	if [[ ${RUN_IN_TEST} == "YES" ]]; then
+		kubectl describe po -A
+		kubectl get po -A
+	fi
 	exit 1
 }
 trap debug ERR
@@ -104,20 +137,20 @@ cat u4a-component/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNode
 	sed "s/<replaced-oidc-proxy-node-name>/${kubeProxyNode}/g" |
 	sed "s/<replaced-k8s-ip-with-oidc-enabled>/${kubeProxyNodeIP}/g" \
 		>u4a-component/values1.yaml
-		
+
 if [ $INSTALL_U4A == "YES" ]; then
-# step 5. install cluster-compoent
+	# step 5. install cluster-compoent
 	echo "begin deploying cluster component..."
-	helm --wait --timeout=$TIMEOUT -n u4a-system install cluster-component --wait -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
+	helm --wait --timeout=$TIMEOUT -n u4a-system install cluster-component -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
 	echo "deploy cluster component succeffsully."
 
-# step 6. install u4a component
+	# step 6. install u4a component
 	echo "begin deploying u4a component..."
-	helm --wait --timeout=$TIMEOUT -n u4a-system install u4a-component --wait -f u4a-component/values1.yaml u4a-component
+	helm --wait --timeout=$TIMEOUT -n u4a-system install u4a-component -f u4a-component/values1.yaml u4a-component
 	echo "deploy u4a component successfully"
 
-echo "namespace info:"
-kubectl get po -n u4a-system -o wide
+	echo "namespace info:"
+	kubectl get po -n u4a-system -o wide
 fi
 
 # baas step 1. replace iam server and get oidc-server client secret
@@ -132,13 +165,37 @@ cat fabric-operator/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNo
 		>fabric-operator/values1.yaml
 
 # baas step 2. install fabric operator
-if [[ ${IGNORE_FABRIC_OPERATOR} != "YES" ]]; then
+if [[ ${INSTALL_FABRIC_OPERATOR} == "YES" ]]; then
 	kubectl create namespace baas-system
-	helm --debug --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
+	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml fabric-operator
 	echo "deploy fabric-operator successfully"
 	kubectl get po -nbaas-system
 else
 	echo "According to the configuration, fabric-operator will not be installed."
+fi
+
+# baas step optional. install minio
+if [[ ${INSTALL_MINIO} == "YES" ]]; then
+	cd fabric-operator/charts
+	if [[ $(kubectl get ns baas-system --no-headers --ignore-not-found | awk '{print $1}') == "" ]]; then
+		kubectl create namespace baas-system
+	fi
+	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric-minio minio
+	echo "deploy minio successfully"
+	kubectl get po -nbaas-system
+	cd -
+fi
+
+# baas step optional. install tekton operator
+if [[ ${INSTALL_TEKTON} == "YES" ]]; then
+	cd fabric-operator/charts
+	if [[ $(kubectl get ns baas-system --no-headers --ignore-not-found | awk '{print $1}') == "" ]]; then
+		kubectl create namespace baas-system
+	fi
+	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric-tekton tekton-operator
+	echo "deploy tekton-operator successfully"
+	kubectl get po -nbaas-system
+	cd -
 fi
 
 if [[ ${WAIT_TEKTON_INSTALL} == "YES" ]]; then
@@ -159,6 +216,13 @@ if [[ ${WAIT_TEKTON_INSTALL} == "YES" ]]; then
 		sleep 5
 	done
 	echo "deploy tekton successfully"
+fi
+
+# baas step optional. install tekton task and pipeline
+if [[ ${INSTALL_TEKTON_TASK_PIPELINE} == "YES" ]]; then
+	echo "install pre defined tekton task and pipeline for chaincode..."
+	find tekton -type f -name "*.yaml" ! -path "*/sample/*" | xargs -n 1 kubectl apply -f
+	echo "install pre defined tekton task and pipeline for chaincode done."
 fi
 
 # upgrade fabric
