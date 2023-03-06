@@ -38,10 +38,12 @@ spec:
           spec:
             description: ChaincodeBuildSpec defines the desired state of ChaincodeBuild
             properties:
+              id:
+                description: Name of the chaincode
+                type: string
               initiator:
                 description: Initiator is the organization who initiates this chaincode
-                  build License should be accepted by the user to be able to setup
-                  console
+                  build
                 type: string
               license:
                 description: License should be accepted by the user to be able to
@@ -53,14 +55,12 @@ spec:
                     - true
                     type: boolean
                 type: object
-              name:
-                description: Name of the chaincode License should be accepted by the
-                  user to be able to setup console
+              network:
+                description: Network of the chaincode belongs to
                 type: string
               pipelineRunSpec:
                 description: PipelineRunSpec defines the tekton  pipelinerun which
-                  reference pipeline `ChaincodeBuild` License should be accepted by
-                  the user to be able to setup console
+                  reference pipeline `ChaincodeBuild`
                 properties:
                   dockerBuild:
                     properties:
@@ -97,13 +97,13 @@ spec:
                 - dockerBuild
                 type: object
               version:
-                description: Version of the chaincode License should be accepted by
-                  the user to be able to setup console
+                description: Version of the chaincode
                 type: string
             required:
+            - id
             - initiator
             - license
-            - name
+            - network
             - pipelineRunSpec
             - version
             type: object
