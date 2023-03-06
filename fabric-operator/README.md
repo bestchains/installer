@@ -84,3 +84,10 @@ The following table lists the configurable parameters of fabric-operator chart a
 | `bcapi.imagePullPolicy`                   | the policy of pulling image  | `IfNotPresent` |
 | `bcapi.hostAliases`                       | add entry to Pod's /etc/hosts  | can be empty, format reference [adding-additional-entries-with-hostaliases](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/#adding-additional-entries-with-hostaliases)    |
 | `bcapi.ingressName`                       | name of the ingress of the bff service| `bc-apis-ingress` |
+
+
+## Uninstall
+**All `TektonConfig` and `TektonInstallerSet` CR should be deleted manually before uninstall.**
+```bash
+helm -nbaas-system uninstall fabric fabric-operator
+```

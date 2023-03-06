@@ -29,8 +29,8 @@ spec:
       description: minio's object path
       default: "bestchains"
     - name: SOURCE_MINIO_HOST
-      description: minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local) (required if SOURCE is git)
-      default: "minio.tekton-pipelines-addons.svc.cluster.local"
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local) (required if SOURCE is git)
+      default: "fabric-minio.baas-system.svc.cluster.local"
     - name: SOURCE_MINIO_ACCESS_KEY
       type: string
       description: the accessKey used to fetch minio object (required if SOURCE is git)

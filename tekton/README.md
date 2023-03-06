@@ -7,7 +7,8 @@
 ## Installation
 
 ### Install tekton operator
-Todo...
+
+Tekton pipeline will be automatically installed with fabric-operator
 
 ### Post-process after tekton operator deployed
 
@@ -76,7 +77,7 @@ This pipeline builds chaincode source code into a container image with `srouce-f
 | `SOURCE`                               | The source type where chaincode code stores.Now supports minio,git  | default `minio`. |  `required` |
 | `SOURCE_MINIO_BUCKET`                               | minio's bucket name  | default `bestchains`. |   `required when using minio` |
 | `SOURCE_MINIO_OBJECT`                               | minio's object path  | default ""  |   `required when using minio` |
-| `SOURCE_MINIO_HOST`                               | minio host/domain to fetch (minio.tekton-pipelines-addons.svc.cluster.local)  | default `minio.tekton-pipelines-addons.svc.cluster.local`. | `required when using minio` |
+| `SOURCE_MINIO_HOST`                               | minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)  | default `fabric-minio.baas-system.svc.cluster.local`. | `required when using minio` |
 | `SOURCE_MINIO_ACCESS_KEY`                               | the accessKey used to fetch minio object  | default  |  `required when using minio` |
 | `SOURCE_MINIO_SECRET_KEY`                               | the secretKey used to fetch minio object | default | `required when using minio` |
 | `SOURCE_GIT_URL`                               |  The git repo url where the source code resides | default |  `required when using git` |

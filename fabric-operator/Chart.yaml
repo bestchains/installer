@@ -12,6 +12,16 @@ keywords:
   - bestchains
 sources:
   - https://github.com/bestchains/fabric-operator
+dependencies:
+  - name: tekton-operator
+    version: 0.64.0
+    # TODO: this directory is copy from https://github.com/tektoncd/operator/tree/5701d7814f8d7e909aeb111f7ac368e631a33f3f/chart
+    # multiple issues has been fixed, and it should be push back to the upstream.
+    # should change to https://tektoncd.github.io/operator after these issues have been fixed.
+  - name: minio
+    version: 5.0.7
+    # copy from https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.7.tgz for ease of use.
+    # modify the default image, ingress domain and other configurations.
 maintainers:
   - name: nkwangleiGIT
     url: https://github.com/nkwangleiGIT

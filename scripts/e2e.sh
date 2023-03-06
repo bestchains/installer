@@ -18,6 +18,8 @@
 #
 IGNORE_FABRIC_OPERATOR=${IGNORE_FABRIC_OPERATOR:-"NO"}
 TIMEOUT=${TIMEOUT:-"1200s"}
+WAIT_TEKTON_INSTALL=${WAIT_TEKTON_INSTALL:-"YES"}
+RUN_TEKTON_EXAMPLE=${RUN_TEKTON_EXAMPLE:-"YES"}
 
 function debug() {
 	kubectl describe po -A
@@ -43,7 +45,7 @@ cat u4a-component/charts/cluster-component/values.yaml | sed "s/<replaced-ingres
 	>u4a-component/charts/cluster-component/values1.yaml
 
 # step 4. install cluster-compoent
-helm --wait --timeout=$TIMEOUT -nu4a-system install cluster-component --wait -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
+helm --wait --timeout=$TIMEOUT -nu4a-system install cluster-component -f u4a-component/charts/cluster-component/values1.yaml u4a-component/charts/cluster-component
 
 echo "deploy cluster component succeffsully"
 kubectl get po -nu4a-system -owide
@@ -54,7 +56,7 @@ cat u4a-component/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNode
 	sed "s/<replaced-k8s-ip-with-oidc-enabled>/${kubeProxyNodeIP}/g" \
 		>u4a-component/values1.yaml
 
-helm --wait --timeout=$TIMEOUT -nu4a-system install u4a-component --wait -f u4a-component/values1.yaml u4a-component
+helm --wait --timeout=$TIMEOUT -nu4a-system install u4a-component -f u4a-component/values1.yaml u4a-component
 
 # step 6. install u4a component
 
@@ -75,9 +77,29 @@ cat fabric-operator/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNo
 # step 8. install fabric operator
 if [[ ${IGNORE_FABRIC_OPERATOR} != "YES" ]]; then
 	kubectl create namespace baas-system
-	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml --wait fabric-operator
+	helm --debug --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml fabric-operator
 	echo "deploy fabric-operator successfully"
 	kubectl get po -nbaas-system
 else
 	echo "According to the configuration, fabric-operator will not be installed."
+fi
+
+if [[ ${WAIT_TEKTON_INSTALL} == "YES" ]]; then
+	echo "wait tekton install finish..."
+	START_TIME=$(date +%s)
+	while true; do
+		output=$(kubectl get tektonconfig config -ojsonpath='{.status.conditions[?(@.type=="Ready")].status}' --ignore-not-found)
+		if [[ ${output} == "True" ]]; then
+			break
+		fi
+		CURRENT_TIME=$(date +%s)
+		ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
+		if [[ $ELAPSED_TIME -gt 600 ]]; then
+			echo "wait tekton install timeout"
+			kubectl get tektonconfig config -oyaml
+			exit 1
+		fi
+		sleep 5
+	done
+	echo "deploy tekton successfully"
 fi
