@@ -44,12 +44,10 @@ spec:
                     type: string
                 type: object
               externalBuilder:
-                default: k8s
                 description: ExternalBuilder used, default is k8s
                 type: string
               id:
                 description: chaincode id
-                pattern: ^[a-z][a-z0-9]{7,63}$
                 type: string
               images:
                 description: the image used by the current version of chaincode
@@ -84,12 +82,9 @@ spec:
             required:
             - channel
             - endorsePolicyRef
-            - id
-            - images
             - initRequired
             - label
             - license
-            - version
             type: object
           status:
             properties:
@@ -116,7 +111,7 @@ spec:
                 description: Chaincode upgrade history
                 items:
                   properties:
-                    finalState:
+                    externalBuilder:
                       type: string
                     image:
                       properties:
@@ -137,7 +132,7 @@ spec:
                     version:
                       type: string
                   required:
-                  - finalState
+                  - externalBuilder
                   - image
                   - upgradeTime
                   - version
