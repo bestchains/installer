@@ -68,6 +68,8 @@ spec:
                 properties:
                   chaincode:
                     type: string
+                  externalBuilder:
+                    type: string
                   members:
                     items:
                       description: Member in a Fedeartion
@@ -88,6 +90,7 @@ spec:
                     type: array
                 required:
                 - chaincode
+                - externalBuilder
                 - members
                 type: object
               deprecated:
@@ -129,6 +132,8 @@ spec:
                 properties:
                   chaincode:
                     type: string
+                  externalBuilder:
+                    type: string
                   members:
                     items:
                       description: Member in a Fedeartion
@@ -147,26 +152,10 @@ spec:
                           type: string
                       type: object
                     type: array
-                  newChaincodeImage:
-                    properties:
-                      digest:
-                        type: string
-                      name:
-                        type: string
-                      pullSecret:
-                        default: Always
-                        type: string
-                    required:
-                    - digest
-                    - name
-                    type: object
-                  newVersion:
-                    type: string
                 required:
                 - chaincode
+                - externalBuilder
                 - members
-                - newChaincodeImage
-                - newVersion
                 type: object
             required:
             - federation
