@@ -33,6 +33,7 @@ jobs:
         load_all_images kind /tmp/all.image.tar
     - name: Installation test
       run: |
+        export RUN_IN_TEST=YES
         make e2e
     - name: Cache images
       id: cache-image

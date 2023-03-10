@@ -1,0 +1,16 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: git-clone-run-subdirectory
+spec:
+  workspaces:
+    - name: output
+      emptyDir: {}
+  taskRef:
+    name: git-clone
+  params:
+    - name: url
+      value: https://github.com/kelseyhightower/nocode
+    - name: subdirectory
+      value: "hellomoto"

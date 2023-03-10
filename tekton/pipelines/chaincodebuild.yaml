@@ -27,34 +27,34 @@ spec:
       description: minio's object path
       default: ""
     - name: SOURCE_MINIO_HOST
-      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local) (required if SOURCE is minio)
       default: "fabric-minio.baas-system.svc.cluster.local"
     - name: SOURCE_MINIO_ACCESS_KEY
       type: string
-      description: the accessKey used to fetch minio object
+      description: the accessKey used to fetch minio object (required if SOURCE is minio)
       default: ""
     - name: SOURCE_MINIO_SECRET_KEY
       type: string
-      description: the secretKey used to fetch minio object
+      description: the secretKey used to fetch minio object (required if SOURCE is minio)
       default: ""
     - name: SOURCE_GIT_URL
-      description: The git repo url where the source code resides
+      description: The git repo url where the source code resides. (required if SOURCE is git)s
       default: "github.com/bestchains/fabric-builder-k8s"
     - name: SOURCE_GIT_REFERENCE
       description: The branch, tag or SHA to checkout.
       default: ""
     - name: SOURCE_GIT_INIT_IMAGE
       description: The init image of git-clone
-      default: "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.21.0"
+      default: "hyperledgerk8s/tekton-pipeline-args-git-init:v0.42.0"
     - name: APP_IMAGE
-      description: The chaincode name of the image to build
+      description: The chaincode name of the image to build (required)
       default: "hyperledgerk8s/fabric-chaincode"
     - name: BUILDER_IMAGE
       description: The name of the image containing the Docker tool
-      default: "docker.io/docker:latest"
+      default: "hyperledgerk8s/docker:stable"
     - name: DIND_IMAGE
       description: The name of the image used by `docker-in-docker` sidecar container
-      default: "docker:dind"
+      default: "hyperledgerk8s/docker:dind"
     - name: DOCKERFILE
       description: The path of the dockerfile to execute
       default: "./Dockerfile"
@@ -114,6 +114,7 @@ spec:
     - name: build-from-dockerfile
       retries: 3
       runAfter:
+        - fetch-from-minio
         - fetch-from-git
       taskRef:
         name: docker-build

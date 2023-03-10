@@ -8,11 +8,11 @@
 
 ### Install tekton operator
 
-Tekton pipeline will be automatically installed with fabric-operator
+Tekton pipeline will be automatically installed with fabric-operator.
 
 ### Post-process after tekton operator deployed
 
-Todo: Install tasks/pipelines for ChaincodeBuild
+tasks/pipelines will be automatically installed by install script.
 
 
 ## Build Chaincode with Tekton Pipelines
@@ -27,7 +27,7 @@ Todo: Install tasks/pipelines for ChaincodeBuild
 #### Tasks: 
 - [`git-clone` task](https://github.com/tektoncd/catalog/tree/main/task/git-clone) 0.3
 ```
-kubectl apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/git-clone/0.3/raw
+kubectl apply -f ./task/git-clone/git-clone.yaml
 ```
 
 - [`minio-fetch` task](./task/minio-fetch/minio-fetch.yaml)
@@ -35,15 +35,15 @@ kubectl apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/git-clone/0.
 kubectl apply -f ./task/minio-fetch/minio-fetch.yaml
 ```
 
-- [`docker build` task](https://github.com/tektoncd/catalog/tree/main/task/docker-build/0.1)
+- [`docker build` task](https://github.com/tektoncd/catalog/tree/main/task/docker-build/0.1) 0.1
 ```
-kubectl apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/docker-build/0.1/raw
+kubectl apply -f ./task/docker-build/docker-build.yaml
 ```
 
-- [`kaniko` task](https://github.com/tektoncd/catalog/tree/main/task/kaniko/0.6)
+- [`kaniko` task](https://github.com/tektoncd/catalog/tree/main/task/kaniko/0.6) 0.6
 
 ```
-kubectl apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/kaniko/0.6/raw 
+kubectl apply -f ./task/kaniko/kaniko.yaml
 ```
 
 ### Install pipelines
@@ -120,16 +120,25 @@ reference here [Sample with source `git`](./pipelines/sample/sample_git.yaml)
 
 #### Samples
 
-1. Sample for Task `minio-fetch`
+1. Sample for Tasks:
 
-- [Sample](./task/minio-fetch/sample/samplerun.yaml)
+- [`git-clone` Sample](./task/git-clone/sample/test-in-upstream.yaml)
+- [`minio-fetch` Sample](./task/minio-fetch/sample/samplerun.yaml)
+- [`docker-build` Sample](./task/docker-build/sample/test-in-upstream.yaml)
+- [`kaniko` Sample](./task/docker-build/sample/kaniko.yaml)
 
 2. Sample for Pipeline `chaincodebuild`
 
 - [Sample with source `git`](./pipelines/sample/sample_git.yaml)
 - [Sample with source `minio`](./pipelines/sample/sample_minio.yaml)
+  - Before testing Minio, [import data into Minio](./pipelines/sample/pre_sample_minio.yaml) in advance. 
+  - After testing Minio, [delete the test data from Minio](./pipelines/sample/post_sample_minio.yaml).
 
-3. Sample for Pipeline `chaincodebuild-kaniko` (Not supported yet)
+3. Sample for Pipeline `chaincodebuild-kaniko`
+- [Sample with source `git`](./pipelines/sample/sample_git_kaniko.yaml)
+- [Sample with source `minio`](./pipelines/sample/sample_minio_kaniko.yaml)
+  - Before testing Minio, [import data into Minio](./pipelines/sample/pre_sample_minio.yaml) in advance.
+  - After testing Minio, [delete the test data from Minio](./pipelines/sample/post_sample_minio.yaml).
 
 
 

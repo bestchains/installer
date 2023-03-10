@@ -1,8 +1,37 @@
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: sample-git
+  labels:
+    description: "A_PipelineRun_For_ChaincodeBuild"
+spec:
+  pipelineRef:
+    name: chaincodebuild
+  params:
+    - name: SOURCE
+      value: git
+    - name: SOURCE_GIT_URL
+      value: https://github.com/bestchains/fabric-builder-k8s
+    - name: APP_IMAGE
+      value: registry-sample-git.default.svc.cluster.local:5000/go-contract:latest
+    - name: INSECURE_REGISTRY
+      value: registry-sample-git.default.svc.cluster.local:5000
+    - name: DOCKERFILE
+      value: samples/go-contract/Dockerfile.optimized # Only complete absolute paths  {relevant_path_to_object_root_directory}
+    - name: CONTEXT
+      value: samples/go-contract/
+  workspaces:
+    - name: source-ws
+      subPath: source
+      persistentVolumeClaim:
+        claimName: sample-git-ws-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sample-git-kaniko-ws-pvc
+  name: sample-git-ws-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -10,32 +39,38 @@ spec:
     requests:
       storage: 100Mi
 ---
-apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: sample-git-chaincodebuild-pipelinerun
-  labels:
-    description: "A_PipelineRun_For_ChaincodeBuild"
+  name: registry-sample-git
+  namespace: default
 spec:
-  serviceAccountName: chaincodebuild-service-account
-  pipelineRef:
-    name: chaincodebuild-kaniko
-  params:
-    - name: SOURCE
-      value: git
-    - name: SOURCE_GIT_URL
-      value: https://github.com/bestchains/fabric-builder-k8s
-    - name: APP_IMAGE
-      value: hyperledgerk8s/go-contract:latest
-    - name: DOCKERFILE
-      value: bestchains/go-contract/Dockerfile.optimized # Must be in format : {bucket}/{object}/{relevant_path_to_object_root_directory}
-    - name: CONTEXT
-      value: bestchains/go-contract # Must be in format {bucket}/{object}
-  workspaces:
-    - name: source-ws
-      subPath: source
-      persistentVolumeClaim:
-        claimName: sample-git-kaniko-ws-pvc
-    - name: dockerconfig-ws
-      secret:
-        secretName: dockerhub-secret
+  selector:
+    matchLabels:
+      app: registry-sample-git
+  template:
+    metadata:
+      labels:
+        app: registry-sample-git
+    spec:
+      containers:
+        - name: registry-sample-git
+          image: hyperledgerk8s/registry:2
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-sample-git
+  namespace: default
+spec:
+  selector:
+    app: registry-sample-git
+  ports:
+    - port: 5000
+      targetPort: 5000

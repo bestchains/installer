@@ -107,6 +107,15 @@ pipeline:
     image: "hyperledgerk8s/tekton-pipeline-webhook:v0.42.0"
   args:
     entrypointImage: "hyperledgerk8s/tekton-pipeline-args-entrypoint:v0.42.0"
+    gitImage: "hyperledgerk8s/tekton-pipeline-args-git-init:v0.42.0"
+    kubeconfigWriterImage: "hyperledgerk8s/tekton-pipeline-args-kubeconfigwriter:v0.42.0"
+    nopImage: "hyperledgerk8s/tekton-pipeline-args-nop:v0.42.0"
+    imagedigestexporterImage: "hyperledgerk8s/tekton-pipeline-args-imagedigestexporter:v0.42.0"
+    pullrequestInitImage: "hyperledgerk8s/tekton-pipeline-args-pullrequest-init:v0.42.0"
+    workingdirinitImage: "hyperledgerk8s/tekton-pipeline-args-workingdirinit:v0.42.0"
+    cloudSdkImage: "hyperledgerk8s/tekton-pipeline-args-cloud-sdk:27b2c2"
+    busyboxImage: "hyperledgerk8s/tekton-pipeline-args-busybox:19f022"
+    powershellImage: "hyperledgerk8s/tekton-pipeline-args-powershell:nanoserver-b6d5ff"
 
 dashboard:
   image: "hyperledgerk8s/tekton-dashboard:v0.31.0"
