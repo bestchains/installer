@@ -5,11 +5,11 @@ ingressClassName: portal-ingress
 storageClassName: standard # optional
 iamServer: <replaced-iam-server> # example: https://oidc-server.system.svc
 minio:
-  host: minio.bestchains-addons.svc.cluster.local
+  host: fabric-minio.baas-system.svc.cluster.local:9000
   accessKey: <replaced-minio-accesskey>
   secretKey: <replaced-minio-secretkey>
 tekton:
-  namespace: bestchains-pipelinerun # namespace where bestchains' taks/pipeline/taskrun/pipelinerun will be deployed
+  namespace: default
   dockerConfigSecret: dockerhub-secret # secret which will be used to push/pull built images
 operator:
   watchNamespace: ""

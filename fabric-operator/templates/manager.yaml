@@ -53,9 +53,15 @@ spec:
         - name: MINIO_HOST
           value: {{ .Values.minio.host }}
         - name: MINIO_ACCESS_KEY
-          value: {{ .Values.minio.accessKey }}
+          valueFrom:
+            secretKeyRef:
+              name: fabric-minio
+              key: rootUser
         - name: MINIO_SECRET_KEY
-          value: {{ .Values.minio.secretKey }}
+          valueFrom:
+            secretKeyRef:
+              name: fabric-minio
+              key: rootPassword
         - name: STORE
           value: /bestchains/chaincodes
         image: {{ .Values.operator.image }}
