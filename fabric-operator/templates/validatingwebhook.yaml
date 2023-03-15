@@ -11,6 +11,48 @@ webhooks:
     service:
       name: webhook-service
       namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-chaincode
+  failurePolicy: Fail
+  name: chaincode.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - chaincodes
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-chaincodebuild
+  failurePolicy: Fail
+  name: chaincodebuild.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - chaincodebuilds
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
       path: /validate-ibp-com-v1beta1-channel
   failurePolicy: Fail
   name: channel.validate.webhook
@@ -25,6 +67,27 @@ webhooks:
     - DELETE
     resources:
     - channels
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: {{ .Values.namespace }}
+      path: /validate-ibp-com-v1beta1-endorsepolicy
+  failurePolicy: Fail
+  name: endorsepolicy.validate.webhook
+  rules:
+  - apiGroups:
+    - ibp.com
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - endorsepolicies
   sideEffects: None
 - admissionReviewVersions:
   - v1

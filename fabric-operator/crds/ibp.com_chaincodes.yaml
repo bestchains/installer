@@ -66,6 +66,7 @@ spec:
               initRequired:
                 type: boolean
               label:
+                pattern: ^[[:alnum:]][[:alnum:]-]*$
                 type: string
               license:
                 description: License should be accepted to install custom resources
@@ -83,7 +84,6 @@ spec:
             - channel
             - endorsePolicyRef
             - initRequired
-            - label
             - license
             type: object
           status:

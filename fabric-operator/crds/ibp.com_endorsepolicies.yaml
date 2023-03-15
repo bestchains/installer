@@ -40,10 +40,13 @@ spec:
                 type: string
               description:
                 type: string
+              displayName:
+                type: string
               value:
                 type: string
             required:
             - channel
+            - displayName
             - value
             type: object
           status:

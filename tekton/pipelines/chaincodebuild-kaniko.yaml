@@ -133,3 +133,4 @@ spec:
           value:
             - --skip-tls-verify
             - --insecure
+            - --ignore-path=/product_uuid
