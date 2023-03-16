@@ -24,13 +24,14 @@ jobs:
       with:
         key: install-image-${{ github.sha }}
         restore-keys: install-image-
+        # note: use ${GITHUB_WORKSPACE} can cache, but cannot restore!
         path: |
-          /tmp/all.image.tar
-          /tmp/all.image.list
+          /home/runner/work/fabric-installer/fabric-installer/tmp/images/
+          /home/runner/work/fabric-installer/fabric-installer/tmp/all.image.list
     - name: Load cache images to kind cluster
       run: |
         source scripts/cache-image.sh
-        load_all_images kind /tmp/all.image.tar
+        load_all_images kind /home/runner/work/fabric-installer/fabric-installer/tmp/images/
     - name: Installation test
       run: |
         export RUN_IN_TEST=YES
@@ -39,7 +40,7 @@ jobs:
       id: cache-image
       run: |
         source scripts/cache-image.sh
-        save_all_images /tmp/all.image.tar /tmp/all.image.list
+        save_all_images /home/runner/work/fabric-installer/fabric-installer/tmp/images/ /home/runner/work/fabric-installer/fabric-installer/tmp/all.image.list
         echo "upload_image=${UPLOAD_IMAGE}" >> $GITHUB_OUTPUT
     - name: Upload cache images
       if: steps.cache-image.outputs.upload_image == 'YES'
@@ -47,5 +48,5 @@ jobs:
       with:
         key: install-image-${{ github.sha }}
         path: |
-          /tmp/all.image.tar
-          /tmp/all.image.list
+          /home/runner/work/fabric-installer/fabric-installer/tmp/images/
+          /home/runner/work/fabric-installer/fabric-installer/tmp/all.image.list
