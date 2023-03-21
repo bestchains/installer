@@ -34,6 +34,7 @@ Here are the steps about how to install bestchains BaaS platform which include w
 make kind
 
 # it will install cluster components, u4a-components and baas components
+# By default, the postgresql service is deployed under u4a-system
 make e2e
 ```
 
@@ -44,53 +45,59 @@ For the 1st step, we'll install u4a-component and it'll provide the account, aut
 
 And then we'll deploy BaaS on top of it, and use OIDC token for SSO between u4a and baas component.
 
-#### 1.1 Install cluster tools
 
-Before deploy u4a, we should add some tools for later usage. Enter into u4a-component folder and following the step below:
+#### 1.1 Install u4a services
 
-* This step will install a ingress nginx controller with ingressclass named 'portal-ingress' and cert-manager for certificate management.
-
-```
-# 1. create a namespace to install u4a-component
-$ kubectl create ns u4a-system
-
-# 2. edit charts/cluster-component/values.yaml to replace '<replaced-ingress-node-name>'
-# with the K8S node name that will install the ingress controller, so update the value of deployedHost, and remember the IP address of this host, will use it at the next step.
-
-ingress-nginx:
-  # MUST update this value
-  deployedHost: &deployedHost
-    k8s-ingress-nginx-node-name
-
-# you should also update the image address if you're using a private registry, then you should replace 'hub.tenxcloud.com'(or the image name) with your private registry.
-
-# 3. install cluster-component using 
-$ helm install cluster-component -n u4a-system charts/cluster-component
-
-# 4. check the status of pods to make sure ingress-nginx-controller and cert-manager are ready
-$ kubectl get pods -n u4a-system
-NAME                                                          READY   STATUS    RESTARTS   AGE
-cert-manager-756fd78bff-wb2vh                                 1/1     Running   0          76m
-cert-manager-cainjector-64685f8d48-qg69v                      1/1     Running   0          76m
-cert-manager-webhook-5c46d68c6b-f4dkh                         1/1     Running   0          76m
-cluster-component-ingress-nginx-controller-5bd67897dd-5m9n7   1/1     Running   0          76m
-```
-#### 1.2 Install u4a services
 Enter into u4a-component folder and following the step below:
 
+> **Note**
+> This step will install a ingress nginx controller with ingressclass named 'portal-ingress' and cert-manager for certificate management.
+
+
 This step will install the following services:
+* cert-manager
+* ingress-nginx
 * Capsule for tenant management
 * kube-oidc-proxy for K8S OIDC enablement
 * oidc-server for OIDC and iam service
 * resource-view-controller for resource aggregation view from multiple clusters
 
-1. Edit values.yaml to replace the placeholder below:
+1. Create namespace `u4a-namespace`
+
+    ```
+    kubectl create ns u4a-system
+    ```
+
+
+2. Edit values.yaml to replace the placeholder below:
 * `<replaced-ingress-nginx-ip>`, replace it with the IP address of the ingress nginx node that deployed in the previous step, this placeholder will have multiple ones
 * `<replaced-oidc-proxy-node-name>`, replace it with the node name where kube-oidc-proxy will be installed
 * `<replaced-k8s-ip-with-oidc-enabled>`, replace it with the IP address of node where kube-oidc-proxy will be installed, this placeholder will have multiple ones
 * you should also update the image address if you're using a private registry
+* edit `charts/cluster-component/values.yaml` to replace `<replaced-ingress-node-name>` with the K8S node name that will install the ingress controller, so update the value of deployedHost, and remember the IP address of this host, will use it at the next step.
 
-2. Install u4a component using helm
+    ```yaml
+    ingress-nginx:
+    # MUST update this value
+      deployedHost: &deployedHost
+        k8s-ingress-nginx-node-name
+    ```
+
+
+3. Determine the deployment namespace for postgresql (optional) {#pg-tcp}
+
+    **If you need the postgresql service and need to expose the tcp service via ingress-nginx,**
+    please modify `u4a-component/charts/cluster-component/values.yaml`
+
+    ```yaml
+    ingress-nginx:
+      tcp:
+        #<expose-port>: "<your-postgresql-namespace>/<postgresql-service-name>:<postgresql-service-port>"
+        5432: "u4a-system/postgresql:5432"
+    ```
+
+
+4. Install u4a component using helm
 
     ```
     # run helm install
@@ -110,7 +117,7 @@ This step will install the following services:
     resource-view-controller-76d8c79cf-smkj5                      1/1     Running   0          66m
     ```
 
-3. At the end of the helm install, it'll prompt you with some notes like below:
+5. At the end of the helm install, it'll prompt you with some notes like below:
 
     ```
     NOTES:
@@ -123,7 +130,7 @@ This step will install the following services:
     Save the token and will use it to add the cluster later.
 
 
-4. Open the host configured using ingress below:
+6. Open the host configured using ingress below:
 
     `https://portal.<replaced-ingress-nginx-ip>.nip.io`
 
@@ -131,7 +138,7 @@ This step will install the following services:
     If your host isn't able to access nip.io, you should add the ip<->host mapping to your hosts file. Login with user admin/baas-admin (default one).
 
 
-5. Prepare the environment
+7. Prepare the environment
 1) Create a namespace for cluster management, it should be 'cluster-system'.
 
     ```
@@ -188,7 +195,18 @@ Now, you should have a cluster and a 'system-tenant' and tenant management.
     kubectl delete ns baas-system;
     ```
 
-### 3. Add more components
+
+### 3.  Install PostgreSQL(optional)
+
+Enter `explorer/postgresql` folder
+
+Note that the deployment namespace for PostgreSQL here has to be consistent with `Determine the deployment namespace for postgresql (optional)`. Otherwise the services exposed via ingress-nginx are not accessible.
+
+```shell
+helm --wait -n u4a-system install postgresql .
+```
+
+### 4. Add more components
 1. Install kube-dashboard following [this doc](./kube-dashboard/) to integrate with u4a.
 
     Refer to [kubernetes dashboard ](https://github.com/kubernetes/dashboard) for details.
