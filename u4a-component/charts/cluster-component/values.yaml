@@ -4,6 +4,9 @@
 
 # Overwrite ingress-nginx chart template
 ingress-nginx:
+  tcp:
+    # postgresql service
+    5432: "{{ .Release.Namespace }}/postgresql:5432"
   # MUST update this value
   deployedHost: &deployedHost
     <replaced-ingress-node-name>

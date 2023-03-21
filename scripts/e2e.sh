@@ -32,7 +32,7 @@ INSTALL_TEKTON=${INSTALL_TEKTON:-"NO"}
 INSTALL_MINIO=${INSTALL_MINIO:-"NO"}
 INSTALL_TEKTON_TASK_PIPELINE=${INSTALL_TEKTON_TASK_PIPELINE:-"NO"}
 RUN_IN_TEST=${RUN_IN_TEST:-"NO"}
-
+INSTALL_PG=${INSTALL_PG:-"NO"}
 echo "checking option params..."
 
 # Get install options
@@ -45,6 +45,7 @@ for i in "$@"; do
 		WAIT_TEKTON_INSTALL="YES"
 		INSTALL_MINIO="NO"
 		INSTALL_TEKTON="NO"
+		INSTALL_PG="YES"
 		INSTALL_TEKTON_TASK_PIPELINE="YES"
 	elif [ $i == "--u4a" ]; then
 		echo "will install u4a components"
@@ -97,6 +98,9 @@ for i in "$@"; do
 	elif [ $i == "--rm-baas" ]; then
 		echo "will remove fabric-operator"
 		REMOVE_FABRIC_OPERATOR="YES"
+	elif [ $i == "--pg" ]; then
+		echo "will install postgresql"
+		INSTALL_PG="YES"
 	else
 		echo "param error, no changes applied"
 	fi
@@ -112,8 +116,8 @@ function debug() {
 trap debug ERR
 
 # step 1. create namespace
-if [ $INSTALL_U4A == "YES" ]; then
-	kubectl create namespace u4a-system
+if [[ $INSTALL_U4A == "YES" || $INSTALL_PG == "YES" ]]; then
+	kubectl create ns u4a-system --dry-run=client -oyaml| kubectl apply -f -
 fi
 
 # step 2. get node name and node ip
@@ -137,6 +141,11 @@ cat u4a-component/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNode
 	sed "s/<replaced-oidc-proxy-node-name>/${kubeProxyNode}/g" |
 	sed "s/<replaced-k8s-ip-with-oidc-enabled>/${kubeProxyNodeIP}/g" \
 		>u4a-component/values1.yaml
+
+if [ $INSTALL_PG == "YES" ]; then
+	echo "begin to deploy postgresql component..."
+	helm --wait --timeout=$TIMEOUT -n u4a-system install postgresql explorer/postgresql
+fi
 
 if [ $INSTALL_U4A == "YES" ]; then
 	# step 5. install cluster-compoent
