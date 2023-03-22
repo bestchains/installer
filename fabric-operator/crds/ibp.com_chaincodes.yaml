@@ -64,6 +64,8 @@ spec:
                 - name
                 type: object
               initRequired:
+                enum:
+                - false
                 type: boolean
               label:
                 pattern: ^[[:alnum:]][[:alnum:]-]*$
@@ -83,6 +85,7 @@ spec:
             required:
             - channel
             - endorsePolicyRef
+            - externalBuilder
             - initRequired
             - license
             type: object
