@@ -90,7 +90,6 @@ spec:
                     type: array
                 required:
                 - chaincode
-                - externalBuilder
                 - members
                 type: object
               deprecated:
@@ -154,7 +153,6 @@ spec:
                     type: array
                 required:
                 - chaincode
-                - externalBuilder
                 - members
                 type: object
             required:
