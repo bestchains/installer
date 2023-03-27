@@ -6,7 +6,7 @@
 ingress-nginx:
   tcp:
     # postgresql service
-    5432: "{{ .Release.Namespace }}/postgresql:5432"
+    5432: "baas-system/bc-explorer-postgresql:5432"
   # MUST update this value
   deployedHost: &deployedHost
     <replaced-ingress-node-name>

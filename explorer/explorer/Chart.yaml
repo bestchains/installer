@@ -1,0 +1,26 @@
+apiVersion: v2
+name: bc-explorer
+description: a comprehensive blockchain explorer
+type: application
+version: v0.1
+icon: https://avatars.githubusercontent.com/u/116370569
+appVersion: v0.1
+keywords:
+  - explorer
+  - bestchains
+sources:
+  - https://github.com/bestchains/bc-explorer
+dependencies:
+  - name: postgresql
+    condition: postgresql.enabled
+maintainers:
+  - name: nkwangleiGIT
+    url: https://github.com/nkwangleiGIT
+  - name: bjwswang
+    url: https://github.com/bjwswang
+  - name: Abirdcfly
+    url: https://github.com/Abirdcfly
+  - name: 0xff-dev
+    url: https://github.com/0xff-dev
+  - name: Lanture1064
+    url: https://github.com/Lanture1064

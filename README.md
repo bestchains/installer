@@ -196,14 +196,35 @@ Now, you should have a cluster and a 'system-tenant' and tenant management.
     ```
 
 
-### 3.  Install PostgreSQL(optional)
+### 3.  Install bc-explorer
 
-Enter `explorer/postgresql` folder
+#### 3.1 Separate installation of postgresql
 
-Note that the deployment namespace for PostgreSQL here has to be consistent with `Determine the deployment namespace for postgresql (optional)`. Otherwise the services exposed via ingress-nginx are not accessible.
+You can install postgresql by the command:
 
-```shell
-helm --wait -n u4a-system install postgresql .
+```bash
+helm --wait --timeout=300 -n baas-system install postgresql explorer/explorer/charts/postgresql
+```
+It will add new user `bestchains` with password `Passw0rd!`, Also create database `bestchains`.
+
+
+#### 3.2 Install Explorer with postgresql
+
+If you have installed `postgresql`, Please edit `explorer/explorer/Charts.yaml`.
+
+```yaml
+dependencies:
+  - name: postgresql
+    condition: postgresql.disabled
+```
+The bc-explorer needs to be exposed via ingress, so make sure the `<replaced-ingress-nginx-ip>` is set correctly.
+
+And the postgresql access address has been set correctly. Postgresql is accessed by default via tcp forwarding from ingress-nginx, if you have another address, please replace `pdAddr`.
+
+Install `bc-explorer` by the command:
+
+```bash
+helm --wait --timeout=300 -nbaas-system install bc-explorer explorer/explorer
 ```
 
 ### 4. Add more components
