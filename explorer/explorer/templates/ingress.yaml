@@ -2,18 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    description: bc-apis-ingress
-    displayName: bc-apis-ingress
+    description: bc-explorer-ingress
+    displayName: bc-explorer-ingress
     httpSend: /
     ingress-lb: {{ .Values.ingressClassName }}
-    kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
+    kubernetes.io/ingress.class:  {{ .Values.ingressClassName }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_cache static-cache;
       proxy_cache_valid 404 10m;
       proxy_cache_use_stale error timeout updating http_404 http_500 http_502 http_503 http_504;
       proxy_cache_bypass $http_x_purge;
       add_header X-Cache-Status $upstream_cache_status; # check X-Cache-Status to see if it's HIT
-      rewrite ^/bc-apis(/|$)(.*)$ /$2 break;
     nginx.ingress.kubernetes.io/enable-access-log: "false"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "false"
     nginx.ingress.kubernetes.io/load-balance: round_robin
@@ -24,32 +23,18 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/upstream-vhost: $host
   labels:
-    ingress-lb: {{ .Values.ingressClassName}}
-  name: {{ .Values.bcapi.ingressName }}
+    ingress-lb: {{ .Values.ingressClassName }}
+  name: {{ .Values.explorerIngressName }}
   namespace: {{ .Values.namespace }}
 spec:
   rules:
-  - host: portal.{{ .Values.ingressDomain }}
+  - host: bc-explorer.{{ .Values.ingressDomain }}
     http:
       paths:
-      - backend:
-          service:
-            name: {{ .Values.bcapi.name }}
-            port:
-              number: 8024
-        path: /bc-public
-        pathType: ImplementationSpecific
-      - backend:
-          service:
-            name: {{ .Values.bcapi.name }}
-            port:
-              number: 8024
-        path: /bc-apis
-        pathType: ImplementationSpecific
       - backend:
           service:
             name: bc-explorer-service
             port:
               number: 9998
-        path: /bc-explorer
+        path: /
         pathType: ImplementationSpecific

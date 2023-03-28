@@ -33,6 +33,8 @@ INSTALL_MINIO=${INSTALL_MINIO:-"NO"}
 INSTALL_TEKTON_TASK_PIPELINE=${INSTALL_TEKTON_TASK_PIPELINE:-"NO"}
 RUN_IN_TEST=${RUN_IN_TEST:-"NO"}
 INSTALL_PG=${INSTALL_PG:-"NO"}
+INSTALL_EXPLORER=${INSTALL_EXPLORER:-"NO"}
+
 echo "checking option params..."
 
 # Get install options
@@ -45,7 +47,8 @@ for i in "$@"; do
 		WAIT_TEKTON_INSTALL="YES"
 		INSTALL_MINIO="NO"
 		INSTALL_TEKTON="NO"
-		INSTALL_PG="YES"
+		INSTALL_PG="NO"
+		INSTALL_EXPLORER="YES"
 		INSTALL_TEKTON_TASK_PIPELINE="YES"
 	elif [ $i == "--u4a" ]; then
 		echo "will install u4a components"
@@ -101,6 +104,11 @@ for i in "$@"; do
 	elif [ $i == "--pg" ]; then
 		echo "will install postgresql"
 		INSTALL_PG="YES"
+		INSTALL_EXPLORER="NO"
+	elif [ $i == "--explorer" ]; then
+		echo "will install bc-explorer"
+		INSTALL_EXPLORER="YES"
+		INSTALL_PG="NO"
 	else
 		echo "param error, no changes applied"
 	fi
@@ -116,8 +124,12 @@ function debug() {
 trap debug ERR
 
 # step 1. create namespace
-if [[ $INSTALL_U4A == "YES" || $INSTALL_PG == "YES" ]]; then
+# pg and explorer will be deployed to baas-system namespace
+if [[ $INSTALL_U4A == "YES" ]]; then
 	kubectl create ns u4a-system --dry-run=client -oyaml| kubectl apply -f -
+fi
+if [[ ${INSTALL_FABRIC_OPERATOR} == "YES" ||  $INSTALL_PG == "YES" || $INSTALL_EXPLORER == "YES" ]]; then
+	kubectl create ns baas-system --dry-run=client -oyaml| kubectl apply -f -
 fi
 
 # step 2. get node name and node ip
@@ -142,11 +154,6 @@ cat u4a-component/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNode
 	sed "s/<replaced-k8s-ip-with-oidc-enabled>/${kubeProxyNodeIP}/g" \
 		>u4a-component/values1.yaml
 
-if [ $INSTALL_PG == "YES" ]; then
-	echo "begin to deploy postgresql component..."
-	helm --wait --timeout=$TIMEOUT -n u4a-system install postgresql explorer/postgresql
-fi
-
 if [ $INSTALL_U4A == "YES" ]; then
 	# step 5. install cluster-compoent
 	echo "begin deploying cluster component..."
@@ -162,6 +169,17 @@ if [ $INSTALL_U4A == "YES" ]; then
 	kubectl get po -n u4a-system -o wide
 fi
 
+if [ $INSTALL_PG == "YES" ]; then
+	echo "begin to deploy postgresql component..."
+	helm --wait --timeout=$TIMEOUT -n baas-system install postgresql explorer/explorer/charts/postgresql
+fi
+if [ $INSTALL_EXPLORER == "YES" ]; then
+	echo "begin to deploy bc-explorer component..."
+	cat explorer/explorer/values.yaml| sed "s/<replaced-ingress-nginx-ip>/${ingressNodeIP}/g" \
+	> explorer/explorer/values1.yaml
+	helm --wait --timeout=$TIMEOUT -n baas-system install bc-explorer explorer/explorer -f explorer/explorer/values1.yaml
+fi
+
 # baas step 1. replace iam server and get oidc-server client secret
 secret=$(kubectl get cm oidc-server -nu4a-system -oyaml | grep secret | head -n1 | awk '{print $2}')
 
@@ -175,7 +193,6 @@ cat fabric-operator/values.yaml | sed "s/<replaced-ingress-nginx-ip>/${ingressNo
 
 # baas step 2. install fabric operator
 if [[ ${INSTALL_FABRIC_OPERATOR} == "YES" ]]; then
-	kubectl create namespace baas-system
 	helm --wait --timeout=$TIMEOUT -nbaas-system install fabric -f fabric-operator/values1.yaml fabric-operator
 	echo "deploy fabric-operator successfully"
 	kubectl get po -nbaas-system

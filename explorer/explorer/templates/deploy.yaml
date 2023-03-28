@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bc-explorer
+  template:
+    metadata:
+      labels:
+        app: bc-explorer
+    spec:
+      serviceAccountName: bc-explorer
+      containers:
+      - name: viewer
+        image: {{ .Values.deployImage }}
+        command:
+        - viewer
+        args:
+        - -v=5
+        - -db={{ .Values.explorerDB }}
+        - -dsn={{ .Values.pgAddr }}
+        ports:
+        - containerPort: 9998
+      - name: listener
+        image:  {{ .Values.deployImage }}
+        command:
+        - listener
+        args:
+        - -v=5
+        - -injector={{ .Values.explorerDB }}
+        - -dsn={{ .Values.pgAddr }}
+        ports:
+        - containerPort: 9999
+      - name: observer
+        image: {{ .Values.deployImage }}
+        command:
+        - observer
+        args:
+        - -v=5
+        - -host=http://127.0.0.1:9999
