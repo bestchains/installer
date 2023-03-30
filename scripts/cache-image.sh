@@ -30,7 +30,7 @@ function save_all_images() {
 		mkdir -p "$(dirname "$imageListFile")" && touch "$imageListFile"
 	fi
 	echo "get all images list..."
-	IMAGES=$(kubectl get po -A -o yaml | grep "image: " | awk -F ": " '{print $2}' | sort -u | grep -v "k8s.gcr.io")
+	IMAGES=$(kubectl get po -A -o yaml | grep "image: " | awk -F ": " '{print $2}' | sort -u | grep "tenxcloud")
 	echo "compare all images list with $imageListFile"
 	same=0
 	echo $IMAGES | diff - $imageListFile -y -q && same=0 || same=1
