@@ -10,6 +10,9 @@ Here are the steps about how to install bestchains BaaS platform which include w
 - `baas-component` which provides blockchain management in `CloudNative` way
     - [fabric-operator](https://github.com/bestchains/fabric-operator)
     - [bc-apis](https://github.com/bestchains/bc-apis)
+- `bc-explorer` browser for querying on-chain data
+    - [postgresql](https://github.com/bitnami/containers/tree/main/bitnami/postgresql)
+    - [bc-explorer](https://github.com/bestchains/bc-explorer)
 - more addons
     - [kuber-dashboard](https://github.com/kubernetes/dashboard)
     - [kubelogin](https://github.com/int128/kubelogin)
@@ -203,14 +206,14 @@ Now, you should have a cluster and a 'system-tenant' and tenant management.
 You can install postgresql by the command:
 
 ```bash
-helm --wait --timeout=300 -n baas-system install postgresql explorer/explorer/charts/postgresql
+helm --wait --timeout=300 -n baas-system install postgresql explorer/charts/postgresql
 ```
 It will add new user `bestchains` with password `Passw0rd!`, Also create database `bestchains`.
 
 
 #### 3.2 Install Explorer with postgresql
 
-If you have installed `postgresql`, Please edit `explorer/explorer/Charts.yaml`.
+If you have installed `postgresql`, Please edit `explorer/Charts.yaml`.
 
 ```yaml
 dependencies:
@@ -224,7 +227,7 @@ And the postgresql access address has been set correctly. Postgresql is accessed
 Install `bc-explorer` by the command:
 
 ```bash
-helm --wait --timeout=300 -nbaas-system install bc-explorer explorer/explorer
+helm --wait --timeout=300 -nbaas-system install bc-explorer explorer
 ```
 
 ### 4. Add more components

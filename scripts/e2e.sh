@@ -171,13 +171,13 @@ fi
 
 if [ $INSTALL_PG == "YES" ]; then
 	echo "begin to deploy postgresql component..."
-	helm --wait --timeout=$TIMEOUT -n baas-system install postgresql explorer/explorer/charts/postgresql
+	helm --wait --timeout=$TIMEOUT -n baas-system install postgresql explorer/charts/postgresql
 fi
 if [ $INSTALL_EXPLORER == "YES" ]; then
 	echo "begin to deploy bc-explorer component..."
-	cat explorer/explorer/values.yaml| sed "s/<replaced-ingress-nginx-ip>/${ingressNodeIP}/g" \
-	> explorer/explorer/values1.yaml
-	helm --wait --timeout=$TIMEOUT -n baas-system install bc-explorer explorer/explorer -f explorer/explorer/values1.yaml
+	cat explorer/values.yaml| sed "s/<replaced-ingress-nginx-ip>/${ingressNodeIP}/g" \
+	> explorer/values1.yaml
+	helm --wait --timeout=$TIMEOUT -n baas-system install bc-explorer explorer -f explorer/values1.yaml
 fi
 
 # baas step 1. replace iam server and get oidc-server client secret
