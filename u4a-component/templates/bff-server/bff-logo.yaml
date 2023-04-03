@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-logos
+  namespace: {{ .Release.Namespace }}
+binaryData:
+  logo-white.png: |-
+    {{ .Files.Get "files/logo-white.png" | b64enc }}
+  favicon.ico: |-
+    {{ .Files.Get "files/favicon.ico" | b64enc }}

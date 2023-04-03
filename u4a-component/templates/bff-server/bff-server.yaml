@@ -38,6 +38,9 @@ spec:
         - name: cluster-configs-secret
           secret:
             secretName: cluster-configs
+        - name: logos
+          configMap:
+            name: portal-logos
       containers:
         - name: bff-server
           image: {{ .Values.registryServer }}/{{ .Values.bffServer.image }}
@@ -96,6 +99,9 @@ spec:
               readOnly: true
             - mountPath: /usr/src/app/configs/cluster-configs
               name: cluster-configs-secret
+              readOnly: true
+            - mountPath: /usr/src/app/public/profile/img
+              name: logos
               readOnly: true
 ---
 apiVersion: v1
