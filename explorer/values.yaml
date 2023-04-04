@@ -3,7 +3,7 @@ deployName: bc-explorer
 deployImage: hyperledgerk8s/bc-explorer:v0.1.1
 explorerDB: pg # log
 # if explorerDB is pd pdAddr must be provided
-pgAddr: postgres://bestchains:Passw0rd!@<replaced-ingress-nginx-ip>:5432/bestchains?sslmode=disable
+pgAddr: postgres://bestchains:Passw0rd!@bc-explorer-postgresql.baas-system.svc.cluster.local:5432/bestchains?sslmode=disable
 explorerIngressName: bc-explorer-ingress
 ingressClassName: portal-ingress
 ingressDomain: <replaced-ingress-nginx-ip>.nip.io
