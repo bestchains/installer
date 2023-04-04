@@ -79,6 +79,7 @@ function pre_load_image() {
 		hyperledgerk8s/kaniko-executor:v1.9.1
 		hyperledgerk8s/bash:5.1.4
 		hyperledgerk8s/ubuntu:22.04
+		hyperledgerk8s/tekton-job-pruner-tkn:025de221fb05
 	)
 	for image in ${pre_load_images[*]}; do
 		docker pull ${image}
