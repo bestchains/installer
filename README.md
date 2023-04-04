@@ -86,21 +86,7 @@ This step will install the following services:
         k8s-ingress-nginx-node-name
     ```
 
-
-3. Determine the deployment namespace for postgresql (optional) {#pg-tcp}
-
-    **If you need the postgresql service and need to expose the tcp service via ingress-nginx,**
-    please modify `u4a-component/charts/cluster-component/values.yaml`
-
-    ```yaml
-    ingress-nginx:
-      tcp:
-        #<expose-port>: "<your-postgresql-namespace>/<postgresql-service-name>:<postgresql-service-port>"
-        5432: "u4a-system/postgresql:5432"
-    ```
-
-
-4. Install u4a component using helm
+3. Install u4a component using helm
 
     ```
     # run helm install
@@ -120,7 +106,7 @@ This step will install the following services:
     resource-view-controller-76d8c79cf-smkj5                      1/1     Running   0          66m
     ```
 
-5. At the end of the helm install, it'll prompt you with some notes like below:
+4. At the end of the helm install, it'll prompt you with some notes like below:
 
     ```
     NOTES:
@@ -133,7 +119,7 @@ This step will install the following services:
     Save the token and will use it to add the cluster later.
 
 
-6. Open the host configured using ingress below:
+5. Open the host configured using ingress below:
 
     `https://portal.<replaced-ingress-nginx-ip>.nip.io`
 
@@ -141,16 +127,18 @@ This step will install the following services:
     If your host isn't able to access nip.io, you should add the ip<->host mapping to your hosts file. Login with user admin/baas-admin (default one).
 
 
-7. Prepare the environment
-1) Create a namespace for cluster management, it should be 'cluster-system'.
+6. Prepare the environment
+
+    6.1 Create a namespace for cluster management, it should be 'cluster-system'.
 
     ```
-    kubectl create -n cluster-system
+    kubectl create ns cluster-system
     ```
 
-2) Add current cluster to the portal. Navigate to '集群管理' and '添加集群'
-* for API Host, use the one from `hostK8sApiWithOidc`
-* for API Token, use the one you saved from step 3.
+    6.2 Click 'Management Console' and navigate to 'Cluster Management' and 'Add Cluster'.
+
+    * for API Host, use the one from `hostK8sApiWithOidc`
+    * for API Token, use the one you saved from step 4.
 
 Now, you should have a cluster and a 'system-tenant' and tenant management.
 
@@ -213,16 +201,17 @@ It will add new user `bestchains` with password `Passw0rd!`, Also create databas
 
 #### 3.2 Install Explorer with postgresql
 
-If you have installed `postgresql`, Please edit `explorer/Charts.yaml`.
+If you have installed `postgresql`, Please edit `explorer/Chart.yaml`, `explorer/values.yaml`.
 
 ```yaml
+# explorer/Chart.yaml
 dependencies:
   - name: postgresql
     condition: postgresql.disabled
-```
-The bc-explorer needs to be exposed via ingress, so make sure the `<replaced-ingress-nginx-ip>` is set correctly.
 
-And the postgresql access address has been set correctly. Postgresql is accessed by default via tcp forwarding from ingress-nginx, if you have another address, please replace `pdAddr`.
+# explorer/values.yaml
+pdAddr: "your-pg-address"
+``` 
 
 Install `bc-explorer` by the command:
 
