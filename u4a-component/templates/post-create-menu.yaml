@@ -22,7 +22,7 @@ spec:
   pathname: /oidc/management/clusters/:clusterID/configs
   rankingInColumn: 100
   text: 集群设置
-  textEn: Cluster Configs
+  textEn: Configurations
 status: {}
 
 ---
@@ -55,7 +55,7 @@ spec:
   pathname: /oidc/management/clusters/:clusterID/hosts
   rankingInColumn: 200
   text: 集群节点
-  textEn: Cluster Nodes
+  textEn: Nodes
 status: {}
 
 ---
@@ -90,7 +90,7 @@ spec:
   pathname: /oidc/management/clusters/:clusterID/labels
   rankingInColumn: 300
   text: 集群标签
-  textEn: Cluster Labels
+  textEn: Labels
 status: {}
 
 ---
@@ -123,7 +123,7 @@ spec:
   requiredRoles:
   - TenantAdmin
   text: 项目角色
-  textEn: Project Roles
+  textEn: Roles
 status: {}
 
 ---
@@ -160,7 +160,7 @@ spec:
   requiredRoles:
   - TenantAdmin
   text: 项目成员
-  textEn: Project Members
+  textEn: Members
 status: {}
 
 ---
@@ -200,7 +200,7 @@ spec:
   requiredRoles:
   - TenantAdmin
   text: 项目授权集群
-  textEn: Project Clusters
+  textEn: Authorized Clusters
 status: {}
 
 ---
@@ -243,7 +243,7 @@ spec:
   rankingInColumn: 100
   replaceSiderBackNextPathnamePattern: management-projects
   text: 项目管理
-  textEn: Cluster Nodes
+  textEn: Project Management
   useChildrenReplaceSider: true
 status: {}
 
@@ -279,7 +279,7 @@ spec:
   - SystemAdmin
   - PlatformAdmin
   text: 租户授权集群
-  textEn: Cluster Labels
+  textEn: Authorized Clusters
 status: {}
 
 ---
@@ -310,7 +310,7 @@ spec:
   pathname: /oidc/management/projects/:id/role
   rankingInColumn: 100
   text: 项目角色
-  textEn: Project Roles
+  textEn: Roles
 status: {}
 
 ---
@@ -345,7 +345,7 @@ spec:
   pathname: /oidc/management/projects/:id/member
   rankingInColumn: 200
   text: 项目成员
-  textEn: Project Members
+  textEn: Members
 status: {}
 
 ---
@@ -387,7 +387,7 @@ spec:
   - PlatformAdmin
   - TenantAdmin
   text: 项目授权集群
-  textEn: Project Clusters
+  textEn: Authorized Clusters
 status: {}
 
 ---
@@ -434,7 +434,7 @@ spec:
   - SystemAdmin
   - PlatformAdmin
   text: 集群管理
-  textEn: Clusters Management
+  textEn: Cluster Management
   useChildrenReplaceSider: true
 status: {}
 
@@ -485,7 +485,7 @@ spec:
   - PlatformAdmin
   - TenantAdmin
   text: 租户管理
-  textEn: Tenants Management
+  textEn: Tenant Management
   useChildrenReplaceSider: true
 status: {}
 
@@ -532,7 +532,7 @@ spec:
   - SystemAdmin
   - PlatformAdmin
   text: 项目管理
-  textEn: Tenants Management
+  textEn: Project Management
   useChildrenReplaceSider: true
 status: {}
 
@@ -564,7 +564,7 @@ spec:
   pathname: /oidc/management/users
   rankingInColumn: 100
   text: 成员管理
-  textEn: Users Management
+  textEn: User Management
 status: {}
 
 ---
@@ -710,7 +710,7 @@ spec:
     uid: ""
   rankingInColumn: 300
   text: 配置管理
-  textEn: ""
+  textEn: "Configurations"
 status: {}
 
 ---
@@ -841,7 +841,7 @@ spec:
     uid: ""
   rankingInColumn: 200
   text: 平台信息
-  textEn: Platform setting
+  textEn: Platform Info
 status: {}
 
 ---
@@ -887,7 +887,7 @@ spec:
   pathname: /oidc/management/toolbox
   rankingInColumn: 300
   text: API 凭证
-  textEn: API Credentials
+  textEn: API Tokens
 status: {}
 
 ---
@@ -929,8 +929,8 @@ spec:
     name: ""
     uid: ""
   rankingInColumn: 200
-  text: 设置管理
-  textEn: System Setting
+  text: 个人设置
+  textEn: User Settings
 status: {}
 
 ---
@@ -967,7 +967,7 @@ spec:
   pathname: /oidc/management/operation-audit
   rankingInColumn: 100
   text: 操作审计
-  textEn: Operation audit
+  textEn: Auditing
 status: {}
 
 ---
@@ -1023,7 +1023,7 @@ spec:
     uid: ""
   rankingInColumn: 300
   text: 平台运维
-  textEn: Manage/Monitor
+  textEn: Operation Management
 status: {}
 
 ---
