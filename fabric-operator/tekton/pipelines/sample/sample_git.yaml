@@ -13,15 +13,15 @@ spec:
     - name: SOURCE
       value: git
     - name: SOURCE_GIT_URL
-      value: https://github.com/bestchains/fabric-builder-k8s
+      value: https://github.com/bestchains/bestchains-contracts
     - name: APP_IMAGE
       value: registry-sample-git.default.svc.cluster.local:5000/go-contract:latest
     - name: INSECURE_REGISTRY
       value: registry-sample-git.default.svc.cluster.local:5000
     - name: DOCKERFILE
-      value: samples/go-contract/Dockerfile.optimized # Only complete absolute paths  {relevant_path_to_object_root_directory}
+      value: Dockerfile # Only complete absolute paths  {relevant_path_to_object_root_directory}
     - name: CONTEXT
-      value: samples/go-contract/
+      value: "."
   workspaces:
     - name: source-ws
       subPath: source
