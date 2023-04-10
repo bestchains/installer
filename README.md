@@ -201,14 +201,9 @@ It will add new user `bestchains` with password `Passw0rd!`, Also create databas
 
 #### 3.2 Install Explorer with postgresql
 
-If you have installed `postgresql`, Please edit `explorer/Chart.yaml`, `explorer/values.yaml`.
+If postgresql is already installed, edit `explorer/values.yaml`, and set the helm installation parameter `--set postgresql.enabled=false`
 
 ```yaml
-# explorer/Chart.yaml
-dependencies:
-  - name: postgresql
-    condition: postgresql.disabled
-
 # explorer/values.yaml
 pdAddr: "your-pg-address"
 ``` 
@@ -217,6 +212,8 @@ Install `bc-explorer` by the command:
 
 ```bash
 helm --wait --timeout=300 -nbaas-system install bc-explorer explorer
+# if postgresql is already installed
+helm --wait --timeout=300 -nbaas-system --set postgresql.enabled=false install bc-explorer explorer
 ```
 
 ### 4. Add more components

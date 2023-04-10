@@ -34,7 +34,7 @@ spec:
       default: ""
     - name: SOURCE_GIT_URL
       description: The git repo url where the source code resides
-      default: "github.com/bestchains/fabric-builder-k8s"
+      default: "github.com/bestchains/bestchains-contracts"
     - name: SOURCE_GIT_REFERENCE
       description: The branch, tag or SHA to checkout.
       default: ""
@@ -142,7 +142,7 @@ spec:
     name: git-clone-to-minio-bucket
   params:
     - name: SOURCE_GIT_URL
-      value: https://github.com/bestchains/fabric-builder-k8s
+      value: https://github.com/bestchains/bestchains-contracts
     - name: CONTEXT
       value: bestchains/go-contract # Must be in format {bucket}/{object}
     - name: MINIO_BUCKET

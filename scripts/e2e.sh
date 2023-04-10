@@ -247,7 +247,7 @@ fi
 # baas step optional. install tekton task and pipeline
 if [[ ${INSTALL_TEKTON_TASK_PIPELINE} == "YES" ]]; then
 	echo "install pre defined tekton task and pipeline for chaincode..."
-	find tekton -type f -name "*.yaml" ! -path "*/sample/*" | xargs -n 1 kubectl apply -f
+	find fabric-operator/tekton -type f -name "*.yaml" ! -path "*/sample/*" | xargs -n 1 kubectl apply -f
 	echo "install pre defined tekton task and pipeline for chaincode done."
 fi
 
