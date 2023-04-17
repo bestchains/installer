@@ -10,13 +10,11 @@ metadata:
 spec:
   description: >-
     The pipeline uses git-clone/minio-fetch and docker-build to build a chaincode image from git/minio.
-
   workspaces:
     - name: source-ws
       description: Location where source is stored.
     - name: dockerconfig-ws
       description: Location where docker push credentail is stored.
-
   params:
     - name: SOURCE
       description: >-
@@ -108,11 +106,30 @@ spec:
       workspaces:
         - name: output
           workspace: source-ws
-    - name: build-with-kaniko
-      retries: 3
+    - name: unzip
       runAfter:
         - fetch-from-minio
         - fetch-from-git
+      taskRef:
+        name: unzip
+      workspaces:
+        - name: source
+          workspace: source-ws
+      params:
+        - name: DOCKERFILE
+          value: $(params.DOCKERFILE)
+        - name: CONTEXT
+          value: $(params.CONTEXT)
+        - name: BUCKET
+          value: $(params.SOURCE_MINIO_BUCKET)
+        - name: OBJECT
+          value: $(params.SOURCE_MINIO_OBJECT)
+        - name: SOURCE
+          value: $(params.SOURCE)
+    - name: build-with-kaniko
+      retries: 3
+      runAfter:
+        - unzip
       taskRef:
         name: kaniko
       workspaces:
@@ -124,9 +141,9 @@ spec:
         - name: IMAGE
           value: $(params.APP_IMAGE)
         - name: DOCKERFILE
-          value: $(params.DOCKERFILE)
+          value: $(tasks.unzip.results.DOCKERFILE)
         - name: CONTEXT
-          value: $(params.CONTEXT)
+          value: $(tasks.unzip.results.CONTEXT)
         - name: BUILDER_IMAGE
           value: $(params.BUILDER_IMAGE)
         - name: EXTRA_ARGS

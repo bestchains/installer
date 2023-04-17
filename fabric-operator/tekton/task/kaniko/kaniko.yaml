@@ -43,30 +43,6 @@ spec:
     - name: IMAGE_URL
       description: URL of the image just built.
   steps:
-    - name: extract-files-as-needed
-      image: hyperledgerk8s/bash:5.1.4
-      workingDir: $(workspaces.source.path)
-      script: |
-        ls -ltrha
-        compress_files=$(find . -maxdepth 1 -type f -name "*.tar*" -o -name "*.zip")
-        if [ -z "$compress_files" ]; then
-          echo "There are no compressed files in the directory. Skip extract."
-          exit 0
-        fi
-        for file in $compress_files; do
-          filename=$(basename -- "$file")
-          extension="${filename##*.}"
-          case "$extension" in
-              "tar") tar -xf "$file";;
-              "tar.gz"|"tgz") tar -xzf "$file" ;;
-              "tar.bz2"|"tbz2") tar -xjf "$file" ;;
-              "zip") unzip -q "$file"  ;;
-              *) echo "Unknown compressed file format!" $file ;;
-          esac
-        done
-        echo "All compressed files have been extracted!"
-        ls -ltrha
-        exit 0
     - name: build-and-push
       workingDir: $(workspaces.source.path)
       image: $(params.BUILDER_IMAGE)
