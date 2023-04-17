@@ -1,0 +1,75 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: post-sample-minio-zip
+  annotations:
+    tekton.dev/categories: Minio
+    tekton.dev/tags: minio
+    tekton.dev/displayName: "minio remove"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    The minio-remove Task will remove a object from the provided minio. 
+
+  params:
+    - name: scheme
+      type: string
+      description: minio server scheme (http or https)
+      default: "http"
+    - name: host
+      type: string
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+      default: fabric-minio.baas-system.svc.cluster.local
+    - name: bucket
+      type: string
+      description: minio's bucket name
+    - name: object
+      type: string
+      description: minio's object path
+    - name: accessKey
+      type: string
+      description: the accessKey used to fetch minio object
+    - name: secretKey
+      type: string
+      description: the secretKey used to fetch minio object
+    - name: subdirectory
+      description: subdirectory inside the "output" workspace to store the minio object into
+      type: string
+      default: ""
+    - name: minioClientImage
+      type: string
+      default: "hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z"
+      description: the image used where the minio-fetch
+
+  steps:
+    - name: remove
+      image: $(params.minioClientImage)
+      env:
+        - name: MC_HOST_minio
+          value: $(params.scheme)://$(params.accessKey):$(params.secretKey)@$(params.host)
+      args:
+        [
+          "rm",
+          --recursive,
+          --force,
+          minio/$(params.bucket)/$(params.object),
+        ]
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: post-sample-minio-zip
+spec:
+  taskRef:
+    name: post-sample-minio-zip
+  params:
+    - name: bucket
+      value: bestchains
+    - name: object
+      value: go-contract
+    - name: host
+      value: fabric-minio.baas-system.svc.cluster.local:9000
+    - name: accessKey
+      value: "admin"
+    - name: secretKey
+      value: "passw0rd"

@@ -1,0 +1,81 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: unzip
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.17.0"
+    tekton.dev/categories: Tool
+    tekton.dev/tags: unzip
+    tekton.dev/displayName: "unzip"
+    tekton.dev/platforms: "linux/amd64,linux/arm64,linux/ppc64le"
+spec:
+  description: unzip
+  params:
+    - name: BUCKET
+      description: The bucket where the source is stored.
+    - name: OBJECT
+      description: The object where the source is stored.
+    - name: DOCKERFILE
+      description: Path to the Dockerfile to build.
+    - name: CONTEXT
+      description: The build context used by Kaniko.
+    - name: SOURCE
+      description: The source type where chaincode code stores.Now supports minio,git
+  workspaces:
+    - name: source
+      description: Holds the context and Dockerfile
+  results:
+    - name: DOCKERFILE
+      description: Path to the Dockerfile to build.
+    - name: CONTEXT
+      description: The build context used by Kaniko.
+  steps:
+    - name: extract-files-as-needed
+      image: hyperledgerk8s/bash:5.1.4
+      workingDir: $(workspaces.source.path)
+      script: | 
+        if [[ $(params.SOURCE) != "minio" ]]; then
+          echo "source type: $(params.SOURCE)"
+          dockerfile="$(params.DOCKERFILE)"
+          echo -n "${dockerfile}" | tee "$(results.DOCKERFILE.path)"
+          context="$(params.CONTEXT)"
+          echo -n "${context}" | tee "$(results.CONTEXT.path)" 
+          exit 0
+        fi
+        ls -ltrha ./*
+        cd "$(params.BUCKET)" || exit 1
+        filename=$(params.OBJECT)
+        extension="${filename##*.}"
+        dir=${filename%.*}
+        mkdir $dir || true
+        case "$extension" in
+        "tar")
+          tar -xf "$filename" -C $dir
+          ;;
+        "tar.gz" | "tgz")
+          tar -xzf "$filename" -C $dir
+          ;;
+        "tar.bz2" | "tbz2")
+          tar -xjf "$filename" -C $dir
+          ;;
+        "zip")
+          unzip -q "$filename" -d $dir
+          ;;
+        *)
+          echo $filename "is no a support compressed file, skip extract..."
+          dockerfile="$(params.DOCKERFILE)"
+          echo -n "${dockerfile}" | tee "$(results.DOCKERFILE.path)"
+          context="$(params.CONTEXT)"
+          echo -n "${context}" | tee "$(results.CONTEXT.path)"
+          ;;
+        esac
+        base=$(params.CONTEXT)
+        context=${base/${filename}/${dir}}
+        echo -n "${context}" | tee "$(results.CONTEXT.path)"
+        base=$(params.DOCKERFILE)
+        dockerfile=${base/${filename}/${dir}}
+        echo -n "${dockerfile}" | tee "$(results.DOCKERFILE.path)"
+        ls -ltrha .
+        ls -ltrha ./*

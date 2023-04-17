@@ -1,0 +1,162 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pre-sample-minio-zip
+  annotations:
+    tekton.dev/tags: test
+    tekton.dev/displayName: "git clone, then zip to minio bucket"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    The pipeline uses git-clone and minio-fetch to store data from git clone.
+  workspaces:
+    - name: source-ws
+      description: Location where source is stored.
+  params:
+    - name: MINIO_BUCKET
+      description: minio's bucket name
+    - name: MINIO_OBJECT
+      description: minio's object path
+    - name: MINIO_HOST
+      description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+    - name: MINIO_ACCESS_KEY
+      type: string
+      description: the accessKey used to fetch minio object
+    - name: MINIO_SECRET_KEY
+      type: string
+      description: the secretKey used to fetch minio object
+    - name: SOURCE_GIT_URL
+      description: The git repo url where the source code resides
+    - name: SOURCE_GIT_REFERENCE
+      description: The branch, tag or SHA to checkout.
+      default: ""
+    - name: SOURCE_GIT_INIT_IMAGE
+      description: The init image of git-clone
+      default: "hyperledgerk8s/tekton-pipeline-args-git-init:v0.42.0"
+  tasks:
+    - name: fetch-from-git
+      retries: 3
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.SOURCE_GIT_URL)
+        - name: revision
+          value: $(params.SOURCE_GIT_REFERENCE)
+        - name: gitInitImage
+          value: $(params.SOURCE_GIT_INIT_IMAGE)
+      workspaces:
+        - name: output
+          workspace: source-ws
+    - name: copy-to-minio
+      retries: 3
+      runAfter:
+        - fetch-from-git
+      taskSpec:
+        workspaces:
+          - name: output
+            description: The original location of the data, which will be copied to Minio.
+        params:
+          - name: scheme
+            type: string
+            description: minio server scheme (http or https)
+            default: "http"
+          - name: host
+            type: string
+            description: minio host/domain to fetch (fabric-minio.baas-system.svc.cluster.local)
+            default: fabric-minio.baas-system.svc.cluster.local
+          - name: bucket
+            type: string
+            description: minio's bucket name
+          - name: object
+            type: string
+            description: minio's object path
+          - name: accessKey
+            type: string
+            description: the accessKey used to fetch minio object
+          - name: secretKey
+            type: string
+            description: the secretKey used to fetch minio object
+          - name: subdirectory
+            description: subdirectory inside the "output" workspace to store the minio object into
+            type: string
+            default: ""
+          - name: minioClientImage
+            type: string
+            default: "hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z"
+            description: the image used where the minio-fetch
+        steps:
+          - name: extract-files-as-needed
+            image: hyperledgerk8s/bash:5.1.4-add-zip
+            workingDir: $(workspaces.output.path)
+            script: |
+              rm -r -f .git
+              zip -r $(params.object) .
+              ls -ltrha .
+              ls -ltrha ./*
+          - name: copy
+            image: $(params.minioClientImage)
+            env:
+              - name: MC_HOST_minio
+                value: $(params.scheme)://$(params.accessKey):$(params.secretKey)@$(params.host)
+            args:
+              [
+                "cp",
+                --debug,
+                $(workspaces.output.path)/$(params.object),
+                minio/$(params.bucket)/$(params.object),
+              ]
+      workspaces:
+        - name: output
+          workspace: source-ws
+      params:
+        - name: bucket
+          value: $(params.MINIO_BUCKET)
+        - name: object
+          value: $(params.MINIO_OBJECT)
+        - name: host
+          value: $(params.MINIO_HOST)
+        - name: accessKey
+          value: $(params.MINIO_ACCESS_KEY)
+        - name: secretKey
+          value: $(params.MINIO_SECRET_KEY)
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pre-sample-minio-zip-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: pre-sample-minio-zip
+spec:
+  pipelineRef:
+    name: pre-sample-minio-zip
+  params:
+    - name: SOURCE_GIT_URL
+      value: https://github.com/bestchains/fabric-builder-k8s
+    - name: CONTEXT
+      value: bestchains/kaniko-build-zip # Must be in format {bucket}/{object}
+    - name: MINIO_BUCKET
+      value: bestchains
+    - name: MINIO_OBJECT
+      value: kaniko-build-zip.zip
+    - name: MINIO_HOST
+      value: fabric-minio.baas-system.svc.cluster.local:9000
+    - name: MINIO_ACCESS_KEY
+      value: "admin"
+    - name: MINIO_SECRET_KEY
+      value: "passw0rd"
+  workspaces:
+    - name: source-ws
+      subPath: source
+      persistentVolumeClaim:
+        claimName: pre-sample-minio-zip-pvc
