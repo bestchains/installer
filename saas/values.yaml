@@ -1,0 +1,10 @@
+namespace: baas-system
+deployName: bc-saas
+deployImage: hyperledgerk8s/bc-saas:6b0ed39
+port: 9999
+addr: ""
+ingressClassName: portal-ingress
+ingressDomain: <replaced-ingress-nginx-ip>.nip.io
+saasIngressName: bc-saas-ingress
+serviceName: bc-saas-service
+depositoryContract: depository
