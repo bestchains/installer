@@ -1,0 +1,22 @@
+apiVersion: v2
+name: bc-saas
+description: bc-saas represents software-as-a-service in bestchains which provides quick way to create a blockchain service
+type: application
+version: v0.0.1
+icon: https://avatars.githubusercontent.com/u/116370569
+keywords:
+  - saas
+  - bestchains
+sources:
+  - https://github.com/bestchains/bc-saas
+maintainers:
+  - name: nkwangleiGIT
+    url: https://github.com/nkwangleiGIT
+  - name: bjwswang
+    url: https://github.com/bjwswang
+  - name: Abirdcfly
+    url: https://github.com/Abirdcfly
+  - name: 0xff-dev
+    url: https://github.com/0xff-dev
+  - name: Lanture1064
+    url: https://github.com/Lanture1064

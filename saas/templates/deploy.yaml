@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bc-saas
+  template:
+    metadata:
+      labels:
+        app: bc-saas
+    spec:
+      volumes:
+      - name: network-json
+        secret:
+          secretName: bc-saas-secret
+      containers:
+      - name: depository
+        image: {{ .Values.deployImage }}
+        command:
+        - depository
+        args:
+        - -v=5
+        - -profile=/opt/depository/network.json
+        - -contract={{ .Values.depositoryContract }}
+        ports:
+        - containerPort: {{ .Values.port }}
+        volumeMounts:
+        - name: network-json
+          mountPath: /opt/depository

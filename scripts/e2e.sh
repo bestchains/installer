@@ -34,6 +34,7 @@ INSTALL_TEKTON_TASK_PIPELINE=${INSTALL_TEKTON_TASK_PIPELINE:-"NO"}
 RUN_IN_TEST=${RUN_IN_TEST:-"NO"}
 INSTALL_PG=${INSTALL_PG:-"NO"}
 INSTALL_EXPLORER=${INSTALL_EXPLORER:-"NO"}
+INSTALL_SAAS=${INSTALL_SAAS:-"NO"}
 
 echo "checking option params..."
 
@@ -109,6 +110,8 @@ for i in "$@"; do
 		echo "will install bc-explorer"
 		INSTALL_EXPLORER="YES"
 		INSTALL_PG="NO"
+	elif [[ $i == "--saas" ]]; then
+		INSTALL_SAAS="YES"
 	else
 		echo "param error, no changes applied"
 	fi
@@ -242,6 +245,14 @@ if [[ ${WAIT_TEKTON_INSTALL} == "YES" ]]; then
 		sleep 5
 	done
 	echo "deploy tekton successfully"
+fi
+
+if [[ ${INSTALL_SAAS} == "YES" ]]; then
+	echo "install bc saas, please confirm 'files/network.json' has been updated."
+	cat saas/values.yaml \
+	| sed "s/<replaced-ingress-nginx-ip>/${ingressNodeIP}/g" > saas/values1.yaml
+	helm --wait --timeout=$TIMEOUT -nbaas-system install bc-saas saas -f saas/values1.yaml
+	echo "deploy bc-saas successfully"
 fi
 
 # baas step optional. install tekton task and pipeline
