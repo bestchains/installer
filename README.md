@@ -216,7 +216,17 @@ helm --wait --timeout=300 -nbaas-system install bc-explorer explorer
 helm --wait --timeout=300 -nbaas-system --set postgresql.enabled=false install bc-explorer explorer
 ```
 
-### 4. Add more components
+### 4. Install Saas
+
+1. Get secret
+Copy the sercret oidc-server-root-secret under the u4a-system namespace to the namespace to be deployed, in case the secret does not exist.
+
+2. Install
+```shell
+make e2e --saas
+```
+
+### 5. Add more components
 1. Install kube-dashboard following [this doc](./kube-dashboard/) to integrate with u4a.
 
     Refer to [kubernetes dashboard ](https://github.com/kubernetes/dashboard) for details.

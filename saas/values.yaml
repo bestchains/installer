@@ -8,3 +8,9 @@ ingressDomain: <replaced-ingress-nginx-ip>.nip.io
 saasIngressName: bc-saas-ingress
 serviceName: bc-saas-service
 depositoryContract: depository
+# Currently, if the field is not pg it will be implemented by log by default.
+db: pg
+# pg connection address
+dsn: "postgres://bestchains:Passw0rd!@bc-explorer-postgresql.baas-system.svc.cluster.local:5432/bc-saas?sslmode=disable"
+# or none
+authMethod: oidc

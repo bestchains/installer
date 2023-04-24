@@ -13,10 +13,18 @@ spec:
       labels:
         app: bc-saas
     spec:
+      serviceAccountName: bc-saas
       volumes:
       - name: network-json
         secret:
           secretName: bc-saas-secret
+      - name: oidc-server-ca
+        secret:
+          defaultMode: 420
+          items:
+            - key: ca.crt
+              path: ca.pem
+          secretName: oidc-server-root-secret
       containers:
       - name: depository
         image: {{ .Values.deployImage }}
@@ -26,8 +34,37 @@ spec:
         - -v=5
         - -profile=/opt/depository/network.json
         - -contract={{ .Values.depositoryContract }}
+        - -db={{ .Values.db }}
+        - -dsn={{ .Values.dsn }}
+        - -auth={{ .Values.authMethod }}
         ports:
         - containerPort: {{ .Values.port }}
+        env:
+        - name: OIDC_CA_FILE
+          value: "/etc/oidc/oidc-server/ca.pem"
+        - name: OIDC_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: oidc.client-id
+              name: kube-oidc-proxy-config
+        - name: OIDC_ISSUER_URL
+          valueFrom:
+            secretKeyRef:
+              key: oidc.issuer-url
+              name: kube-oidc-proxy-config
+        - name: OIDC_USERNAME_CLAIM
+          valueFrom:
+            secretKeyRef:
+              key: oidc.username-claim
+              name: kube-oidc-proxy-config
+        - name: OIDC_GROUPS_CLAIM
+          valueFrom:
+            secretKeyRef:
+              key: oidc.group-claim
+              name: kube-oidc-proxy-config
         volumeMounts:
         - name: network-json
           mountPath: /opt/depository
+        - mountPath: /etc/oidc/oidc-server
+          name: oidc-server-ca
+          readOnly: true
