@@ -82,6 +82,7 @@ oidcServer:
   - id: *clientId
     redirectURIs:
     - https://{{ .Values.deploymentConfig.bffHost }}/
+    - http://localhost:26666
     name: *clientName
     secret: *clientSecret
   # Enable and update the ip if nip.io is NOT accessible in deployed environment
