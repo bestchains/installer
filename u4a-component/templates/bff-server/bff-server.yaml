@@ -41,6 +41,10 @@ spec:
         - name: logos
           configMap:
             name: portal-logos
+        - name: portal-global-configs
+          configMap:
+            name: portal-global-configs
+            defaultMode: 420
       containers:
         - name: bff-server
           image: {{ .Values.registryServer }}/{{ .Values.bffServer.image }}
@@ -102,6 +106,9 @@ spec:
               readOnly: true
             - mountPath: /usr/src/app/public/profile/img
               name: logos
+              readOnly: true
+            - name: portal-global-configs
+              mountPath: /usr/src/app/configs
               readOnly: true
 ---
 apiVersion: v1
