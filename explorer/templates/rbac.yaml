@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: bc-explorer
-  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}-bc-explorer
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: bc-explorer
+  name: {{ .Release.Name }}-bc-explorer
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -160,12 +160,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: bc-explorer
+  name: {{ .Release.Name }}-bc-explorer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: bc-explorer
+  name: {{ .Release.Name }}-bc-explorer
 subjects:
   - kind: ServiceAccount
-    name: bc-explorer
-    namespace: {{ .Values.namespace }}
+    name: {{ .Release.Name }}-bc-explorer
+    namespace: {{ .Release.Namespace }}

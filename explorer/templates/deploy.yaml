@@ -1,42 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.deployName }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bc-explorer
+      app: {{ .Release.Name }}-bc-explorer
   template:
     metadata:
       labels:
-        app: bc-explorer
+        app: {{ .Release.Name }}-bc-explorer
     spec:
-      serviceAccountName: bc-explorer
+      serviceAccountName: {{ .Release.Name }}-bc-explorer
       containers:
       - name: viewer
-        image: {{ .Values.deployImage }}
+        image: {{ .Values.deployment.image }}
         command:
         - viewer
         args:
         - -v=5
-        - -db={{ .Values.explorerDB }}
-        - -dsn={{ .Values.pgAddr }}
+        - -db={{ .Values.runtimeArgs.explorerDB }}
+        - -dsn={{ template "pg-svc" .}}
         ports:
         - containerPort: 9998
       - name: listener
-        image:  {{ .Values.deployImage }}
+        image:  {{ .Values.deployment.image }}
         command:
         - listener
         args:
         - -v=5
-        - -injector={{ .Values.explorerDB }}
-        - -dsn={{ .Values.pgAddr }}
+        - -injector={{ .Values.runtimeArgs.explorerDB }}
+        - -dsn={{ template "pg-svc" . }}
         ports:
         - containerPort: 9999
       - name: observer
-        image: {{ .Values.deployImage }}
+        image: {{ .Values.deployment.image }}
         command:
         - observer
         args:

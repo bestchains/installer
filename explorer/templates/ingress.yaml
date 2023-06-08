@@ -1,3 +1,4 @@
+{{- if .Values.ingress.enable }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -5,8 +6,8 @@ metadata:
     description: bc-explorer-ingress
     displayName: bc-explorer-ingress
     httpSend: /
-    ingress-lb: {{ .Values.ingressClassName }}
-    kubernetes.io/ingress.class:  {{ .Values.ingressClassName }}
+    ingress-lb: {{ .Values.ingress.ingressClassName }}
+    kubernetes.io/ingress.class:  {{ .Values.ingress.ingressClassName }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_cache static-cache;
       proxy_cache_valid 404 10m;
@@ -23,18 +24,19 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/upstream-vhost: $host
   labels:
-    ingress-lb: {{ .Values.ingressClassName }}
-  name: {{ .Values.explorerIngressName }}
-  namespace: {{ .Values.namespace }}
+    ingress-lb: {{ .Values.ingress.ingressClassName }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   rules:
-  - host: bc-explorer.{{ .Values.ingressDomain }}
+  - host: bc-explorer.{{ .Values.ingress.ingressDomain }}
     http:
       paths:
       - backend:
           service:
-            name: bc-explorer-service
+            name: {{ .Release.Name }}-bc-explorer-service
             port:
               number: 9998
         path: /
         pathType: ImplementationSpecific
+{{- end }}
