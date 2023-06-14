@@ -13,6 +13,7 @@ sources:
 dependencies:
   - name: postgresql
     condition: postgresql.enabled
+    version: 12.2.5
 maintainers:
   - name: nkwangleiGIT
     url: https://github.com/nkwangleiGIT
