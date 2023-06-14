@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.serviceName }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
-    app: bc-saas
+    app: {{ .Release.Name }}-bc-saas
   ports:
     - protocol: TCP
-      port: {{ .Values.port }}
-      targetPort: {{ .Values.port }}
+      port: {{ .Values.runtimeArgs.port }}
+      targetPort: {{ .Values.runtimeArgs.port }}

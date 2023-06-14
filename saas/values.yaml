@@ -1,16 +1,17 @@
-namespace: baas-system
-deployName: bc-saas
-deployImage: hyperledgerk8s/bc-saas:6b0ed39
-port: 9999
-addr: ""
-ingressClassName: portal-ingress
-ingressDomain: <replaced-ingress-nginx-ip>.nip.io
-saasIngressName: bc-saas-ingress
-serviceName: bc-saas-service
-depositoryContract: depository
-# Currently, if the field is not pg it will be implemented by log by default.
-db: pg
-# pg connection address
-dsn: "postgres://bestchains:Passw0rd!@bc-explorer-postgresql.baas-system.svc.cluster.local:5432/bc-saas?sslmode=disable"
-# or none
-authMethod: oidc
+deployment:
+  deployImage: hyperledgerk8s/bc-saas:6b0ed39
+
+runtimeArgs:
+  port: 9999
+  addr: ""
+  depositoryContract: depository
+  db: pg
+  # pg connection address
+  dsn: "postgres://bestchains:Passw0rd!@bc-explorer-postgresql.baas-system.svc.cluster.local:5432/bc-saas?sslmode=disable"
+  # or none
+  authMethod: oidc
+
+ingress:
+  enable: false
+  ingressClassName: portal-ingress
+  ingressDomain: <replaced-ingress-nginx-ip>.nip.io

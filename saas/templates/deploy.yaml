@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.deployName }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bc-saas
+      app: {{ .Release.Name }}-bc-saas
   template:
     metadata:
       labels:
-        app: bc-saas
+        app: {{ .Release.Name }}-bc-saas
     spec:
-      serviceAccountName: bc-saas
+      serviceAccountName: {{ .Release.Name }}
       volumes:
       - name: network-json
         secret:
-          secretName: bc-saas-secret
+          secretName: {{ .Release.Name }}
       - name: oidc-server-ca
         secret:
           defaultMode: 420
@@ -27,18 +27,19 @@ spec:
           secretName: oidc-server-root-secret
       containers:
       - name: depository
-        image: {{ .Values.deployImage }}
+        image: {{ .Values.deployment.deployImage }}
         command:
         - depository
         args:
         - -v=5
         - -profile=/opt/depository/network.json
-        - -contract={{ .Values.depositoryContract }}
-        - -db={{ .Values.db }}
-        - -dsn={{ .Values.dsn }}
-        - -auth={{ .Values.authMethod }}
+        - -contract={{ .Values.runtimeArgs.depositoryContract }}
+        - -db={{ .Values.runtimeArgs.db }}
+        - -dsn={{ .Values.runtimeArgs.dsn }}
+        - -auth={{ .Values.runtimeArgs.authMethod }}
+        - -addr={{ .Values.runtimeArgs.addr }}:{{ .Values.runtimeArgs.port }}
         ports:
-        - containerPort: {{ .Values.port }}
+        - containerPort: {{ .Values.runtimeArgs.port }}
         env:
         - name: OIDC_CA_FILE
           value: "/etc/oidc/oidc-server/ca.pem"
