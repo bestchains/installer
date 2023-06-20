@@ -46,11 +46,9 @@ function pre_load_image() {
 	pre_load_images=(
 		hyperledgerk8s/ubi-minimal:latest
 		hyperledgerk8s/fabric-ca:iam-20230131
-		hyperledgerk8s/fabric-peer:2.4.7
-		hyperledgerk8s/fabric-peer:2.4.7
+		hyperledgerk8s/fabric-peer:2.4.7-external
 		hyperledgerk8s/couchdb:3.2.2
 		hyperledgerk8s/fabric-orderer:2.4.7
-		hyperledgerk8s/fabric-console:latest
 		hyperledgerk8s/grpc-web:latest
 		hyperledgerk8s/tektoncd-operator:v0.64.0
 		hyperledgerk8s/tekton-operator-webhook:v0.64.0
@@ -74,8 +72,6 @@ function pre_load_image() {
 		hyperledgerk8s/minio-minio:RELEASE.2023-02-10T18-48-39Z
 		hyperledgerk8s/minio-mc:RELEASE.2023-01-28T20-29-38Z
 		hyperledgerk8s/registry:2
-		hyperledgerk8s/docker:dind
-		hyperledgerk8s/docker:stable
 		hyperledgerk8s/kaniko-executor:v1.9.1
 		hyperledgerk8s/bash:5.1.4
 		hyperledgerk8s/ubuntu:22.04

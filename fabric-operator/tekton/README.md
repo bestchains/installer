@@ -14,7 +14,6 @@ Tekton pipeline will be automatically installed with fabric-operator.
 
 tasks/pipelines will be automatically installed by install script.
 
-
 ## Build Chaincode with Tekton Pipelines
 
 ### Install depencencies
@@ -24,53 +23,44 @@ tasks/pipelines will be automatically installed by install script.
 - Tekton-CI Serivce
 - Minio Service
 
-#### Tasks: 
-- [`git-clone` task](https://github.com/tektoncd/catalog/tree/main/task/git-clone) 0.3
-```
+#### Tasks
+
+- [`git-clone` 0.3 task](https://github.com/tektoncd/catalog/tree/main/task/git-clone)
+
+```shell
 kubectl apply -f ./task/git-clone/git-clone.yaml
 ```
 
 - [`minio-fetch` task](./task/minio-fetch/minio-fetch.yaml)
-```
+
+```shell
 kubectl apply -f ./task/minio-fetch/minio-fetch.yaml
 ```
 
-- [`docker build` task](https://github.com/tektoncd/catalog/tree/main/task/docker-build/0.1) 0.1
-```
-kubectl apply -f ./task/docker-build/docker-build.yaml
-```
+- [`kaniko` 0.6 task](https://github.com/tektoncd/catalog/tree/main/task/kaniko/0.6)
 
-- [`kaniko` task](https://github.com/tektoncd/catalog/tree/main/task/kaniko/0.6) 0.6
-
-```
+```shell
 kubectl apply -f ./task/kaniko/kaniko.yaml
 ```
 
 ### Install pipelines
 
 - build with `kaniko` task (**Recommended**)
-```
+
+```shell
 kubectl apply -f ./pipelines/chaincodebuild-kaniko.yaml
 ```
-
-- build with `docker build` task
-```
-kubectl apply -f ./pipelines/chaincodebuild.yaml
-```
-
 
 ### ChaincodeBuilds (Kaniko)
 
 This pipeline builds chaincode source code into a container image with `srouce-fetch` and `docker build`.
 
-
 #### Parameters
 
-> Now we supports two kind of sources in pipeline [chaincodebuild](./pipelines/chaincodebuild.yaml) 
-
+> Now we supports two kind of sources in pipeline [chaincodebuild](./pipelines/chaincodebuild.yaml)
+>
 > - [Git](https://github.com/tektoncd/catalog/tree/main/task/git-clone/0.3) get build marterials(chaincode source code) from a git repo
 > - [Minio](https://min.io/docs/minio/kubernetes/upstream/index.html) get build materials(chaincode source code) from Minio server(S3)
-
 
 | Parameter                                   | Description                                 | Default                                                          |   Required |
 | ------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------- | ---------- |
@@ -88,7 +78,6 @@ This pipeline builds chaincode source code into a container image with `srouce-f
 | `CONTEXT`                               | The path of the directory to use as context  | default `.`.  |   `required` |
 | `INSECURE_REGISTRY`                               | Allows the user to push to an insecure registry that has been specified  | default |   `optional` |
 
-
 #### Docker registry (Kaniko)
 
 When user needs to push image to a registry which needs authorization,you should create a push secret and reference it in workspace.
@@ -97,15 +86,17 @@ When user needs to push image to a registry which needs authorization,you should
 
 > - update the docker config file
 > - change the secret namespace to `PipelineRun Namespace`
-```
+>
+
+```shell
  kubectl create secret generic dockerhub-secret --from-file=/root/.docker/config.json -n {Pipeline_Run_Namespace}
 ```
 
 2. reference it in `PipelineRun`
 
-
 reference here [Sample with source `git`](./pipelines/sample/sample_git.yaml)
-```
+
+```yaml
   workspaces:
     - name: source-ws
       subPath: source
@@ -115,8 +106,6 @@ reference here [Sample with source `git`](./pipelines/sample/sample_git.yaml)
       secret:
         secretName: dockerhub-secret
 ```
-
-
 
 #### Samples
 
@@ -131,16 +120,12 @@ reference here [Sample with source `git`](./pipelines/sample/sample_git.yaml)
 
 - [Sample with source `git`](./pipelines/sample/sample_git.yaml)
 - [Sample with source `minio`](./pipelines/sample/sample_minio.yaml)
-  - Before testing Minio, [import data into Minio](./pipelines/sample/pre_sample_minio.yaml) in advance. 
+  - Before testing Minio, [import data into Minio](./pipelines/sample/pre_sample_minio.yaml) in advance.
   - After testing Minio, [delete the test data from Minio](./pipelines/sample/post_sample_minio.yaml).
 
 3. Sample for Pipeline `chaincodebuild-kaniko`
+
 - [Sample with source `git`](./pipelines/sample/sample_git_kaniko.yaml)
 - [Sample with source `minio`](./pipelines/sample/sample_minio_kaniko.yaml)
   - Before testing Minio, [import data into Minio](./pipelines/sample/pre_sample_minio.yaml) in advance.
   - After testing Minio, [delete the test data from Minio](./pipelines/sample/post_sample_minio.yaml).
-
-
-
-
-
